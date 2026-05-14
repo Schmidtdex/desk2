@@ -19,15 +19,16 @@ export function NumberTicker({ value, durationMs = 1800, suffix = "", prefix = "
     const node = ref.current;
     if (!node) return;
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) {
-      setDisplay(value);
-      return;
-    }
+
     const obs = new IntersectionObserver(
       (entries) => {
         if (started.current) return;
         if (entries.some((e) => e.isIntersecting)) {
           started.current = true;
+          if (prefersReduced) {
+            setDisplay(value);
+            return;
+          }
           const start = performance.now();
           function tick(now: number) {
             const t = Math.min(1, (now - start) / durationMs);
