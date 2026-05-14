@@ -186,8 +186,8 @@
 }
 
 @keyframes gb-rotate {
-  from { --gb-rotate: -70;            --gb-glow-translate-y: -65; }
-  to   { --gb-rotate: calc(360 - 70); --gb-glow-translate-y: -65; }
+  from { --gb-rotate: -70; --gb-glow-translate-y: -65; }
+  to   { --gb-rotate: 290; --gb-glow-translate-y: -65; }
 }
 
 /* ─── Keyframes ─── */
@@ -213,6 +213,70 @@
 @keyframes aurora {
   0%   { background-position: 50% 50%, 50% 50%; }
   100% { background-position: 350% 50%, 350% 50%; }
+}
+
+/* ─── Venn diagram (ThreePillars) ─── */
+
+@keyframes venn-pulse-ring { 0% { transform: scale(.6); opacity: .9 } 100% { transform: scale(1.8); opacity: 0 } }
+@keyframes venn-spin-slow  { to { transform: rotate(360deg); } }
+@keyframes venn-spin-rev   { to { transform: rotate(-360deg); } }
+
+@keyframes venn-drift-a {
+  0%   { transform: translate(0,0) rotate(0deg) scale(1); }
+  25%  { transform: translate(-22px,-30px) rotate(-2deg) scale(1.03); }
+  50%  { transform: translate(14px,-44px) rotate(1.5deg) scale(1.05); }
+  75%  { transform: translate(28px,-16px) rotate(2deg) scale(1.02); }
+  100% { transform: translate(0,0) rotate(0deg) scale(1); }
+}
+@keyframes venn-drift-b {
+  0%   { transform: translate(0,0) rotate(0deg) scale(1); }
+  25%  { transform: translate(26px,-18px) rotate(2deg) scale(1.04); }
+  50%  { transform: translate(36px,18px) rotate(-1.5deg) scale(1.02); }
+  75%  { transform: translate(8px,30px) rotate(-2deg) scale(1.05); }
+  100% { transform: translate(0,0) rotate(0deg) scale(1); }
+}
+@keyframes venn-drift-c {
+  0%   { transform: translate(0,0) rotate(0deg) scale(1); }
+  25%  { transform: translate(-30px,16px) rotate(2deg) scale(1.05); }
+  50%  { transform: translate(-18px,36px) rotate(-1.5deg) scale(1.03); }
+  75%  { transform: translate(20px,22px) rotate(-2deg) scale(1.02); }
+  100% { transform: translate(0,0) rotate(0deg) scale(1); }
+}
+
+@keyframes venn-breathe   { 0%,100% { transform: scale(1); }  50% { transform: scale(1.06); } }
+@keyframes venn-glow-pulse {
+  0%,100% { opacity: .55; transform: scale(1); }
+  50%     { opacity: .9;  transform: scale(1.15); }
+}
+@keyframes venn-blob-in {
+  0%   { opacity: 0; transform: translate(0,40px) scale(.6); }
+  60%  { opacity: 1; transform: translate(0,-6px) scale(1.04); }
+  100% { opacity: 1; transform: translate(0,0) scale(1); }
+}
+@keyframes venn-rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes venn-shimmer {
+  0%   { transform: translateX(-140%) skewX(-12deg); }
+  100% { transform: translateX(240%) skewX(-12deg); }
+}
+
+.animate-pulse-ring  { animation: venn-pulse-ring 1.8s ease-out infinite; }
+.animate-spin-slow   { animation: venn-spin-slow  80s  linear     infinite; }
+.animate-spin-rev    { animation: venn-spin-rev   110s linear     infinite; }
+.animate-drift-a     { animation: venn-drift-a    14s  ease-in-out infinite; }
+.animate-drift-b     { animation: venn-drift-b    16s  ease-in-out infinite; }
+.animate-drift-c     { animation: venn-drift-c    18s  ease-in-out infinite; }
+.animate-breathe     { animation: venn-breathe    6s   ease-in-out infinite; }
+.animate-glow-pulse  { animation: venn-glow-pulse 5s   ease-in-out infinite; }
+.animate-blob-in     { animation: venn-blob-in    1.1s cubic-bezier(.2,.7,.2,1) both; }
+.animate-rise        { animation: venn-rise        .9s cubic-bezier(.2,.7,.2,1) both; }
+.animate-shimmer     { animation: venn-shimmer 3.5s ease-in-out infinite; animation-delay: 2.5s; }
+
+.mask-radial-fade {
+  -webkit-mask-image: radial-gradient(circle at center, black 0%, black 30%, transparent 75%);
+          mask-image: radial-gradient(circle at center, black 0%, black 30%, transparent 75%);
 }
 
 @media (prefers-reduced-motion: reduce) {
