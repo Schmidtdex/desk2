@@ -62,7 +62,7 @@ export function WorldGlobe() {
             ))}
           </ul>
         </div>
-        <div className="relative mx-auto aspect-square w-full max-w-[600px]">
+        <div className="relative mx-auto aspect-square w-full max-w-150">
           <canvas ref={canvasRef} style={{ width: "100%", height: "100%" }} aria-hidden="true" />
         </div>
       </div>
