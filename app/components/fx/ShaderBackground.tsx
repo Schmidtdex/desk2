@@ -11,15 +11,13 @@ export function ShaderBackground({ className }: { className?: string }) {
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
-    // Set initial dims and mount in one tick — no double render
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    // Cap at 1440p: shader doesn't need native 4K resolution
-    setDimensions({ width: Math.min(w, 1440), height: Math.min(h, 900) });
+    setDimensions({
+      width: Math.min(window.innerWidth, 1440),
+      height: Math.min(window.innerHeight, 900),
+    });
     setMounted(true);
 
     const onResize = () => {
-      // Debounce 150ms — avoids WebGL context churn during window drag
       clearTimeout(timerRef.current);
       timerRef.current = setTimeout(() => {
         setDimensions({
@@ -38,14 +36,9 @@ export function ShaderBackground({ className }: { className?: string }) {
 
   return (
     <div
-      className={`absolute inset-0 -z-10 overflow-hidden${className ? ` ${className}` : ""}`}
+      className={`absolute inset-0 -z-10${className ? ` ${className}` : ""}`}
       aria-hidden="true"
-      style={{
-        background: "#05060F",
-        // Promote to its own GPU layer so the canvas compositor is isolated
-        transform: "translateZ(0)",
-        willChange: "transform",
-      }}
+      style={{ background: "#05060F" }}
     >
       {mounted && (
         <>
