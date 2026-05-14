@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { LenisProvider } from "./components/layout/LenisProvider";
+import { NavBar } from "./components/layout/NavBar";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -23,7 +24,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="pt-BR" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="bg-bg text-text min-h-screen">
-        <LenisProvider>{children}</LenisProvider>
+        <LenisProvider>
+          <NavBar />
+          {children}
+        </LenisProvider>
       </body>
     </html>
   );
