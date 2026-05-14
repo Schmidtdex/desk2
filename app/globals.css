@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+/* ─── Glow button: @property must be at stylesheet root ─── */
+@property --gb-rotate           { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --gb-bg-y             { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --gb-bg-x             { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --gb-glow-translate-y { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --gb-bg-size          { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --gb-glow-opacity     { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --gb-glow-blur        { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --gb-glow-scale       { syntax: "<number>"; inherits: true; initial-value: 2; }
+@property --gb-glow-radius      { syntax: "<number>"; inherits: true; initial-value: 2; }
+@property --gb-white-shadow     { syntax: "<number>"; inherits: true; initial-value: 0; }
+
 @theme {
   --color-bg: #05060F;
   --color-surface: #0B0D1C;
@@ -14,6 +26,12 @@
 
   --font-sans: var(--font-display);
   --font-mono: var(--font-code);
+}
+
+@layer utilities {
+  .enable-ligatures {
+    font-feature-settings: "liga" 1, "calt" 1, "kern" 1;
+  }
 }
 
 @layer base {
@@ -35,6 +53,144 @@
   }
 }
 
+/* ─── Glow button component styles ─── */
+.gb-root {
+  --gb-bg-size: 1;
+  --gb-rotate: 0;
+  --gb-speed: 5s;
+  --gb-ease-speed: 0.55s;
+  --gb-glow-scale: 1.5;
+  --gb-scale-factor: 1;
+  --gb-glow-blur: 5;
+  --gb-glow-opacity: 0.9;
+  --gb-glow-radius: 100;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.gb-inner {
+  position: relative;
+  background: #05060F;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.375rem;
+  font-size: 0.875rem;
+  color: rgb(255 255 255 / 0.45);
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+.gb-inner::before {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 999px;
+  box-shadow: 0 0 20px black;
+  mix-blend-mode: color-burn;
+  z-index: -1;
+  background: hsl(225deg 0% 14%) radial-gradient(
+    40% 60% at calc(var(--gb-bg-x) * 1%) calc(var(--gb-bg-y) * 1%),
+    hsl(225deg 100% 95%) calc(0%  * var(--gb-bg-size)),
+    hsl(225deg 100% 80%) calc(20% * var(--gb-bg-size)),
+    hsl(225deg 100% 60%) calc(40% * var(--gb-bg-size)),
+    transparent 100%
+  );
+  animation: gb-rotate-bg var(--gb-speed) linear infinite;
+  transition: --gb-bg-size var(--gb-ease-speed) ease;
+}
+
+.gb-glow {
+  --gb-glow-translate-y: 0;
+  display: block;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  animation: gb-rotate var(--gb-speed) linear infinite;
+  transform: rotateZ(calc(var(--gb-rotate) * 1deg));
+  transform-origin: center;
+  border-radius: calc(var(--gb-glow-radius) * 10vw);
+  pointer-events: none;
+}
+
+.gb-glow::after {
+  content: "";
+  display: block;
+  z-index: -2;
+  filter: blur(calc(var(--gb-glow-blur) * 10px));
+  width: 130%;
+  height: 130%;
+  left: -15%;
+  top: -15%;
+  position: relative;
+  background: hsl(225deg 100% 62%);
+  border-radius: calc(var(--gb-glow-radius) * 10vw);
+  transform:
+    scaleY(calc(var(--gb-glow-scale) * var(--gb-scale-factor) / 1.1))
+    scaleX(calc(var(--gb-glow-scale) * var(--gb-scale-factor) * 1.2))
+    translateY(calc(var(--gb-glow-translate-y) * 1%));
+  opacity: var(--gb-glow-opacity);
+}
+
+.gb-root:hover .gb-inner {
+  color: rgb(255 255 255 / 0.8);
+  mix-blend-mode: darken;
+  box-shadow: 0 0 calc(var(--gb-white-shadow) * 0.5vw) calc(var(--gb-white-shadow) * 0.1vw) rgb(26 77 255 / 30%);
+  animation: gb-shadow-pulse calc(var(--gb-speed) * 2) linear infinite;
+}
+
+.gb-root:hover .gb-inner::before {
+  --gb-bg-size: 12;
+  animation-play-state: paused;
+}
+
+.gb-root:hover .gb-glow {
+  --gb-glow-blur: 1.5;
+  --gb-glow-opacity: 0.6;
+  --gb-glow-scale: 2.5;
+  --gb-glow-radius: 0;
+  --gb-rotate: 900;
+  --gb-scale-factor: 1.25;
+  animation-play-state: paused;
+}
+
+.gb-root:hover .gb-glow::after {
+  animation-play-state: paused;
+  transition: --gb-glow-blur 0.05s ease, --gb-glow-opacity 0.05s ease,
+              --gb-glow-scale 0.05s ease, --gb-glow-radius 0.05s ease;
+}
+
+@keyframes gb-shadow-pulse {
+  0%, 24%, 46%, 73%, 96% { --gb-white-shadow: 0.5; }
+  12%, 28%, 41%, 63%, 75%, 82%, 98% { --gb-white-shadow: 2.5; }
+  6%, 32%, 57% { --gb-white-shadow: 1.3; }
+  18%, 52%, 88% { --gb-white-shadow: 3.5; }
+}
+
+@keyframes gb-rotate-bg {
+  0%   { --gb-bg-x: 0;   --gb-bg-y: 0;   }
+  25%  { --gb-bg-x: 100; --gb-bg-y: 0;   }
+  50%  { --gb-bg-x: 100; --gb-bg-y: 100; }
+  75%  { --gb-bg-x: 0;   --gb-bg-y: 100; }
+  100% { --gb-bg-x: 0;   --gb-bg-y: 0;   }
+}
+
+@keyframes gb-rotate {
+  from { --gb-rotate: -70;            --gb-glow-translate-y: -65; }
+  to   { --gb-rotate: calc(360 - 70); --gb-glow-translate-y: -65; }
+}
+
+/* ─── Keyframes ─── */
 @keyframes orbit {
   from { transform: rotate(0deg) translateX(var(--orbit-r)) rotate(0deg); }
   to   { transform: rotate(360deg) translateX(var(--orbit-r)) rotate(-360deg); }

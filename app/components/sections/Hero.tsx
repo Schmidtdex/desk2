@@ -1,77 +1,80 @@
 "use client";
 
-import Link from "next/link";
-import { ShaderBackground } from "@/components/fx/ShaderBackground";
-import { TextReveal } from "@/components/fx/TextReveal";
-import { MagneticButton } from "@/components/fx/MagneticButton";
+import { DottedSurface } from "@/components/fx/DottedSurface";
+import { TextEffect } from "@/components/fx/TextEffect";
 import { motion } from "motion/react";
+
+const PILLS = [
+  "#1 EM ITSM",
+  "#1 EM AUTOMAÇÃO",
+  "+600 CLIENTES",
+] as const;
 
 export function Hero() {
   return (
     <section
       id="scene-hero"
       aria-label="Hero"
-      className="relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden px-6"
+      className="relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden px-5 sm:px-10"
     >
-      <ShaderBackground />
+      <DottedSurface />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center pt-24 pb-20 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: [0.2, 0, 0, 1] }}
-        >
-        </motion.div>
+      <div className="relative z-10 flex w-full max-w-4xl flex-col items-center gap-10 pb-32 pt-20 text-center">
 
-        <div className="mt-10 space-y-2">
-          <TextReveal
+        {/* Headline */}
+        <div className="flex flex-col gap-0">
+          <TextEffect
             as="h1"
-            text="Não somos um software."
-            delay={0.3}
-            stagger={0.035}
-            className="block font-sans text-[clamp(2.75rem,8vw,7.5rem)] font-extralight leading-[0.95] tracking-[-0.03em] text-white"
-          />
-          <TextReveal
-            as="h2"
-            text="Somos a sinfonia da sua operação."
-            delay={0.55}
-            stagger={0.03}
-            className="block font-sans text-[clamp(2.75rem,8vw,7.5rem)] font-extralight leading-[0.95] tracking-[-0.03em] text-[oklch(68%_0.18_260)]"
-          />
+            preset="blur"
+            per="word"
+            delay={0.2}
+            className="enable-ligatures block font-serif font-light text-[2.75rem] leading-[1.05] tracking-[-0.04em] text-pretty text-center text-white md:text-[4.5rem] xl:text-[6.5rem]"
+          >
+            Não somos um software
+          </TextEffect>
+          <TextEffect
+            as="span"
+            preset="blur"
+            per="word"
+            delay={0.5}
+            className="enable-ligatures block font-serif font-light text-[2.75rem] leading-[1.05] tracking-[-0.04em] text-pretty text-center text-[oklch(68%_0.18_260)] md:text-[4.5rem] xl:text-[6.5rem]"
+          >
+            Somos a sinfonia da sua operação
+          </TextEffect>
         </div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 8 }}
+        {/* Social proof pills */}
+        <motion.div
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.9, ease: [0.2, 0, 0, 1] }}
+          className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2"
+        >
+          {PILLS.map((label) => (
+            <span
+              key={label}
+              className="gap-5 font-mono text-xs font-light tracking-[0.2em] text-text-muted uppercase"
+            >
+              {label}
+            </span>
+          ))}
+        </motion.div>
+
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 1.1, ease: [0.2, 0, 0, 1] }}
-          className="mt-10 max-w-xl font-sans text-base leading-relaxed text-white/45 md:text-lg"
+          className="flex flex-wrap items-center justify-center gap-4"
         >
-          Transforme serviços e processos em eficiência operacional e governança ativa.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1.3, ease: [0.2, 0, 0, 1] }}
-          className="mt-10 flex flex-col items-center gap-3 sm:flex-row"
-        >
-          <MagneticButton>Falar com especialista</MagneticButton>
-          <Link
-            href="#scene-products"
-            className="inline-flex items-center gap-2 px-6 py-4 font-sans text-base text-white/50 transition-colors duration-150 hover:text-white"
-          >
-            Ver plataforma
-            <span aria-hidden="true" className="text-lg leading-none">→</span>
-          </Link>
         </motion.div>
+
       </div>
 
       <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 h-40"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-72"
         aria-hidden="true"
-        style={{
-          background: "linear-gradient(to bottom, transparent, #05060F)",
-        }}
+        style={{ background: "linear-gradient(to bottom, transparent 0%, #05060F 80%)" }}
       />
     </section>
   );

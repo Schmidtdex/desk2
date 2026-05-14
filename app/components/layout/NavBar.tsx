@@ -42,18 +42,22 @@ export function NavBar() {
       <motion.nav
         animate={{
           width: isScrolled ? "min(896px, 100%)" : "min(1280px, 100%)",
-          backgroundColor: isScrolled ? "rgba(5, 6, 15, 0.82)" : "rgba(0, 0, 0, 0)",
+          backgroundColor: isScrolled ? "rgba(5, 6, 15, 0.55)" : "rgba(0, 0, 0, 0)",
           boxShadow: isScrolled
             ? "inset 0 0 0 1px rgba(255, 255, 255, 0.06)"
             : "inset 0 0 0 0 rgba(0, 0, 0, 0)",
         }}
-        transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
+        transition={{
+          width: { duration: 0.65, ease: [0.16, 1, 0.3, 1] },
+          backgroundColor: { duration: 0.45, ease: [0.2, 0, 0, 1] },
+          boxShadow: { duration: 0.45, ease: [0.2, 0, 0, 1] },
+        }}
         className="relative rounded-2xl"
         style={{ willChange: "width, background-color" }}
       >
         <motion.div
           animate={{ opacity: isScrolled ? 1 : 0 }}
-          transition={{ duration: 0.22, ease: [0.2, 0, 0, 1] }}
+          transition={{ duration: 0.5, ease: [0.2, 0, 0, 1] }}
           className="pointer-events-none absolute inset-0 rounded-2xl backdrop-blur-xl"
         />
 
@@ -62,7 +66,7 @@ export function NavBar() {
             <Image
               src="/Logotipo principal - branco.png"
               alt="Desk Manager"
-              width={120}
+              width={150}
               height={40}
               priority
             />

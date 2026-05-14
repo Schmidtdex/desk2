@@ -25,7 +25,7 @@ Never use `#000000` or `#ffffff`. Every neutral carries the `#05060F` blue tint.
 
 ## Typography
 
-**Fonts**: Geist Sans (display + body) + Geist Mono (data, KPIs, captions). Loaded via `next/font/google` in `app/layout.tsx`.
+**Fonts**: Plus Jakarta Sans (display + body) + JetBrains Mono (data, KPIs, captions). Variables: `--font-display` / `--font-code`. Loaded via `next/font/google` in `app/layout.tsx`.
 
 | Role | Size | Weight | Tracking |
 |------|------|--------|----------|
@@ -67,42 +67,30 @@ GSAP ScrollTrigger used for: horizontal timeline pin (scene 4), per-card sticky 
 
 ## FX Component Library (`app/components/fx/`)
 
-### ShaderBackground
-**O shader do hero.** Usa `MeshGradient` de `@paper-design/shaders-react`. Paleta Desk Manager: espaço escuro fluindo para azul elétrico. Renderiza apenas no cliente (`mounted` guard) — SSR mostra o fallback `#05060F`. Veil semi-transparente por cima garante contraste do texto branco.
+### DottedSurface
+**O shader do hero.** Grade de partículas animadas com ondas senoidais — Three.js WebGLRenderer. Dots em azul-branco suave sobre fundo `#05060F`, com fog que desfoca pontos distantes no bg. Sem dependência de `next-themes` (dark-only por padrão).
 
-**Paleta atual** (editável diretamente em `ShaderBackground.tsx`):
+**Parâmetros** (editáveis em `DottedSurface.tsx`):
 ```ts
-const COLORS = [
-  "#05060F",  // bg — espaço escuro
-  "#080E22",  // navy profundo
-  "#0D1840",  // azul meia-noite
-  "#142060",  // azul saturado
-  "#1A4DFF",  // accent — azul elétrico Desk
-  "#3B82F6",  // accent-2 — azul mais claro
-];
+const SEPARATION = 150;  // espaçamento entre dots (px Three.js units)
+const AMOUNTX = 40;      // colunas
+const AMOUNTY = 60;      // linhas
+// cor dos dots: [0.65, 0.70, 1.0] — branco com tint azul (RGB 0–1)
+// wave: Math.sin((ix + count) * 0.3) * 50 + Math.sin((iy + count) * 0.5) * 50
+// count += 0.1 por frame — ajuste para velocidade
 ```
 
-**Parâmetros** (editáveis em `ShaderBackground.tsx`):
-```ts
-distortion={0.8}   // 0–1: movimento orgânico
-swirl={0.6}        // 0–1: vórtice
-speed={0.42}       // velocidade da animação
-offsetX={0.08}     // deslocamento horizontal do centro
-```
-
-**Veil** — overlay `bg-bg/35` sobre o shader para garantir legibilidade do texto. Aumente para `bg-bg/55` se o fundo ficar muito vibrante em algum breakpoint.
-
-**Usage** (hero sections, cinematic section openers):
+**Usage**:
 ```tsx
-import { ShaderBackground } from "@/components/fx/ShaderBackground";
+import { DottedSurface } from "@/components/fx/DottedSurface";
 
 <section className="relative min-h-screen overflow-hidden">
-  <ShaderBackground />
+  <DottedSurface />
   {/* conteúdo */}
 </section>
 ```
 
-**Performance**: sem dynamic import — o `mounted` state garante SSR-safe. Não usar em mais de 1 seção simultaneamente (é WebGL, tem custo de GPU).
+**Performance**: Three.js puro, sem React Three Fiber. `pixelRatio` capped em 2. Cleanup completo no unmount (geometry, material, renderer). Não usar em mais de 1 seção simultaneamente.
 
 ---
 
