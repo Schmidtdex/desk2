@@ -67,30 +67,42 @@ GSAP ScrollTrigger used for: horizontal timeline pin (scene 4), per-card sticky 
 
 ## FX Component Library (`app/components/fx/`)
 
-### ShaderBackground + ShaderCanvas
-**The hero shader.** GLSL WebGL animation via React Three Fiber. Full-screen canvas with:
-- Custom vertex shader: subtle wave displacement on a 10×10 plane
-- Fragment shader: dark base (`#05060F`) + electric blue flows (`#1A4DFF`) via animated noise
-- Center vignette: bright at center (text focus), dark at edges
-- Two energy rings: slow-rotating semi-transparent blue circles at z=-0.5
+### ShaderBackground
+**O shader do hero.** Usa `MeshGradient` de `@paper-design/shaders-react`. Paleta Desk Manager: espaço escuro fluindo para azul elétrico. Renderiza apenas no cliente (`mounted` guard) — SSR mostra o fallback `#05060F`. Veil semi-transparente por cima garante contraste do texto branco.
 
-**Usage** (brand hero sections, cinematic section openers):
+**Paleta atual** (editável diretamente em `ShaderBackground.tsx`):
+```ts
+const COLORS = [
+  "#05060F",  // bg — espaço escuro
+  "#080E22",  // navy profundo
+  "#0D1840",  // azul meia-noite
+  "#142060",  // azul saturado
+  "#1A4DFF",  // accent — azul elétrico Desk
+  "#3B82F6",  // accent-2 — azul mais claro
+];
+```
+
+**Parâmetros** (editáveis em `ShaderBackground.tsx`):
+```ts
+distortion={0.8}   // 0–1: movimento orgânico
+swirl={0.6}        // 0–1: vórtice
+speed={0.42}       // velocidade da animação
+offsetX={0.08}     // deslocamento horizontal do centro
+```
+
+**Veil** — overlay `bg-bg/35` sobre o shader para garantir legibilidade do texto. Aumente para `bg-bg/55` se o fundo ficar muito vibrante em algum breakpoint.
+
+**Usage** (hero sections, cinematic section openers):
 ```tsx
 import { ShaderBackground } from "@/components/fx/ShaderBackground";
 
 <section className="relative min-h-screen overflow-hidden">
   <ShaderBackground />
-  {/* content */}
+  {/* conteúdo */}
 </section>
 ```
 
-**Customization** — edit color uniforms in `ShaderCanvas.tsx`:
-```ts
-color1: { value: new THREE.Color("#05060F") },  // base dark
-color2: { value: new THREE.Color("#1A4DFF") },  // accent blue
-```
-
-**Performance**: loaded with `next/dynamic` + `ssr: false`, `dpr={[1, 1.5]}` to cap pixel density. Do not use on more than 2 sections simultaneously.
+**Performance**: sem dynamic import — o `mounted` state garante SSR-safe. Não usar em mais de 1 seção simultaneamente (é WebGL, tem custo de GPU).
 
 ---
 
