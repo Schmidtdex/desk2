@@ -52,6 +52,11 @@
   50%      { transform: scale(1.4); opacity: 0.3; }
 }
 
+@keyframes aurora {
+  0%   { background-position: 50% 50%, 50% 50%; }
+  100% { background-position: 350% 50%, 350% 50%; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
