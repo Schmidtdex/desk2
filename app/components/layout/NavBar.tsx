@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
   { name: "Produto", href: "#scene-products" },
@@ -31,28 +30,36 @@ export function NavBar() {
   }, [isOpen]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
-      <nav className="mx-auto px-4 pt-3">
-        <div
-          className={cn(
-            "mx-auto flex items-center justify-between px-5 py-3 transition-all duration-500",
-            isScrolled
-              ? "max-w-4xl rounded-2xl border border-white/[0.06] bg-[#05060F]/75 backdrop-blur-xl"
-              : "max-w-7xl"
-          )}
-        >
-          <Link href="/" aria-label="Desk Manager" className="flex items-center gap-3 shrink-0">
+    <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-3">
+      {/* Pill container — Framer animates width + bg, avoids CSS reflow */}
+      <motion.nav
+        animate={{
+          width: isScrolled ? "min(896px, 100%)" : "min(1280px, 100%)",
+          backgroundColor: isScrolled ? "rgba(5, 6, 15, 0.82)" : "rgba(0, 0, 0, 0)",
+          boxShadow: isScrolled
+            ? "inset 0 0 0 1px rgba(255, 255, 255, 0.06)"
+            : "inset 0 0 0 0 rgba(0, 0, 0, 0)",
+        }}
+        transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
+        className="relative rounded-2xl"
+        style={{ willChange: "width, background-color" }}
+      >
+        {/* Blur layer — fades independently (backdrop-filter can't be transitioned) */}
+        <motion.div
+          animate={{ opacity: isScrolled ? 1 : 0 }}
+          transition={{ duration: 0.22, ease: [0.2, 0, 0, 1] }}
+          className="pointer-events-none absolute inset-0 rounded-2xl backdrop-blur-xl"
+        />
+
+        <div className="relative flex items-center justify-between gap-6 px-5 py-3">
+          <Link href="/" aria-label="Desk Manager" className="flex shrink-0 items-center">
             <Image
-              src="/desk-manager-icon-white.svg"
-              alt=""
-              width={28}
-              height={22}
+              src="/Logotipo principal - branco.png"
+              alt="Desk Manager"
+              width={120}
+              height={40}
               priority
-              aria-hidden="true"
             />
-            <span className="font-sans text-[15px] font-light tracking-wide text-white">
-              Desk Manager
-            </span>
           </Link>
 
           <ul className="hidden items-center gap-8 lg:flex" aria-label="Navegação principal">
@@ -71,13 +78,13 @@ export function NavBar() {
           <div className="hidden items-center gap-3 lg:flex">
             <Link
               href="#"
-              className="px-4 py-2 font-sans text-sm text-white/60 transition-colors duration-150 hover:text-white"
+              className="px-4 py-2 font-sans text-sm text-white/50 transition-colors duration-150 hover:text-white"
             >
               Entrar
             </Link>
             <Link
               href="#scene-cta"
-              className="rounded-full bg-accent px-5 py-2 font-sans text-sm font-medium text-white shadow-[0_0_24px_rgba(26,77,255,0.35)] transition-all duration-200 hover:shadow-[0_0_36px_rgba(26,77,255,0.5)] hover:brightness-110"
+              className="rounded-full bg-accent px-5 py-2 font-sans text-sm font-medium text-white shadow-[0_0_24px_rgba(26,77,255,0.3)] transition-shadow duration-200 hover:shadow-[0_0_36px_rgba(26,77,255,0.5)]"
             >
               Falar com especialista
             </Link>
@@ -96,7 +103,7 @@ export function NavBar() {
                   initial={{ opacity: 0, rotate: -90 }}
                   animate={{ opacity: 1, rotate: 0 }}
                   exit={{ opacity: 0, rotate: 90 }}
-                  transition={{ duration: 0.18 }}
+                  transition={{ duration: 0.15 }}
                 >
                   <X className="size-5" />
                 </motion.span>
@@ -106,7 +113,7 @@ export function NavBar() {
                   initial={{ opacity: 0, rotate: 90 }}
                   animate={{ opacity: 1, rotate: 0 }}
                   exit={{ opacity: 0, rotate: -90 }}
-                  transition={{ duration: 0.18 }}
+                  transition={{ duration: 0.15 }}
                 >
                   <Menu className="size-5" />
                 </motion.span>
@@ -114,16 +121,16 @@ export function NavBar() {
             </AnimatePresence>
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -8 }}
+            initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.22, ease: [0.2, 0, 0, 1] }}
-            className="mx-4 mt-2 rounded-2xl border border-white/[0.06] bg-[#05060F]/95 p-6 backdrop-blur-xl lg:hidden"
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+            className="absolute inset-x-4 top-full mt-2 rounded-2xl border border-white/[0.06] bg-[#05060F]/95 p-6 backdrop-blur-xl lg:hidden"
           >
             <ul className="space-y-1">
               {NAV_LINKS.map((link) => (
