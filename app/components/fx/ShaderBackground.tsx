@@ -28,6 +28,7 @@ export function ShaderBackground({ className }: { className?: string }) {
       {mounted && (
         <>
           <MeshGradient
+            className="absolute inset-0 w-full h-full"
             width={dimensions.width}
             height={dimensions.height}
             colors={COLORS}

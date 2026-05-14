@@ -5,12 +5,12 @@ import { LenisProvider } from "./components/layout/LenisProvider";
 import { NavBar } from "./components/layout/NavBar";
 
 const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-geist-sans",
+  variable: "--font-display",
   subsets: ["latin"],
   weight: ["200", "300", "400", "500", "600", "700", "800"],
 });
 const jetBrainsMono = JetBrains_Mono({
-  variable: "--font-geist-mono",
+  variable: "--font-code",
   subsets: ["latin"],
   weight: ["200", "300", "400"],
 });
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" className={`${plusJakarta.variable} ${jetBrainsMono.variable}`}>
+    <html lang="pt-BR" className={`${plusJakarta.variable} ${jetBrainsMono.variable}`} style={{ fontFamily: "var(--font-display), system-ui, sans-serif" }}>
       <body className="bg-bg text-text min-h-screen">
         <LenisProvider>
           <NavBar />
