@@ -16,15 +16,25 @@ const NAV_LINKS = [
 export function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const rafRef = useRef(0);
+  const rafRef     = useRef(0);
+  const scrolledRef = useRef(false); // shadow value — avoids setState when unchanged
 
   useEffect(() => {
+    let scheduled = false;
+
     const onScroll = () => {
-      cancelAnimationFrame(rafRef.current);
+      if (scheduled) return; // already waiting for next frame
+      scheduled = true;
       rafRef.current = requestAnimationFrame(() => {
-        setIsScrolled(window.scrollY > 48);
+        scheduled = false;
+        const next = window.scrollY > 48;
+        if (next !== scrolledRef.current) {
+          scrolledRef.current = next;
+          setIsScrolled(next);
+        }
       });
     };
+
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);

@@ -1,30 +1,28 @@
+import dynamic from "next/dynamic";
 import { Hero } from "./components/sections/Hero";
 import { HarvardStats } from "./components/sections/HarvardStats";
 import { ThreePillars } from "./components/sections/ThreePillars";
-import { Timeline } from "./components/sections/Timeline";
-import { WorldGlobe } from "./components/sections/WorldGlobe";
-import { ProductsBento } from "./components/sections/ProductsBento";
-import { RetailFlows } from "./components/sections/RetailFlows";
-import { CasesSticky } from "./components/sections/CasesSticky";
-import { AiAnatomy } from "./components/sections/AiAnatomy";
-import { MaturityJourney } from "./components/sections/MaturityJourney";
-import { TrustMarquee } from "./components/sections/TrustMarquee";
-import { FinalCta } from "./components/sections/FinalCta";
+import { EcosystemHub } from "./components/sections/EcosystemHub";
 import { ScrollDots } from "./components/fx/ScrollDots";
+import { FooterFull } from "./components/layout/FooterFull";
+
+// Heavy below-fold sections — split into separate JS chunks, loaded lazily
+const WorldGlobe       = dynamic(() => import("./components/sections/WorldGlobe").then(m => ({ default: m.WorldGlobe })));
+const SegmentsCarousel = dynamic(() => import("./components/sections/SegmentsCarousel").then(m => ({ default: m.SegmentsCarousel })));
+const CasesSticky      = dynamic(() => import("./components/sections/CasesSticky").then(m => ({ default: m.CasesSticky })));
+const DeskExperience   = dynamic(() => import("./components/sections/DeskExperience").then(m => ({ default: m.DeskExperience })));
+const PartnersMarquee  = dynamic(() => import("./components/sections/PartnersMarquee").then(m => ({ default: m.PartnersMarquee })));
 
 const SECTION_IDS = [
   "scene-hero",
   "scene-harvard",
   "scene-pillars",
-  "scene-timeline",
+  "scene-ecosystem",
   "scene-globe",
-  "scene-products",
-  "scene-flows",
+  "scene-segments",
   "scene-cases",
-  "scene-anatomy",
-  "scene-maturity",
-  "scene-trust",
-  "scene-cta",
+  "scene-experience",
+  "scene-partners",
 ];
 
 export default function Home() {
@@ -34,18 +32,13 @@ export default function Home() {
       <Hero />
       <HarvardStats />
       <ThreePillars />
-      <Timeline />
+      <EcosystemHub />
       <WorldGlobe />
-      <ProductsBento />
-      <RetailFlows />
+      <SegmentsCarousel />
       <CasesSticky />
-      <AiAnatomy />
-      <MaturityJourney />
-      <TrustMarquee />
-      <FinalCta />
-      <footer className="border-t border-border bg-bg py-12 text-center">
-        <p className="font-mono text-xs uppercase tracking-[0.3em] text-text-muted">deskmanager.com</p>
-      </footer>
+      <DeskExperience />
+      <PartnersMarquee />
+      <FooterFull />
     </main>
   );
 }

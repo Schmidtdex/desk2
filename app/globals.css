@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
+
+@custom-variant dark (&:is(.dark *));
 
 /* ─── Glow button: @property must be at stylesheet root ─── */
 @property --gb-rotate           { syntax: "<number>"; inherits: true; initial-value: 0; }
@@ -279,9 +282,43 @@
           mask-image: radial-gradient(circle at center, black 0%, black 30%, transparent 75%);
 }
 
+/* ─── GradientText keyframes ─── */
+@keyframes gradient-border {
+  0%, 100% { transform: translate(-20%, -20%); }
+  25%       { transform: translate(120%, -20%); }
+  50%       { transform: translate(120%, 120%); }
+  75%       { transform: translate(-20%, 120%); }
+}
+@keyframes gradient-1 {
+  0%, 100% { transform: translate(0%, 0%)    scale(1);    }
+  33%       { transform: translate(30%, -25%) scale(1.15); }
+  66%       { transform: translate(-15%, 35%) scale(0.9);  }
+}
+@keyframes gradient-2 {
+  0%, 100% { transform: translate(0%, 0%)    scale(1);    }
+  33%       { transform: translate(-35%, 20%) scale(1.1);  }
+  66%       { transform: translate(20%, -30%) scale(1.2);  }
+}
+@keyframes gradient-3 {
+  0%, 100% { transform: translate(0%, 0%)      scale(1);    }
+  33%       { transform: translate(25%, 35%)   scale(0.95); }
+  66%       { transform: translate(-30%, -15%) scale(1.15); }
+}
+@keyframes gradient-4 {
+  0%, 100% { transform: translate(0%, 0%)     scale(1);   }
+  33%       { transform: translate(-20%, -30%) scale(1.1); }
+  66%       { transform: translate(35%, 20%)  scale(1);   }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
 }
+
+:root { --color-1: hsl(330 100% 40%); --color-2: hsl(140 100% 55%); --color-3: hsl(210 100% 30%); --color-4: hsl(60 100% 70%); --color-5: hsl(295 100% 45%); --brand: hsl(50 100% 50%); }
+
+.dark { --color-1: hsl(330 100% 40%); --color-2: hsl(140 100% 55%); --color-3: hsl(210 100% 30%); --color-4: hsl(60 100% 70%); --color-5: hsl(295 100% 45%); --brand: hsl(50 100% 50%); }
+
+@theme inline { --color-color-1: var(----color-1); --color-color-2: var(----color-2); --color-color-3: var(----color-3); --color-color-4: var(----color-4); --color-color-5: var(----color-5); --color-brand: var(----brand); }

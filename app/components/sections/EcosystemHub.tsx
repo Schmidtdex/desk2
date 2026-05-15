@@ -1,0 +1,457 @@
+﻿"use client";
+
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
+import Image from "next/image";
+import { motion, AnimatePresence, useInView } from "motion/react";
+import { Layers, Server, GitBranch, Wand2, Bot } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { TextEffect } from "@/components/fx/TextEffect";
+
+const R = 350;
+
+interface Pillar {
+  id: string;
+  label: string;
+  name: string;
+  icon: LucideIcon;
+  description: string;
+  angle: number;
+}
+
+const pillars: Pillar[] = [
+  {
+    id: "esm",
+    label: "ESM",
+    name: "Enterprise Service Management",
+    icon: Layers,
+    description:
+      "Centralize portais de autoatendimento, SLAs e catálogos de serviço em um hub único, com visibilidade total para gestores e usuários finais.",
+    angle: -90,
+  },
+  {
+    id: "itsm",
+    label: "ITSM",
+    name: "IT Service Management",
+    icon: Server,
+    description:
+      "Gerencie incidentes, problemas, mudanças e ativos de TI com CMDB integrado e alinhamento nativo ao ITIL.",
+    angle: -18,
+  },
+  {
+    id: "bpm",
+    label: "BPM",
+    name: "Business Process Management",
+    icon: GitBranch,
+    description:
+      "Gestão e automação de processos de negócio com visão executiva.",
+    angle: 54,
+  },
+  {
+    id: "maestro",
+    label: "Maestro",
+    name: "Orquestração Inteligente",
+    icon: Wand2,
+    description:
+      "Plataforma iPaaS para integração low-code de todo o ecossistema.",
+    angle: 126,
+  },
+  {
+    id: "agent",
+    label: "AI Agent",
+    name: "Agentes de IA Autônomos",
+    icon: Bot,
+    description:
+      "Agentes autônomos que decidem e executam tarefas pela operação.",
+    angle: 198,
+  },
+];
+
+function coords(angleDeg: number, radius = R) {
+  const rad = (angleDeg * Math.PI) / 180;
+  return {
+    x: Math.round(radius * Math.cos(rad)),
+    y: Math.round(radius * Math.sin(rad)),
+  };
+}
+
+export function EcosystemHub() {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const active = pillars.find((p) => p.id === activeId) ?? null;
+  const activePillarIndex = activeId
+    ? pillars.findIndex((p) => p.id === activeId)
+    : -1;
+  const panelSide = activePillarIndex % 2 === 0 ? "right" : "left";
+  const headerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(headerRef, { once: true, margin: "-80px" });
+
+  // Orbit animation — direct DOM mutation, zero React re-renders.
+  // Lines wrapper rotates; nodes live outside it and are positioned by RAF directly,
+  // so they never counter-rotate and always stay upright.
+  const orbitLinesRef = useRef<HTMLDivElement>(null);
+  const nodePositionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const angleRef = useRef(0);
+  const activeIdRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    activeIdRef.current = activeId;
+  }, [activeId]);
+
+  // Set initial node positions synchronously before first paint
+  useLayoutEffect(() => {
+    pillars.forEach((p, i) => {
+      const { x, y } = coords(p.angle);
+      const el = nodePositionRefs.current[i];
+      if (el) {
+        el.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    let rafId = 0;
+    let lastTs = 0;
+    const INTERVAL = 1000 / 30; // cap at 30 fps — orbit is decorative, not interactive
+
+    const tick = (ts: number) => {
+      rafId = requestAnimationFrame(tick);
+      if (ts - lastTs < INTERVAL) return; // skip frame
+      lastTs = ts;
+
+      if (activeIdRef.current === null) {
+        angleRef.current = (angleRef.current + 0.16) % 360; // 2× step to match 30 fps
+      }
+      if (orbitLinesRef.current) {
+        orbitLinesRef.current.style.transform = `rotate(${angleRef.current}deg)`;
+      }
+      pillars.forEach((p, i) => {
+        const { x, y } = coords(p.angle + angleRef.current);
+        const el = nodePositionRefs.current[i];
+        if (el) el.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+      });
+    };
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, []);
+
+  function toggle(id: string) {
+    setActiveId((prev) => (prev === id ? null : id));
+  }
+
+  return (
+    <section
+      id="scene-ecosystem"
+      aria-label="Ecossistema Desk"
+      className="relative overflow-hidden bg-transparent py-28 text-text"
+    >
+      <div className="mx-auto max-w-7xl px-8">
+        {/* Section header */}
+        <div ref={headerRef} className="mb-16 text-center">
+          <TextEffect
+            as="p"
+            preset="blur"
+            per="word"
+            trigger={isInView}
+            className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-accent-2"
+          >
+            O Ecossistema
+          </TextEffect>
+          <h2 className="text-[clamp(45px,4vw,100px)] font-light leading-[1.08] tracking-[-0.03em]">
+            <TextEffect
+              as="span"
+              preset="blur"
+              per="word"
+              trigger={isInView}
+              className="block"
+            >
+              Uma plataforma.
+            </TextEffect>
+            <TextEffect
+              as="span"
+              preset="blur"
+              per="word"
+              trigger={isInView}
+              delay={0.28}
+              className="block font-normal text-accent-2"
+            >
+              Cinco pilares.
+            </TextEffect>
+          </h2>
+        </div>
+
+        {/* ── Desktop: radial hub ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.7, ease: "easeOut" as const }}
+          className="hidden md:block"
+        >
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-8">
+            {/* Left detail panel */}
+            <div className="flex justify-end">
+              <AnimatePresence mode="wait">
+                {active && panelSide === "left" && (
+                  <motion.div
+                    key={active.id}
+                    initial={{ opacity: 0, x: -16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -8 }}
+                    transition={{ duration: 0.28, ease: "easeOut" as const }}
+                    className="w-64 rounded-2xl border border-border bg-surface p-6"
+                  >
+                    <div className="mb-3 flex items-center gap-2">
+                      <active.icon
+                        size={14}
+                        className="text-accent-2"
+                        strokeWidth={1.5}
+                      />
+                      <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-accent-2">
+                        {active.label}
+                      </span>
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold leading-snug text-text">
+                      {active.name}
+                    </h3>
+                    <p className="text-sm leading-relaxed text-text-muted">
+                      {active.description}
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Hub canvas */}
+            <div className="relative h-[750px] w-[750px]">
+              {/* Static: orbit ring */}
+              <svg
+                viewBox="-375 -375 750 750"
+                className="pointer-events-none absolute inset-0 h-full w-full"
+                aria-hidden
+              >
+                <circle
+                  cx="0"
+                  cy="0"
+                  r={R}
+                  fill="none"
+                  stroke="rgba(59,130,246,0.08)"
+                  strokeWidth="1"
+                  strokeDasharray="3 7"
+                />
+              </svg>
+
+              {/* Lines wrapper — only this rotates via RAF */}
+              <div
+                ref={orbitLinesRef}
+                className="pointer-events-none absolute inset-0"
+              >
+                <svg
+                  viewBox="-375 -375 750 750"
+                  className="absolute inset-0 h-full w-full"
+                  aria-hidden
+                >
+                  {pillars.map((p) => {
+                    const { x, y } = coords(p.angle);
+                    const isActive = activeId === p.id;
+                    return (
+                      <line
+                        key={p.id}
+                        x1="0"
+                        y1="0"
+                        x2={x}
+                        y2={y}
+                        style={{
+                          stroke: isActive
+                            ? "rgba(26,77,255,0.85)"
+                            : "rgba(59,130,246,0.13)",
+                          strokeWidth: isActive ? 1.5 : 1,
+                          strokeDasharray: isActive ? "0" : "4 4",
+                          filter: isActive
+                            ? "drop-shadow(0 0 5px rgba(26,77,255,0.5))"
+                            : "none",
+                          transition:
+                            "stroke 0.35s ease, stroke-width 0.35s ease, filter 0.35s ease",
+                        }}
+                      />
+                    );
+                  })}
+                </svg>
+              </div>
+
+              {/* Nodes — outside rotating wrapper; RAF sets translate directly, always upright */}
+              {pillars.map((p, i) => {
+                const Icon = p.icon;
+                const isActive = activeId === p.id;
+                return (
+                  <div
+                    key={p.id}
+                    ref={(el) => {
+                      nodePositionRefs.current[i] = el;
+                    }}
+                    className="absolute left-1/2 top-1/2"
+                  >
+                    <motion.button
+                      whileHover={{ scale: 1.07 }}
+                      whileTap={{ scale: 0.96 }}
+                      onClick={() => toggle(p.id)}
+                      className="flex flex-col items-center gap-2 outline-none"
+                      aria-pressed={isActive}
+                    >
+                      <div
+                        className={[
+                          "flex h-17 w-17 items-center justify-center rounded-2xl border transition-colors duration-300",
+                          isActive
+                            ? "border-accent bg-accent text-white shadow-[0_0_32px_rgba(26,77,255,0.5)]"
+                            : "border-border bg-surface text-text-muted hover:border-accent/40 hover:text-accent-2",
+                        ].join(" ")}
+                      >
+                        <Icon size={30} strokeWidth={1.5} />
+                      </div>
+                      <span
+                        className={[
+                          "text-[11px] font-semibold uppercase tracking-[0.1em] transition-colors duration-200",
+                          isActive ? "text-accent-2" : "text-text-muted",
+                        ].join(" ")}
+                      >
+                        {p.label}
+                      </span>
+                    </motion.button>
+                  </div>
+                );
+              })}
+
+              {/* Center logo — always on top */}
+              <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                <motion.div
+                  animate={{ opacity: [0.2, 0.5, 0.2], scale: [1, 1.2, 1] }}
+                  transition={{
+                    duration: 4,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                  }}
+                  className="absolute -inset-10 rounded-full bg-accent/20 blur-2xl"
+                />
+                <motion.div
+                  animate={
+                    activeId
+                      ? {
+                          scale: 1.08,
+                          boxShadow: "0 0 60px rgba(26,77,255,0.5)",
+                        }
+                      : { scale: 1, boxShadow: "0 0 36px rgba(26,77,255,0.28)" }
+                  }
+                  transition={{ duration: 0.4, ease: "easeOut" as const }}
+                  className="relative flex h-40 w-40 items-center justify-center rounded-full border border-accent/25 bg-surface"
+                >
+                  <div className="relative h-14 w-25">
+                    <Image
+                      src="/Logotipo principal - branco.png"
+                      alt="Desk Manager"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+
+            {/* Right detail panel */}
+            <div className="flex justify-start">
+              <AnimatePresence mode="wait">
+                {active && panelSide === "right" && (
+                  <motion.div
+                    key={active.id}
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 8 }}
+                    transition={{ duration: 0.28, ease: "easeOut" as const }}
+                    className="w-64 rounded-2xl border border-border bg-surface p-6"
+                  >
+                    <div className="mb-3 flex items-center gap-2">
+                      <active.icon
+                        size={14}
+                        className="text-accent-2"
+                        strokeWidth={1.5}
+                      />
+                      <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-accent-2">
+                        {active.label}
+                      </span>
+                    </div>
+                    <h3 className="mb-2 text-lg font-semibold leading-snug text-text">
+                      {active.name}
+                    </h3>
+                    <p className="text-sm leading-relaxed text-text-muted">
+                      {active.description}
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* ── Mobile: vertical accordion ── */}
+        <div className="grid grid-cols-1 gap-3 md:hidden">
+          {pillars.map((p, i) => {
+            const Icon = p.icon;
+            const isActive = activeId === p.id;
+            return (
+              <motion.button
+                key={p.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.4,
+                  delay: i * 0.07,
+                  ease: "easeOut" as const,
+                }}
+                onClick={() => toggle(p.id)}
+                className={[
+                  "w-full rounded-2xl border p-4 text-left transition-colors duration-200",
+                  isActive
+                    ? "border-accent/50 bg-surface"
+                    : "border-border bg-surface",
+                ].join(" ")}
+                aria-pressed={isActive}
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className={[
+                      "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-colors duration-200",
+                      isActive
+                        ? "border-accent bg-accent text-white"
+                        : "border-border bg-surface-2 text-text-muted",
+                    ].join(" ")}
+                  >
+                    <Icon size={17} strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <span className="block text-[10px] font-semibold uppercase tracking-[0.1em] text-accent-2">
+                      {p.label}
+                    </span>
+                    <span className="text-sm font-medium text-text">
+                      {p.name}
+                    </span>
+                  </div>
+                </div>
+                <AnimatePresence>
+                  {isActive && (
+                    <motion.p
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="mt-10 overflow-hidden text-xs leading-relaxed text-text-muted"
+                    >
+                      {p.description}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </motion.button>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
