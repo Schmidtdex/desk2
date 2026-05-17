@@ -12,11 +12,15 @@ export function CasesSticky() {
   // Pre-fetch and pre-decode all case photos before any transition.
   // decode() offloads JPEG/PNG decompression to a worker so the first
   // animated frame is never blocked by image decoding.
+  // The ref keeps the Image objects alive until decode() resolves — without it,
+  // GC can drop them mid-decode and cancel the worker task.
+  const preloadRef = useRef<HTMLImageElement[]>([]);
   useEffect(() => {
-    CASES.forEach(c => {
+    preloadRef.current = CASES.map(c => {
       const img = new window.Image();
       img.src = c.photo;
       if ("decode" in img) img.decode().catch(() => {});
+      return img;
     });
   }, []);
 
@@ -47,18 +51,26 @@ export function CasesSticky() {
 
       progRef.current = prog;
 
-      const hasNext = idx < CASES.length - 1;
-      if (curSlotRef.current) {
-        curSlotRef.current.style.transform =
-          `translate3d(0,${-100 * (hasNext ? prog : 0)}%,0)`;
-        curSlotRef.current.style.pointerEvents = prog < 0.5 ? "auto" : "none";
-      }
-      if (nextSlotRef.current) {
-        nextSlotRef.current.style.transform =
-          `translate3d(0,${100 * (1 - prog)}%,0)`;
-        nextSlotRef.current.style.pointerEvents = prog >= 0.5 ? "auto" : "none";
+      // Guard: when idx changes, curSlotRef/nextSlotRef still point to OLD elements.
+      // Applying new-idx math to old refs jumps them ~98% in the wrong direction
+      // for one frame, causing a visible glitch. Skip transforms this frame —
+      // setCurRef/setNextRef will set correct initial positions after React commits.
+      const idxChanged = idx !== idxRef.current;
+      if (!idxChanged) {
+        const hasNext = idx < CASES.length - 1;
+        if (curSlotRef.current) {
+          curSlotRef.current.style.transform =
+            `translate3d(0,${-100 * (hasNext ? prog : 0)}%,0)`;
+          curSlotRef.current.style.pointerEvents = prog < 0.5 ? "auto" : "none";
+        }
+        if (nextSlotRef.current) {
+          nextSlotRef.current.style.transform =
+            `translate3d(0,${100 * (1 - prog)}%,0)`;
+          nextSlotRef.current.style.pointerEvents = prog >= 0.5 ? "auto" : "none";
+        }
       }
 
+      // Sidebar uses pure math (no DOM ref dependency) — always safe to update.
       sidebarBarRefs.current.forEach((bar, i) => {
         if (!bar) return;
         const fill =
@@ -75,11 +87,11 @@ export function CasesSticky() {
               : "#3B82F6";
       });
 
-      const newVisualIdx = Math.min(Math.round(cRaw), CASES.length - 1);
-      if (idx !== idxRef.current) {
+      if (idxChanged) {
         idxRef.current = idx;
         setActiveIdx(idx);
       }
+      const newVisualIdx = Math.min(Math.round(cRaw), CASES.length - 1);
       if (newVisualIdx !== visualIdxRef.current) {
         visualIdxRef.current = newVisualIdx;
         setVisualIdx(newVisualIdx);
@@ -99,11 +111,11 @@ export function CasesSticky() {
     };
   }, []);
 
-  const scrollToCase = (i: number) => {
+  const scrollToCase = useCallback((i: number) => {
     if (!wrapperRef.current) return;
     const top = wrapperRef.current.getBoundingClientRect().top + window.scrollY;
     window.scrollTo({ top: top + i * SLOT_VH * window.innerHeight, behavior: "smooth" });
-  };
+  }, []);
 
   const cur  = CASES[activeIdx];
   const next = CASES[activeIdx + 1];

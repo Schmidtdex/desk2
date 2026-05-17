@@ -147,7 +147,7 @@ export function ThreePillars() {
             <h3 className="mb-1 text-[20px] font-semibold tracking-[-0.02em]">
               Processos
             </h3>
-            <p className="max-w-[100%] text-[14px] leading-[1.10] opacity-90">
+            <p className="max-w-full text-[14px] leading-[1.10] opacity-90">
               Garantir que o trabalho seja feito corretamente, sempre
             </p>
           </div>

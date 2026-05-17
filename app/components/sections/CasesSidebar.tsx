@@ -1,6 +1,6 @@
 "use client";
 
-import { type MutableRefObject } from "react";
+import { memo, useMemo, type MutableRefObject } from "react";
 import { type CaseData, DISPLAY, MONO } from "@/lib/cases-sticky";
 
 interface Props {
@@ -10,7 +10,16 @@ interface Props {
   onScrollToCase: (i: number) => void;
 }
 
-export function CasesSidebar({ cases, visualIdx, sidebarBarRefs, onScrollToCase }: Props) {
+export const CasesSidebar = memo(function CasesSidebar({ cases, visualIdx, sidebarBarRefs, onScrollToCase }: Props) {
+  // Stable ref callbacks — inline arrows recreate on every render, causing React to
+  // call old(null) then new(el), briefly nulling the ref and making the scroll RAF
+  // skip bar updates for one frame. useMemo with [] creates these once at mount.
+  const barRefCallbacks = useMemo(
+    () => cases.map((_, i) => (el: HTMLDivElement | null) => { sidebarBarRefs.current[i] = el; }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   return (
     <div
       style={{
@@ -48,7 +57,7 @@ export function CasesSidebar({ cases, visualIdx, sidebarBarRefs, onScrollToCase 
               }}
             >
               <div
-                ref={(el) => { sidebarBarRefs.current[i] = el; }}
+                ref={barRefCallbacks[i]}
                 style={{
                   position: "absolute",
                   top: 0,
@@ -109,4 +118,4 @@ export function CasesSidebar({ cases, visualIdx, sidebarBarRefs, onScrollToCase 
       })}
     </div>
   );
-}
+});

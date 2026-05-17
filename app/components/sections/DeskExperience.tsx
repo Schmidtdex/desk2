@@ -91,7 +91,7 @@ export function DeskExperience() {
         style={{ height: "220vh", position: "relative", marginTop: "180px" }}
       >
         <div style={{ position: "sticky", top: 0, height: "100dvh", overflow: "hidden" }}>
-          <section className="relative flex flex-col items-center justify-center min-h-[100dvh]">
+          <section className="relative flex flex-col items-center justify-center min-h-dvh">
 
             {/* Background — imperative opacity, no motion re-renders */}
             <div ref={bgRef} className="absolute inset-0 z-0" style={{ opacity: 1 }}>

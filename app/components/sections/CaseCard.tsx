@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useEffect, useMemo, useRef } from "react";
 import { motion } from "motion/react";
 import Image from "next/image";
 import {
@@ -17,7 +17,12 @@ import {
   HAIR_2,
   BG_CARD,
 } from "@/lib/cases-sticky";
-import { parseAnimatable, useCountUp } from "@/hooks/useCountUp";
+import { parseAnimatable } from "@/hooks/useCountUp";
+
+// Stable objects outside the component — StatRow re-renders at ~60fps during
+// count-up animation, so any object literal inside would get recreated every frame.
+const STAT_INITIAL = { opacity: 0, y: 10 };
+const STAT_ANIMATE = { opacity: 1, y: 0 };
 
 function StatRow({
   metric,
@@ -28,8 +33,31 @@ function StatRow({
   isLast: boolean;
   delay: number;
 }) {
-  const parsed = parseAnimatable(metric.value);
-  const count = useCountUp(parsed?.n ?? 0, parsed !== null);
+  const parsed = useMemo(() => parseAnimatable(metric.value), [metric.value]);
+  const countRef = useRef<HTMLSpanElement>(null);
+  const transition = useMemo(
+    () => ({ duration: 0.48, delay, ease: [0.16, 1, 0.3, 1] as const }),
+    [delay],
+  );
+
+  // Direct DOM mutation for count-up — zero React re-renders during animation.
+  // StatRow would otherwise re-render at ~60fps (via setState) while the scroll
+  // RAF and Framer Motion are also running, tripling the per-frame work.
+  useEffect(() => {
+    if (!parsed || !countRef.current) return;
+    const el = countRef.current;
+    const { n } = parsed;
+    const t0 = performance.now();
+    let rafId: number;
+    const tick = (now: number) => {
+      const p = Math.min((now - t0) / 950, 1);
+      el.textContent = String(Math.round(n * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) rafId = requestAnimationFrame(tick);
+    };
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [parsed]);
 
   const valueNode = parsed ? (
     <>
@@ -48,7 +76,7 @@ function StatRow({
           {parsed.prefix}
         </span>
       )}
-      {count}
+      <span ref={countRef}>0</span>
       {parsed.suffix && (
         <span style={{ fontSize: "0.61em", color: BLUE, marginLeft: 2 }}>
           {parsed.suffix}
@@ -69,9 +97,9 @@ function StatRow({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.48, delay, ease: [0.16, 1, 0.3, 1] }}
+      initial={STAT_INITIAL}
+      animate={STAT_ANIMATE}
+      transition={transition}
       style={{
         display: "grid",
         gridTemplateColumns: "1fr 180px",
@@ -358,9 +386,6 @@ export const CaseCard = memo(function CaseCard({ data }: { data: CaseData }) {
             background: "#eef0ff",
             border: "1px solid #dde1ff",
             height: "100%",
-            // GPU layer: border-radius clipping + image compositing on GPU during parent translate3d
-            transform: "translateZ(0)",
-            willChange: "transform",
           }}
         >
           <Image
