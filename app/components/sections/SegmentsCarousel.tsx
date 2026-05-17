@@ -15,6 +15,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useInView } from "motion/react";
 import { TextEffect } from "@/components/fx/TextEffect";
 import type { LucideIcon } from "lucide-react";
+import Image from "next/image";
 
 const DISPLAY = "var(--font-display,system-ui,sans-serif)";
 const CARD_W = 320;
@@ -111,9 +112,10 @@ function SegmentCard({ seg, delay }: { seg: Segment; delay: number }) {
         border: "1px solid rgba(59,130,246,0.12)",
       }}
     >
-      <img
+      <Image
         src={seg.image}
         alt={seg.title}
+        fill
         style={{
           position: "absolute",
           inset: 0,
@@ -248,10 +250,30 @@ export function SegmentsCarousel() {
   const sync = useCallback(() => {
     const el = trackRef.current;
     if (!el) return;
-    const idx = Math.round(el.scrollLeft / (CARD_W + GAP));
-    setCurrentIdx(Math.min(idx, SEGMENTS.length - 1));
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    const atEnd = el.scrollLeft >= maxScroll - 8;
+
     setCanPrev(el.scrollLeft > 8);
-    setCanNext(el.scrollLeft < el.scrollWidth - el.clientWidth - 8);
+    setCanNext(!atEnd);
+
+    if (atEnd) {
+      setCurrentIdx(SEGMENTS.length - 1);
+      return;
+    }
+
+    // Last index whose ideal snap position fits within maxScroll
+    const maxNaturalIdx = Math.floor(maxScroll / (CARD_W + GAP));
+    const lastNaturalSnap = maxNaturalIdx * (CARD_W + GAP);
+
+    if (el.scrollLeft <= lastNaturalSnap) {
+      setCurrentIdx(Math.round(el.scrollLeft / (CARD_W + GAP)));
+    } else {
+      // Overflow zone: smoothly walk through the remaining dots
+      // while the snap animation carries scrollLeft from lastNaturalSnap → maxScroll
+      const t = (el.scrollLeft - lastNaturalSnap) / (maxScroll - lastNaturalSnap);
+      const remaining = SEGMENTS.length - 1 - maxNaturalIdx;
+      setCurrentIdx(maxNaturalIdx + Math.round(t * remaining));
+    }
   }, []);
 
   useEffect(() => {
@@ -306,7 +328,7 @@ export function SegmentsCarousel() {
                 delay={0.22}
                 className="block font-normal text-accent-2"
               >
-                cada setor merecia.
+                cada setor merece.
               </TextEffect>
             </h2>
             <TextEffect

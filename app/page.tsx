@@ -3,7 +3,6 @@ import { Hero } from "./components/sections/Hero";
 import { HarvardStats } from "./components/sections/HarvardStats";
 import { ThreePillars } from "./components/sections/ThreePillars";
 import { EcosystemHub } from "./components/sections/EcosystemHub";
-import { ScrollDots } from "./components/fx/ScrollDots";
 import { FooterFull } from "./components/layout/FooterFull";
 
 // Heavy below-fold sections — split into separate JS chunks, loaded lazily
@@ -13,22 +12,9 @@ const CasesSticky      = dynamic(() => import("./components/sections/CasesSticky
 const DeskExperience   = dynamic(() => import("./components/sections/DeskExperience").then(m => ({ default: m.DeskExperience })));
 const PartnersMarquee  = dynamic(() => import("./components/sections/PartnersMarquee").then(m => ({ default: m.PartnersMarquee })));
 
-const SECTION_IDS = [
-  "scene-hero",
-  "scene-harvard",
-  "scene-pillars",
-  "scene-ecosystem",
-  "scene-globe",
-  "scene-segments",
-  "scene-cases",
-  "scene-experience",
-  "scene-partners",
-];
-
 export default function Home() {
   return (
     <main className="relative">
-      <ScrollDots ids={SECTION_IDS} />
       <Hero />
       <HarvardStats />
       <ThreePillars />
