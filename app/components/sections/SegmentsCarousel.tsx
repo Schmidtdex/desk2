@@ -39,7 +39,7 @@ const SEGMENTS: Segment[] = [
     id: "agro",
     title: "Agro e Alimentos",
     description:
-      "Gestao de chamados, manutencao preventiva e suporte a campo para cooperativas e agroindustrias.",
+      "Gestão de chamados, manutenção preventiva e suporte a campo para cooperativas e agroindústrias.",
     icon: Wheat,
     image: "/agro.png",
   },
@@ -55,7 +55,7 @@ const SEGMENTS: Segment[] = [
     id: "educacao",
     title: "Educação",
     description:
-      "Portal de servicos unificado para alunos, docentes e administrativo com workflows por campus.",
+      "Portal de serviços unificado para alunos, docentes e administrativo com workflows por campus.",
     icon: GraduationCap,
     image: "/educacao.png",
   },
@@ -63,7 +63,7 @@ const SEGMENTS: Segment[] = [
     id: "industria",
     title: "Indústria",
     description:
-      "CMDB industrial, ordens de manutencao, gestao de ativos e integracao nativa com o chao de fabrica.",
+      "CMDB industrial, ordens de manutenção, gestão de ativos e integração nativa com o chão de fábrica.",
     icon: Factory,
     image: "/industria.png",
   },
@@ -71,7 +71,7 @@ const SEGMENTS: Segment[] = [
     id: "logistica",
     title: "Logística",
     description:
-      "Rastreamento de ocorrencias, SLA por entregador e visibilidade em tempo real de toda a operacao.",
+      "Rastreamento de ocorrências, SLA por entregador e visibilidade em tempo real de toda a operação.",
     icon: Truck,
     image: "/logistica.png",
   },
@@ -79,7 +79,7 @@ const SEGMENTS: Segment[] = [
     id: "saude",
     title: "Saúde e Diagnóstico",
     description:
-      "Chamados clinicos, gestao de equipamentos e SLA adaptado a criticidade hospitalar e laboratorial.",
+      "Chamados clínicos, gestão de equipamentos e SLA adaptado a criticidade hospitalar e laboratorial.",
     icon: Activity,
     image: "/saude.png",
   },
@@ -87,7 +87,7 @@ const SEGMENTS: Segment[] = [
     id: "servicos",
     title: "Serviços e Outsourcing",
     description:
-      "Gestao de contratos, prazos e equipes em campo com visibilidade por cliente e SLA terceirizado.",
+      "Gestão de contratos, prazos e equipes em campo com visibilidade por cliente e SLA terceirizado.",
     icon: Briefcase,
     image: "/servicos.png",
   },
@@ -285,10 +285,18 @@ export function SegmentsCarousel() {
   }, [sync]);
 
   const scrollTo = (i: number) => {
-    trackRef.current?.scrollTo({
-      left: i * (CARD_W + GAP),
-      behavior: "smooth",
-    });
+    const el = trackRef.current;
+    if (!el) return;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    const ideal = i * (CARD_W + GAP);
+    // When the desired position exceeds maxScroll and we're already at the end,
+    // step back to the last distinct snap point instead of staying put.
+    const atEnd = el.scrollLeft >= maxScroll - 8;
+    const target =
+      ideal >= maxScroll && atEnd
+        ? Math.floor((maxScroll - 1) / (CARD_W + GAP)) * (CARD_W + GAP)
+        : Math.min(ideal, maxScroll);
+    el.scrollTo({ left: target, behavior: "smooth" });
   };
 
   return (
@@ -340,7 +348,7 @@ export function SegmentsCarousel() {
               className="mt-5 text-[15px] leading-relaxed text-text-muted"
             >
               Sete verticais. Um ecossistema. A Desk Manager opera com entregas
-              especificas para cada realidade operacional.
+              específicas para cada realidade operacional.
             </TextEffect>
           </div>
 
