@@ -114,7 +114,7 @@ export function NavBar() {
             onClick={() => setIsOpen((v) => !v)}
             aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
             aria-expanded={isOpen}
-            className="relative z-50 p-2 text-white lg:hidden"
+            className="relative z-50 flex min-h-[44px] min-w-[44px] items-center justify-center p-2 text-white lg:hidden"
           >
             <AnimatePresence mode="wait" initial={false}>
               {isOpen ? (
