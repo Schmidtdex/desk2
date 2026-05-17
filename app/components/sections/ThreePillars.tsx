@@ -18,9 +18,9 @@ export function ThreePillars() {
     <section
       id="scene-pillars"
       aria-label="Plataforma de IA"
-      className="relative overflow-hidden bg-transparent pt-[140px] pb-24 text-text"
+      className="relative overflow-hidden bg-transparent pt-20 pb-16 text-text md:pt-[140px] md:pb-24"
     >
-      <div className="relative mx-auto grid max-w-[1280px] grid-cols-1 items-center gap-12 px-8 md:grid-cols-[1.05fr_1fr]">
+      <div className="relative mx-auto grid max-w-[1280px] grid-cols-1 items-center gap-12 px-5 sm:px-8 md:grid-cols-[1.05fr_1fr]">
         {/* ── Left copy ── */}
         <motion.div
           initial="hidden"
@@ -64,7 +64,7 @@ export function ThreePillars() {
           viewport={{ once: true, amount: 0.25 }}
           custom={1}
           variants={fadeUp}
-          className="relative ml-auto aspect-square w-full max-w-[520px]"
+          className="relative mx-auto aspect-square w-full max-w-[480px] md:ml-auto"
         >
           {/* Connecting lines behind all nodes */}
           <svg
