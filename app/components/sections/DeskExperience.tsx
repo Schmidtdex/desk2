@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { Users, Lightbulb, TrendingUp, CircleCheck } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 // -- Design tokens -----------------------------------------------------------
 const DISPLAY = "var(--font-display,system-ui,sans-serif)";
@@ -25,6 +26,7 @@ const FEATURES: Feature[] = [
 
 // -- Component ---------------------------------------------------------------
 export function DeskExperience() {
+  const isMobile = useIsMobile();
   const wrapperRef  = useRef<HTMLDivElement>(null);
   const bgRef       = useRef<HTMLDivElement>(null);
   const mediaRef    = useRef<HTMLDivElement>(null);
@@ -161,13 +163,13 @@ export function DeskExperience() {
       </div>
 
       {/* ── Editorial content ─────────────────────────────────────────────── */}
-      <section style={{ background: "#05060F", paddingTop: "96px", paddingBottom: "112px" }}>
-        <div style={{ maxWidth: 1152, margin: "0 auto", padding: "0 48px" }}>
+      <section style={{ background: "#05060F", paddingTop: isMobile ? "48px" : "96px", paddingBottom: isMobile ? "64px" : "112px" }}>
+        <div style={{ maxWidth: 1152, margin: "0 auto", padding: isMobile ? "0 20px" : "0 48px" }}>
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "2fr 3fr",
-              gap: "clamp(40px,5vw,96px)",
+              gridTemplateColumns: isMobile ? "1fr" : "2fr 3fr",
+              gap: "clamp(32px,5vw,96px)",
               alignItems: "start",
             }}
           >
@@ -177,7 +179,7 @@ export function DeskExperience() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              style={{ position: "sticky", top: 96 }}
+              style={isMobile ? undefined : { position: "sticky", top: 96 }}
             >
               <p style={{ fontFamily: MONO, fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "#3B82F6", marginBottom: 28 }}>
                 Desk Manager Experience
@@ -207,7 +209,7 @@ export function DeskExperience() {
             </motion.div>
 
             {/* RIGHT — 2×2 feature cards */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 16 }}>
               {FEATURES.map((f, i) => {
                 const Icon = f.icon;
                 return (
