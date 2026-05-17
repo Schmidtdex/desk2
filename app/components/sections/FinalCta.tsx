@@ -37,7 +37,7 @@ export function FinalCta() {
     <section
       id="scene-cta"
       aria-label="Convite final"
-      className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-6 py-32"
+      className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-6 py-16 md:py-32"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(26,77,255,0.15),transparent_60%)]" />
       <div className="absolute inset-0" aria-hidden="true">
@@ -63,7 +63,7 @@ export function FinalCta() {
           <Typewriter text={Q2} delay={2500} />
         </h2>
 
-        <div className="mt-20">
+        <div className="mt-10 md:mt-20">
           <MagneticButton>Vamos colocar sua operação em movimento.</MagneticButton>
         </div>
       </div>
