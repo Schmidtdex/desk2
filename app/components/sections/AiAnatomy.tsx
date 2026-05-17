@@ -38,7 +38,7 @@ export function AiAnatomy() {
       id="scene-anatomy"
       aria-label="Anatomia da IA"
       ref={ref}
-      className="relative min-h-screen overflow-hidden px-6 py-32"
+      className="relative min-h-screen overflow-hidden px-6 py-16 md:py-32"
     >
       <div className="mx-auto grid max-w-7xl gap-16 lg:grid-cols-2">
         <div className="flex flex-col justify-center">
