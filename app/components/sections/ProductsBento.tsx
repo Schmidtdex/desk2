@@ -41,10 +41,10 @@ export function ProductsBento() {
     <section
       id="scene-products"
       aria-label="Cinco produtos da plataforma"
-      className="relative min-h-screen px-6 py-32"
+      className="relative min-h-screen px-6 py-16 md:py-32"
     >
       <div className="mx-auto max-w-7xl">
-        <div className="mb-16 max-w-3xl">
+        <div className="mb-8 max-w-3xl md:mb-16">
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-text-muted">Produtos</p>
           <h2 className="mt-3 text-[clamp(2rem,4.5vw,3.75rem)] font-extralight leading-tight tracking-tight">
             Orqueste a operação da sua empresa em um só lugar.
