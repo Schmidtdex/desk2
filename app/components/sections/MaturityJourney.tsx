@@ -11,7 +11,7 @@ export function MaturityJourney() {
     <section
       id="scene-maturity"
       aria-label="Jornada de maturidade com IA"
-      className="relative min-h-screen px-6 py-32"
+      className="relative min-h-screen px-6 py-16 md:py-32"
     >
       <div className="mx-auto max-w-6xl text-center">
         <p className="font-mono text-xs uppercase tracking-[0.3em] text-text-muted">Jornada do Humano com IA</p>
@@ -19,7 +19,7 @@ export function MaturityJourney() {
           Aumento de maturidade com naturalidade.
         </h2>
 
-        <div className="mt-20 flex h-72 items-end justify-center gap-3">
+        <div className="mt-12 flex h-64 items-end justify-center gap-1.5 sm:mt-20 sm:h-72 sm:gap-3">
           {MATURITY.map((s, i) => {
             const isActive = i === stage;
             const isPassed = i < stage;
@@ -28,7 +28,7 @@ export function MaturityJourney() {
               <div
                 key={s.key}
                 className={cn(
-                  "relative flex w-20 flex-col items-center justify-end rounded-t-xl border border-b-0 border-border transition-all duration-300",
+                  "relative flex w-10 flex-col items-center justify-end rounded-t-xl border border-b-0 border-border transition-all duration-300 sm:w-20",
                   isActive
                     ? "bg-accent shadow-[0_0_60px_var(--color-accent-glow)]"
                     : isPassed
