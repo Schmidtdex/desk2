@@ -53,7 +53,7 @@ const SEGMENTS: Segment[] = [
   },
   {
     id: "educacao",
-    title: "Educacao",
+    title: "Educação",
     description:
       "Portal de servicos unificado para alunos, docentes e administrativo com workflows por campus.",
     icon: GraduationCap,
@@ -61,7 +61,7 @@ const SEGMENTS: Segment[] = [
   },
   {
     id: "industria",
-    title: "Industria",
+    title: "Indústria",
     description:
       "CMDB industrial, ordens de manutencao, gestao de ativos e integracao nativa com o chao de fabrica.",
     icon: Factory,
@@ -69,7 +69,7 @@ const SEGMENTS: Segment[] = [
   },
   {
     id: "logistica",
-    title: "Logistica",
+    title: "Logística",
     description:
       "Rastreamento de ocorrencias, SLA por entregador e visibilidade em tempo real de toda a operacao.",
     icon: Truck,
@@ -77,7 +77,7 @@ const SEGMENTS: Segment[] = [
   },
   {
     id: "saude",
-    title: "Saude e Diagnostico",
+    title: "Saúde e Diagnóstico",
     description:
       "Chamados clinicos, gestao de equipamentos e SLA adaptado a criticidade hospitalar e laboratorial.",
     icon: Activity,
@@ -85,7 +85,7 @@ const SEGMENTS: Segment[] = [
   },
   {
     id: "servicos",
-    title: "Servicos e Outsourcing",
+    title: "Serviços e Outsourcing",
     description:
       "Gestao de contratos, prazos e equipes em campo com visibilidade por cliente e SLA terceirizado.",
     icon: Briefcase,
