@@ -28,7 +28,7 @@ export function PartnersMarquee() {
 
           {/* Left label — same markup as desk1 */}
           <div className="md:max-w-44 md:border-r md:pr-6 md:border-white/10">
-            <p className="text-end text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>
+            <p className="text-center text-sm md:text-end" style={{ color: "rgba(255,255,255,0.4)" }}>
               Impulsionando as melhores equipes
             </p>
           </div>
