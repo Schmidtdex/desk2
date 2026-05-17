@@ -95,7 +95,7 @@ export function FooterFull() {
                 key={label}
                 href={href}
                 aria-label={label}
-                className="flex items-center justify-center w-10 h-10 rounded-full transition-all duration-200 hover:scale-110"
+                className="flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200 hover:scale-110"
                 style={{
                   backgroundColor: "rgba(2,55,255,0.15)",
                   border: "1px solid rgba(2,55,255,0.3)",
