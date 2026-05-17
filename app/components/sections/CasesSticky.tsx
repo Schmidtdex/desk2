@@ -205,7 +205,9 @@ export function CasesSticky() {
             <div
               style={{
                 width: "100%",
-                height: "calc(100vh - 96px - 40px)",
+                height: isMobile
+                ? "calc(100dvh - 64px - 20px)"
+                : "calc(100vh - 96px - 40px)",
                 background: BG_FRAME,
                 border: `1px solid ${HAIR}`,
                 borderRadius: 18,
