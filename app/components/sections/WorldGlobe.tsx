@@ -66,7 +66,7 @@ export function WorldGlobe() {
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-text-muted">
             Do Brasil para o mundo
           </p>
-          <h2 className="mt-6 text-[clamp(2.5rem,6vw,5rem)] font-extralight leading-[1.05] tracking-tight">
+          <h2 className="mt-4 text-[clamp(2rem,6vw,5rem)] font-extralight leading-[1.05] tracking-tight md:mt-6">
             <span className="text-accent">+40</span> países
           </h2>
           <p className="mt-5 max-w-md text-text-muted">
