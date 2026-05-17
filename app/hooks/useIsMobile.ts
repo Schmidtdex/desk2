@@ -1,11 +1,14 @@
 "use client";
 
-// app/hooks/useIsMobile.ts
 import { useState, useEffect } from "react";
 
 export function useIsMobile(breakpoint = 640) {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia(`(max-width: ${breakpoint - 1}px)`).matches;
+  });
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const mq = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
     setIsMobile(mq.matches);
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
