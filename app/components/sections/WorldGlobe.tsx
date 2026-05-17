@@ -14,16 +14,19 @@ export function WorldGlobe() {
     let rafId = 0;
     let visible = false;
 
-    const dpr = Math.min(window.devicePixelRatio, 1.5);
+    const isMob = window.innerWidth < 640;
+    const size = isMob ? 300 : 600;
+    const dpr = Math.min(window.devicePixelRatio, isMob ? 1 : 1.5);
+
     const globe = createGlobe(canvas, {
       devicePixelRatio: dpr,
-      width: 600 * dpr,
-      height: 600 * dpr,
+      width: size * dpr,
+      height: size * dpr,
       phi: 0,
       theta: 0.25,
       dark: 1,
       diffuse: 1.2,
-      mapSamples: 4000,
+      mapSamples: isMob ? 1000 : 4000,
       mapBrightness: 6,
       baseColor: [0.07, 0.08, 0.15],
       markerColor: [0.1, 0.3, 1],
@@ -32,9 +35,7 @@ export function WorldGlobe() {
     });
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        visible = entry.isIntersecting;
-      },
+      ([entry]) => { visible = entry.isIntersecting; },
       { threshold: 0.1 }
     );
     observer.observe(canvas);
@@ -58,7 +59,7 @@ export function WorldGlobe() {
     <section
       id="scene-globe"
       aria-label="Presença global"
-      className="relative flex min-h-screen items-center overflow-hidden px-6 py-32"
+      className="relative flex min-h-screen items-center overflow-hidden px-6 py-16 md:py-32"
     >
       <div className="mx-auto grid w-full max-w-7xl gap-16 lg:grid-cols-2">
         <div className="flex flex-col justify-center">
@@ -77,7 +78,7 @@ export function WorldGlobe() {
             ))}
           </ul>
         </div>
-        <div className="relative mx-auto aspect-square w-full max-w-150">
+        <div className="relative mx-auto aspect-square w-full max-w-[300px] sm:max-w-[400px] lg:max-w-[600px]">
           <canvas
             ref={canvasRef}
             style={{ width: "100%", height: "100%" }}
