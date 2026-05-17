@@ -66,6 +66,33 @@ const pillars: Pillar[] = [
   },
 ];
 
+function PillarPanel({ pillar, side }: { pillar: Pillar; side: "left" | "right" }) {
+  const dir = side === "left" ? -1 : 1;
+  return (
+    <motion.div
+      key={pillar.id}
+      initial={{ opacity: 0, x: 16 * dir }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 8 * dir }}
+      transition={{ duration: 0.28, ease: "easeOut" as const }}
+      className="w-64 rounded-2xl border border-border bg-surface p-6"
+    >
+      <div className="mb-3 flex items-center gap-2">
+        <pillar.icon size={14} className="text-accent-2" strokeWidth={1.5} />
+        <span className="text-[11px] font-semibold uppercase tracking-widest text-accent-2">
+          {pillar.label}
+        </span>
+      </div>
+      <h3 className="mb-2 text-lg font-semibold leading-snug text-text">
+        {pillar.name}
+      </h3>
+      <p className="text-sm leading-relaxed text-text-muted">
+        {pillar.description}
+      </p>
+    </motion.div>
+  );
+}
+
 function coords(angleDeg: number, radius = R) {
   const rad = (angleDeg * Math.PI) / 180;
   return {
@@ -191,31 +218,7 @@ export function EcosystemHub() {
             <div className="flex justify-end">
               <AnimatePresence mode="wait">
                 {active && panelSide === "left" && (
-                  <motion.div
-                    key={active.id}
-                    initial={{ opacity: 0, x: -16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -8 }}
-                    transition={{ duration: 0.28, ease: "easeOut" as const }}
-                    className="w-64 rounded-2xl border border-border bg-surface p-6"
-                  >
-                    <div className="mb-3 flex items-center gap-2">
-                      <active.icon
-                        size={14}
-                        className="text-accent-2"
-                        strokeWidth={1.5}
-                      />
-                      <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-accent-2">
-                        {active.label}
-                      </span>
-                    </div>
-                    <h3 className="mb-2 text-lg font-semibold leading-snug text-text">
-                      {active.name}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-text-muted">
-                      {active.description}
-                    </p>
-                  </motion.div>
+                  <PillarPanel pillar={active} side="left" />
                 )}
               </AnimatePresence>
             </div>
@@ -308,7 +311,7 @@ export function EcosystemHub() {
                       </div>
                       <span
                         className={[
-                          "text-[11px] font-semibold uppercase tracking-[0.1em] transition-colors duration-200",
+                          "text-[11px] font-semibold uppercase tracking-widest transition-colors duration-200",
                           isActive ? "text-accent-2" : "text-text-muted",
                         ].join(" ")}
                       >
@@ -347,6 +350,7 @@ export function EcosystemHub() {
                       src="/Logotipo principal - branco.png"
                       alt="Desk Manager"
                       fill
+                      sizes="100px"
                       className="object-contain"
                     />
                   </div>
@@ -358,31 +362,7 @@ export function EcosystemHub() {
             <div className="flex justify-start">
               <AnimatePresence mode="wait">
                 {active && panelSide === "right" && (
-                  <motion.div
-                    key={active.id}
-                    initial={{ opacity: 0, x: 16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 8 }}
-                    transition={{ duration: 0.28, ease: "easeOut" as const }}
-                    className="w-64 rounded-2xl border border-border bg-surface p-6"
-                  >
-                    <div className="mb-3 flex items-center gap-2">
-                      <active.icon
-                        size={14}
-                        className="text-accent-2"
-                        strokeWidth={1.5}
-                      />
-                      <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-accent-2">
-                        {active.label}
-                      </span>
-                    </div>
-                    <h3 className="mb-2 text-lg font-semibold leading-snug text-text">
-                      {active.name}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-text-muted">
-                      {active.description}
-                    </p>
-                  </motion.div>
+                  <PillarPanel pillar={active} side="right" />
                 )}
               </AnimatePresence>
             </div>
@@ -426,7 +406,7 @@ export function EcosystemHub() {
                     <Icon size={17} strokeWidth={1.5} />
                   </div>
                   <div>
-                    <span className="block text-[10px] font-semibold uppercase tracking-[0.1em] text-accent-2">
+                    <span className="block text-[10px] font-semibold uppercase tracking-widest text-accent-2">
                       {p.label}
                     </span>
                     <span className="text-sm font-medium text-text">

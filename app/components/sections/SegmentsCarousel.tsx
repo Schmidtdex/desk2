@@ -92,6 +92,150 @@ const SEGMENTS: Segment[] = [
   },
 ];
 
+function SegmentCard({ seg, delay }: { seg: Segment; delay: number }) {
+  const Icon = seg.icon;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.5, delay, ease: "easeOut" }}
+      style={{
+        scrollSnapAlign: "start",
+        flexShrink: 0,
+        width: `${CARD_W}px`,
+        height: "500px",
+        borderRadius: 18,
+        overflow: "hidden",
+        position: "relative",
+        border: "1px solid rgba(59,130,246,0.12)",
+      }}
+    >
+      <img
+        src={seg.image}
+        alt={seg.title}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: "center",
+        }}
+      />
+
+      {/* Gradient scrim */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(to bottom, rgba(4,5,14,0.05) 0%, rgba(4,5,14,0.38) 42%, rgba(4,5,14,0.94) 100%)",
+        }}
+      />
+
+      {/* Top glow */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: `radial-gradient(ellipse 85% 45% at 50% 0%, ${DESK_BLUE_GLOW} 0%, transparent 62%)`,
+        }}
+      />
+
+      {/* Content */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          padding: "0 26px 26px",
+        }}
+      >
+        <div
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 10,
+            border: `1px solid ${DESK_ICON_BDR}`,
+            background: DESK_ICON_BG,
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: 14,
+          }}
+        >
+          <Icon size={17} style={{ color: DESK_BLUE }} strokeWidth={1.5} />
+        </div>
+
+        <h3
+          style={{
+            fontFamily: DISPLAY,
+            fontSize: "21px",
+            fontWeight: 600,
+            color: "#ffffff",
+            letterSpacing: "-.018em",
+            lineHeight: 1.2,
+            marginBottom: 8,
+          }}
+        >
+          {seg.title}
+        </h3>
+
+        <p
+          style={{
+            fontFamily: DISPLAY,
+            fontSize: "13px",
+            fontWeight: 300,
+            lineHeight: 1.68,
+            color: "rgba(255,255,255,.65)",
+            marginBottom: 18,
+          }}
+        >
+          {seg.description}
+        </p>
+
+        <button
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 7,
+            padding: "8px 16px",
+            borderRadius: 100,
+            border: `1px solid rgba(59,130,246,0.38)`,
+            background: "rgba(26,77,255,0.18)",
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            color: "rgba(255,255,255,0.88)",
+            fontSize: "12px",
+            fontFamily: DISPLAY,
+            fontWeight: 500,
+            letterSpacing: ".02em",
+            cursor: "pointer",
+            transition: "background 0.2s ease, border-color 0.2s ease",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "rgba(26,77,255,0.35)";
+            e.currentTarget.style.borderColor = "rgba(59,130,246,0.65)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "rgba(26,77,255,0.18)";
+            e.currentTarget.style.borderColor = "rgba(59,130,246,0.38)";
+          }}
+        >
+          Saiba mais
+          <ArrowRight size={13} />
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
 export function SegmentsCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -215,163 +359,9 @@ export function SegmentsCarousel() {
           paddingRight: "max(2rem, calc((100vw - 1280px) / 2 + 2rem))",
         }}
       >
-        {SEGMENTS.map((seg, i) => {
-          const Icon = seg.icon;
-          return (
-            <motion.div
-              key={seg.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.5, delay: i * 0.055, ease: "easeOut" }}
-              style={{
-                scrollSnapAlign: "start",
-                flexShrink: 0,
-                width: `${CARD_W}px`,
-                height: "500px",
-                borderRadius: 18,
-                overflow: "hidden",
-                position: "relative",
-                border: "1px solid rgba(59,130,246,0.12)",
-              }}
-            >
-              {/* Full-bleed image */}
-              <img
-                src={seg.image}
-                alt={seg.title}
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  objectPosition: "center",
-                }}
-              />
-
-              {/* Gradient scrim — image to dark at bottom */}
-              <div
-                aria-hidden
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background:
-                    "linear-gradient(to bottom, rgba(4,5,14,0.05) 0%, rgba(4,5,14,0.38) 42%, rgba(4,5,14,0.94) 100%)",
-                }}
-              />
-
-              {/* Desk blue top glow */}
-              <div
-                aria-hidden
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background: `radial-gradient(ellipse 85% 45% at 50% 0%, ${DESK_BLUE_GLOW} 0%, transparent 62%)`,
-                }}
-              />
-
-              {/* Content overlay at bottom */}
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  padding: "0 26px 26px",
-                }}
-              >
-                {/* Icon badge */}
-                <div
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 10,
-                    border: `1px solid ${DESK_ICON_BDR}`,
-                    background: DESK_ICON_BG,
-                    backdropFilter: "blur(10px)",
-                    WebkitBackdropFilter: "blur(10px)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: 14,
-                  }}
-                >
-                  <Icon
-                    size={17}
-                    style={{ color: DESK_BLUE }}
-                    strokeWidth={1.5}
-                  />
-                </div>
-
-                {/* Title */}
-                <h3
-                  style={{
-                    fontFamily: DISPLAY,
-                    fontSize: "21px",
-                    fontWeight: 600,
-                    color: "#ffffff",
-                    letterSpacing: "-.018em",
-                    lineHeight: 1.2,
-                    marginBottom: 8,
-                  }}
-                >
-                  {seg.title}
-                </h3>
-
-                {/* Description */}
-                <p
-                  style={{
-                    fontFamily: DISPLAY,
-                    fontSize: "13px",
-                    fontWeight: 300,
-                    lineHeight: 1.68,
-                    color: "rgba(255,255,255,.65)",
-                    marginBottom: 18,
-                  }}
-                >
-                  {seg.description}
-                </p>
-
-                {/* Saiba mais button */}
-                <button
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 7,
-                    padding: "8px 16px",
-                    borderRadius: 100,
-                    border: `1px solid rgba(59,130,246,0.38)`,
-                    background: "rgba(26,77,255,0.18)",
-                    backdropFilter: "blur(10px)",
-                    WebkitBackdropFilter: "blur(10px)",
-                    color: "rgba(255,255,255,0.88)",
-                    fontSize: "12px",
-                    fontFamily: DISPLAY,
-                    fontWeight: 500,
-                    letterSpacing: ".02em",
-                    cursor: "pointer",
-                    transition: "background 0.2s ease, border-color 0.2s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.background =
-                      "rgba(26,77,255,0.35)";
-                    (e.currentTarget as HTMLButtonElement).style.borderColor =
-                      "rgba(59,130,246,0.65)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.background =
-                      "rgba(26,77,255,0.18)";
-                    (e.currentTarget as HTMLButtonElement).style.borderColor =
-                      "rgba(59,130,246,0.38)";
-                  }}
-                >
-                  Saiba mais
-                  <ArrowRight size={13} />
-                </button>
-              </div>
-            </motion.div>
-          );
-        })}
+        {SEGMENTS.map((seg, i) => (
+          <SegmentCard key={seg.id} seg={seg} delay={i * 0.055} />
+        ))}
       </div>
 
       {/* Dot navigation */}

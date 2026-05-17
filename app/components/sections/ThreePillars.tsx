@@ -111,6 +111,7 @@ export function ThreePillars() {
                 src="/Logotipo principal - branco.png"
                 alt="Desk Manager"
                 fill
+                sizes="144px"
                 className="object-contain object-center"
               />
             </div>

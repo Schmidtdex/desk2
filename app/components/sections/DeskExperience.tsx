@@ -125,6 +125,7 @@ export function DeskExperience() {
                     src="/desk-experience.png"
                     alt="Desk Manager Experience"
                     fill
+                    sizes="(max-width: 768px) 95vw, 85vw"
                     className="object-cover rounded-2xl"
                   />
                   <div
