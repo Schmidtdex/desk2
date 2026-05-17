@@ -306,8 +306,8 @@ export function SegmentsCarousel() {
       className="relative overflow-hidden bg-transparent py-28 text-text"
     >
       {/* Header */}
-      <div ref={headerRef} className="mx-auto mb-14 max-w-7xl px-8">
-        <div className="flex items-end justify-between gap-8">
+      <div ref={headerRef} className="mx-auto mb-10 max-w-7xl px-5 sm:px-8 md:mb-14">
+        <div className="flex flex-col items-start gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-lg">
             <TextEffect
               as="p"
