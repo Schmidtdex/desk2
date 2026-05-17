@@ -4,8 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { CASES, SLOT_VH, BG_FRAME, HAIR, DISPLAY } from "@/lib/cases-sticky";
 import { CaseCard } from "./CaseCard";
 import { CasesSidebar } from "./CasesSidebar";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export function CasesSticky() {
+  const isMobile = useIsMobile();
   const [activeIdx, setActiveIdx] = useState(0);
   const [visualIdx, setVisualIdx] = useState(0);
 
@@ -176,17 +178,19 @@ export function CasesSticky() {
         <div
           style={{
             position: "sticky",
-            top: "96px",
-            height: "calc(100vh - 96px)",
+            top: isMobile ? "64px" : "96px",
+            height: isMobile ? "calc(100dvh - 64px)" : "calc(100vh - 96px)",
             display: "flex",
           }}
         >
-          <CasesSidebar
-            cases={CASES}
-            visualIdx={visualIdx}
-            sidebarBarRefs={sidebarBarRefs}
-            onScrollToCase={scrollToCase}
-          />
+          {!isMobile && (
+            <CasesSidebar
+              cases={CASES}
+              visualIdx={visualIdx}
+              sidebarBarRefs={sidebarBarRefs}
+              onScrollToCase={scrollToCase}
+            />
+          )}
 
           {/* Card frame */}
           <div
@@ -194,7 +198,7 @@ export function CasesSticky() {
               flex: 1,
               display: "flex",
               alignItems: "center",
-              padding: "16px 44px 24px 28px",
+              padding: isMobile ? "8px 8px 12px 8px" : "16px 44px 24px 28px",
               minHeight: 0,
             }}
           >
@@ -241,6 +245,20 @@ export function CasesSticky() {
             </div>
           </div>
         </div>
+        {isMobile && (
+          <div className="flex items-center justify-center gap-2 py-4">
+            {CASES.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => scrollToCase(i)}
+                aria-label={`Ir para case ${i + 1}`}
+                className={`rounded-full transition-all duration-300 ${
+                  visualIdx === i ? "h-1.5 w-5 bg-accent" : "h-1.5 w-1.5 bg-border"
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

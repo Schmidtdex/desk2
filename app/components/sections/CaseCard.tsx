@@ -3,6 +3,7 @@
 import { memo, useEffect, useMemo, useRef } from "react";
 import { motion } from "motion/react";
 import Image from "next/image";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import {
   type Metric,
   type CaseData,
@@ -28,10 +29,12 @@ function StatRow({
   metric,
   isLast,
   delay,
+  isMobile,
 }: {
   metric: Metric;
   isLast: boolean;
   delay: number;
+  isMobile: boolean;
 }) {
   const parsed = useMemo(() => parseAnimatable(metric.value), [metric.value]);
   const countRef = useRef<HTMLSpanElement>(null);
@@ -102,7 +105,7 @@ function StatRow({
       transition={transition}
       style={{
         display: "grid",
-        gridTemplateColumns: "1fr 180px",
+        gridTemplateColumns: isMobile ? "1fr 120px" : "1fr 180px",
         alignItems: "center",
         gap: 20,
         padding: "clamp(5px,0.8vh,10px) 20px",
@@ -152,11 +155,13 @@ function StatRow({
 }
 
 export const CaseCard = memo(function CaseCard({ data }: { data: CaseData }) {
+  const isMobile = useIsMobile();
   return (
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "1fr 1fr",
+        gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+        gridTemplateRows: isMobile ? "1fr auto" : undefined,
         width: "100%",
         height: "100%",
         minHeight: 0,
@@ -274,6 +279,7 @@ export const CaseCard = memo(function CaseCard({ data }: { data: CaseData }) {
                 metric={m}
                 isLast={mi === 2}
                 delay={0.09 + mi * 0.09}
+                isMobile={isMobile}
               />
             ))}
           </div>
@@ -372,10 +378,11 @@ export const CaseCard = memo(function CaseCard({ data }: { data: CaseData }) {
       {/* RIGHT */}
       <div
         style={{
-          padding: "clamp(16px,3vh,40px) 48px clamp(14px,2.5vh,36px) 14px",
-          height: "100%",
+          padding: isMobile ? "0 8px 8px 8px" : "clamp(16px,3vh,40px) 48px clamp(14px,2.5vh,36px) 14px",
+          height: isMobile ? "200px" : "100%",
           minHeight: 0,
           overflow: "hidden",
+          order: isMobile ? -1 : undefined,
         }}
       >
         <div
