@@ -29,7 +29,7 @@ export function AnimatedBeam({
       initial={{ pathLength: 0, opacity: 0 }}
       whileInView={{ pathLength: 1, opacity: 0.6 }}
       viewport={{ once: true, margin: "-10%" }}
-      transition={{ duration, delay, ease: "easeOut" }}
+      transition={{ duration, delay, ease: [0.2, 0, 0, 1] }}
     />
   );
 }

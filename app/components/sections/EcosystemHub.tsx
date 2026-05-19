@@ -231,7 +231,7 @@ export function EcosystemHub() {
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
-          transition={{ duration: 0.7, ease: "easeOut" as const }}
+          transition={{ duration: 0.7, ease: [0.2, 0, 0, 1] as const }}
           className="hidden md:flex md:justify-center"
         >
           <div className="relative h-[750px] w-[750px]">
@@ -332,7 +332,7 @@ export function EcosystemHub() {
                         initial={{ opacity: 0, y: -6, scale: 0.97 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -6, scale: 0.97 }}
-                        transition={{ duration: 0.28, ease: "easeOut" as const }}
+                        transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] as const }}
                         className="absolute top-24 left-1/2 -translate-x-1/2 w-64 rounded-2xl border border-border bg-surface p-6"
                         style={{ zIndex: 300 }}
                       >
@@ -369,7 +369,7 @@ export function EcosystemHub() {
                     ? { scale: 1.08, boxShadow: "0 0 60px rgba(26,77,255,0.5)" }
                     : { scale: 1, boxShadow: "0 0 36px rgba(26,77,255,0.28)" }
                 }
-                transition={{ duration: 0.4, ease: "easeOut" as const }}
+                transition={{ duration: 0.4, ease: [0.2, 0, 0, 1] as const }}
                 className="relative flex h-40 w-40 items-center justify-center rounded-full border border-accent/25 bg-surface"
               >
                 <div className="relative h-14 w-25">
@@ -397,7 +397,7 @@ export function EcosystemHub() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.07, ease: "easeOut" as const }}
+                transition={{ duration: 0.4, delay: i * 0.07, ease: [0.2, 0, 0, 1] as const }}
                 onClick={() => toggle(p.id)}
                 className={[
                   "w-full rounded-2xl border p-4 text-left transition-colors duration-200",

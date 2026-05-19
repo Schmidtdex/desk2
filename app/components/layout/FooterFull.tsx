@@ -66,12 +66,12 @@ export function FooterFull() {
   return (
     <footer
       className="relative w-full border-t overflow-hidden"
-      style={{ backgroundColor: "#000000", borderColor: "rgba(2,55,255,0.2)" }}
+      style={{ backgroundColor: "var(--color-bg)", borderColor: "rgba(26,77,255,0.2)" }}
     >
       {/* Glow line */}
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-2/3 blur-sm"
-        style={{ backgroundColor: "#0237FF", opacity: 0.4 }}
+        style={{ backgroundColor: "var(--color-accent)", opacity: 0.4 }}
       />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-16 pb-10">
@@ -97,12 +97,12 @@ export function FooterFull() {
                 aria-label={label}
                 className="flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200 hover:scale-110"
                 style={{
-                  backgroundColor: "rgba(2,55,255,0.15)",
-                  border: "1px solid rgba(2,55,255,0.3)",
+                  backgroundColor: "rgba(26,77,255,0.15)",
+                  border: "1px solid rgba(26,77,255,0.3)",
                   color: "#A9DBFF",
                 }}
-                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "rgba(2,55,255,0.35)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "rgba(2,55,255,0.15)"; }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "rgba(26,77,255,0.35)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "rgba(26,77,255,0.15)"; }}
               >
                 <Icon />
               </a>
@@ -185,7 +185,7 @@ export function FooterFull() {
         {/* Bottom bar */}
         <div
           className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs"
-          style={{ borderTop: "1px solid rgba(2,55,255,0.15)", color: "rgba(255,255,255,0.25)" }}
+          style={{ borderTop: "1px solid rgba(26,77,255,0.15)", color: "rgba(255,255,255,0.25)" }}
         >
           <span>© {new Date().getFullYear()} Desk Manager. Todos os direitos reservados.</span>
           <span>Feito com dedicação em São Paulo, Brasil.</span>

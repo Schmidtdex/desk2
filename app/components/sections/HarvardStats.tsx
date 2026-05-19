@@ -37,7 +37,7 @@ export function HarvardStats() {
     <section
       id="scene-harvard"
       aria-label="Estudo da Harvard Business Review"
-      className="relative flex min-h-screen items-center justify-center bg-black px-6 py-16 md:py-32"
+      className="relative flex min-h-screen items-center justify-center bg-bg px-6 py-16 md:py-32"
     >
       <div className="mx-auto max-w-6xl">
         <p className="mb-6 font-mono text-xs uppercase tracking-[0.3em] text-text-muted">Harvard Business Review</p>

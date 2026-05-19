@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { buttonClasses } from "@/components/ui/Button";
 
 const NAV_LINKS = [
   { name: "Home", href: "#" },
@@ -104,7 +105,14 @@ export function NavBar() {
             </Link>
             <Link
               href="#scene-cta"
-              className="rounded-full bg-accent px-5 py-2 font-sans text-sm font-medium text-white shadow-[0_0_24px_rgba(26,77,255,0.3)] transition-shadow duration-200 hover:shadow-[0_0_36px_rgba(26,77,255,0.5)]"
+              className={buttonClasses({
+                variant: "primary",
+                size: "sm",
+                // Hero glow override: este é o único CTA visível em todo scroll da página,
+                // merece destaque acima do sm padrão. Ver DESIGN.md Ring 3 → overrides.
+                className:
+                  "shadow-[0_0_24px_rgba(26,77,255,0.4)] transition-shadow duration-200 hover:shadow-[0_0_36px_rgba(26,77,255,0.55)]",
+              })}
             >
               Falar com especialista
             </Link>
@@ -150,7 +158,7 @@ export function NavBar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.18, ease: [0.2, 0, 0, 1] }}
-            className="absolute inset-x-4 top-full mt-2 rounded-2xl border border-white/[0.06] bg-[#05060F]/95 p-6 backdrop-blur-xl lg:hidden"
+            className="absolute inset-x-4 top-full mt-2 rounded-2xl border border-white/[0.06] bg-bg/95 p-6 backdrop-blur-xl lg:hidden"
           >
             <ul className="space-y-1">
               {NAV_LINKS.map((link) => (
@@ -175,7 +183,7 @@ export function NavBar() {
               <Link
                 href="#scene-cta"
                 onClick={() => setIsOpen(false)}
-                className="block rounded-full bg-accent px-5 py-3 text-center font-sans text-sm font-medium text-white"
+                className={buttonClasses({ variant: "primary", size: "sm", className: "w-full" })}
               >
                 Falar com especialista
               </Link>
