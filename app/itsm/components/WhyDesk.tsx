@@ -2,7 +2,7 @@ import { WHY } from "@/itsm/lib/data";
 
 export default function WhyDesk() {
   return (
-    <section id="por-que" className="relative px-6 py-20 md:py-32">
+    <section id="por-que" aria-label="Por que Desk Manager" className="relative px-6 py-20 md:py-32">
       <div className="mx-auto max-w-[1280px]">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
           <div className="reveal">

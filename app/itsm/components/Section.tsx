@@ -21,15 +21,18 @@ export default function Section({
   headerClassName?: string;
   children: ReactNode;
 }) {
+  const headingId = id ? `${id}-heading` : undefined;
+
   return (
     <section
       id={id}
+      aria-labelledby={headingId}
       className={`relative px-6 py-20 md:py-32 ${className}`}
     >
       <div className="mx-auto max-w-[1280px]">
         <div className={`reveal mb-12 max-w-[720px] md:mb-[4.5rem] ${headerClassName}`}>
           <span className="kicker">{kicker}</span>
-          <h2 className="mt-4 text-[clamp(2rem,4.5vw,3.5rem)] font-extralight tracking-tight leading-[1.05]">
+          <h2 id={headingId} className="mt-4 text-[clamp(2rem,4.5vw,3.5rem)] font-extralight tracking-tight leading-[1.05]">
             {title}
           </h2>
           {lead ? (

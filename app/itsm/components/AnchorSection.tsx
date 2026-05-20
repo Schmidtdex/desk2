@@ -11,6 +11,7 @@ export default function AnchorSection() {
   return (
     <section
       id="anchor"
+      aria-label="Práticas ITIL 5 certificadas"
       data-anchor-slot
       data-anchor-label="Anchor slot · ITSM"
       className="relative px-6 py-20 md:py-32"
@@ -18,7 +19,7 @@ export default function AnchorSection() {
       <div className="mx-auto max-w-[1280px]">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[280px_1fr] lg:items-start lg:gap-16">
           {/* Aside sticky */}
-          <aside className="reveal relative lg:sticky lg:top-[100px]">
+          <aside aria-label="12 práticas ITIL 5" className="reveal relative lg:sticky lg:top-[100px]">
             <span className="
               inline-flex rounded-full border border-[rgba(26,77,255,0.4)]
               bg-[rgba(26,77,255,0.1)] px-4 py-2
@@ -49,14 +50,18 @@ export default function AnchorSection() {
           >
             {A.groups.map((g, i) => {
               const isOpen = openGroup === i;
+              const btnId = `anchor-btn-${i}`;
+              const panelId = `anchor-panel-${i}`;
               return (
                 <div
                   key={g.cat}
                   className={`anchor-group ${isOpen ? "open" : ""}`}
                 >
                   <button
+                    id={btnId}
                     type="button"
                     aria-expanded={isOpen}
+                    aria-controls={panelId}
                     onClick={() => setOpenGroup(isOpen ? -1 : i)}
                     className="group-head"
                   >
@@ -71,7 +76,13 @@ export default function AnchorSection() {
                       </svg>
                     </span>
                   </button>
-                  <div className="group-body">
+                  <div
+                    id={panelId}
+                    role="region"
+                    aria-labelledby={btnId}
+                    aria-hidden={!isOpen}
+                    className="group-body"
+                  >
                     <div>
                       <div className="practices">
                         {g.practices.map((p) => (

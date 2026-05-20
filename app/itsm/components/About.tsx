@@ -2,7 +2,7 @@ import { VALUE_CHAIN, PAGE_CONFIG } from "@/itsm/lib/data";
 
 export default function About() {
   return (
-    <section id="produto" className="relative px-6 py-20 md:py-32">
+    <section id="produto" aria-label="O que é ITSM na prática" className="relative px-6 py-20 md:py-32">
       <div className="mx-auto max-w-[1280px]">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
           <div className="reveal">

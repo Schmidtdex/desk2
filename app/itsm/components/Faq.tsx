@@ -9,10 +9,10 @@ export default function Faq() {
   const [open, setOpen] = useState<number>(0);
 
   return (
-    <section id="faq" className="relative px-6 py-20 md:py-32">
+    <section id="faq" aria-label="Perguntas frequentes" className="relative px-6 py-20 md:py-32">
       <div className="mx-auto max-w-[1280px]">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
-          <aside className="reveal">
+          <aside aria-label="Sobre as perguntas" className="reveal">
             <span className="kicker">FAQ</span>
             <h2 className="mt-4 text-[clamp(2rem,4vw,3rem)] font-extralight leading-[1.05] tracking-tight">
               Perguntas frequentes.
@@ -30,6 +30,8 @@ export default function Faq() {
             <div className="flex flex-col">
               {FAQS.map((f, i) => {
                 const isOpen = open === i;
+                const btnId = `faq-btn-${i}`;
+                const panelId = `faq-panel-${i}`;
                 return (
                   <div
                     key={f.q}
@@ -39,8 +41,10 @@ export default function Faq() {
                     ].join(" ")}
                   >
                     <button
+                      id={btnId}
                       type="button"
                       aria-expanded={isOpen}
+                      aria-controls={panelId}
                       onClick={() => setOpen(isOpen ? -1 : i)}
                       className="
                         flex w-full items-center justify-between gap-6 py-1
@@ -51,6 +55,10 @@ export default function Faq() {
                       <PlusMinus open={isOpen} />
                     </button>
                     <div
+                      id={panelId}
+                      role="region"
+                      aria-labelledby={btnId}
+                      aria-hidden={!isOpen}
                       className="
                         max-w-[620px] overflow-hidden
                         text-[0.95rem] leading-[1.7] text-text-muted
