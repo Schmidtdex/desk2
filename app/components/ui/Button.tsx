@@ -5,7 +5,7 @@ type Variant = "primary" | "ghost";
 type Size = "md" | "sm";
 
 const BUTTON_BASE =
-  "inline-flex items-center justify-center rounded-full font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:opacity-50";
+  "inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:opacity-50";
 
 const BUTTON_SIZES: Record<Size, string> = {
   md: "px-7 py-3 text-base",

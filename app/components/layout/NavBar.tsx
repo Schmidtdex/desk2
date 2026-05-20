@@ -6,25 +6,35 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { buttonClasses } from "@/components/ui/Button";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import { PlatformPanel, DepartmentsPanel, ClientsPanel } from "./MegaMenu";
 
-const NAV_LINKS = [
-  { name: "Home", href: "#" },
-  { name: "Clientes", href: "#scene-cases" },
-  { name: "Plataforma", href: "#scene-anatomy" },
+// Mobile-only flat list (mega menus collapse to simple links on small screens)
+const MOBILE_NAV_LINKS = [
+  { name: "Home",          href: "#" },
+  { name: "Clientes",      href: "#scene-cases" },
+  { name: "Plataforma",    href: "#scene-anatomy" },
   { name: "Departamentos", href: "#scene-products" },
 ];
 
 export function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const rafRef     = useRef(0);
+  const rafRef = useRef(0);
   const scrolledRef = useRef(false); // shadow value — avoids setState when unchanged
 
   useEffect(() => {
     let scheduled = false;
 
     const onScroll = () => {
-      if (scheduled) return; // already waiting for next frame
+      if (scheduled) return;
       scheduled = true;
       rafRef.current = requestAnimationFrame(() => {
         scheduled = false;
@@ -52,7 +62,7 @@ export function NavBar() {
     <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-3">
       <motion.nav
         animate={{
-          width: isScrolled ? "min(896px, 100%)" : "min(1280px, 100%)",
+          width: isScrolled ? "min(960px, 100%)" : "min(1280px, 100%)",
           backgroundColor: isScrolled ? "rgba(5, 6, 15, 0.55)" : "rgba(0, 0, 0, 0)",
           boxShadow: isScrolled
             ? "inset 0 0 0 1px rgba(255, 255, 255, 0.06)"
@@ -83,18 +93,40 @@ export function NavBar() {
             />
           </Link>
 
-          <ul className="hidden items-center gap-8 lg:flex" aria-label="Navegação principal">
-            {NAV_LINKS.map((link) => (
-              <li key={link.name}>
-                <Link
-                  href={link.href}
-                  className="font-sans text-sm text-white/50 transition-colors duration-150 hover:text-white"
+          {/* Desktop nav: Radix NavigationMenu with viewport */}
+          <NavigationMenu className="hidden lg:flex">
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  asChild
+                  className="inline-flex shrink-0 items-center font-sans text-sm text-white/50 transition-colors duration-150 hover:text-white"
                 >
-                  {link.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+                  <Link href="#">Home</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Clientes</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ClientsPanel />
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Plataforma</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <PlatformPanel />
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Departamentos</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <DepartmentsPanel />
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
 
           <div className="hidden items-center gap-3 lg:flex">
             <Link
@@ -161,7 +193,7 @@ export function NavBar() {
             className="absolute inset-x-4 top-full mt-2 rounded-2xl border border-white/[0.06] bg-bg/95 p-6 backdrop-blur-xl lg:hidden"
           >
             <ul className="space-y-1">
-              {NAV_LINKS.map((link) => (
+              {MOBILE_NAV_LINKS.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
