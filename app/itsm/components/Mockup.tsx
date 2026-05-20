@@ -26,9 +26,9 @@ export default function Mockup() {
         </div>
       </div>
 
-      <div className="grid grid-cols-[130px_1fr] gap-3">
+      <div className="grid grid-cols-[100px_1fr] gap-2 sm:grid-cols-[130px_1fr] sm:gap-3">
         {/* Sidebar */}
-        <div className="flex flex-col gap-2 rounded-2xl border border-border bg-bg/50 px-2.5 py-3.5">
+        <div className="flex flex-col gap-1.5 rounded-2xl border border-border bg-bg/50 px-2 py-3 sm:gap-2 sm:px-2.5 sm:py-3.5">
           {[
             { label: "Overview", active: true },
             { label: "Incidentes" },
