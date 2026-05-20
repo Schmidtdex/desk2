@@ -117,9 +117,14 @@ function NavigationMenuViewport({
 }: React.ComponentProps<typeof NavigationMenuPrimitive.Viewport>) {
   return (
     <div
-      // Spans the full width of the closest positioned ancestor (the <motion.nav>).
-      // top-full puts it just below the nav; small pt creates an 8px gap for floating feel.
-      className={cn("absolute inset-x-0 top-full isolate z-50 pt-2")}
+      // Fixed-width panel centered to the viewport (via the nav's center, which is
+      // already viewport-centered by the header's `flex justify-center`).
+      // Decoupled from the nav width so the submenu stays generous (1280) even when
+      // the nav shrinks to 960 on scroll. Capped to viewport - 32px for narrow desktops.
+      className={cn(
+        "absolute left-1/2 top-full isolate z-50 -translate-x-1/2 pt-2",
+        "w-[1280px] max-w-[calc(100vw-2rem)]"
+      )}
     >
       <NavigationMenuPrimitive.Viewport
         data-slot="navigation-menu-viewport"

@@ -27,6 +27,7 @@ const MOBILE_NAV_LINKS = [
 export function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<string>("");
   const rafRef = useRef(0);
   const scrolledRef = useRef(false); // shadow value — avoids setState when unchanged
 
@@ -42,6 +43,9 @@ export function NavBar() {
         if (next !== scrolledRef.current) {
           scrolledRef.current = next;
           setIsScrolled(next);
+          // Close any open mega-menu when the nav crosses the shrink/expand threshold,
+          // so the user never sees the submenu mid-transition.
+          setActiveMenu("");
         }
       });
     };
@@ -93,8 +97,14 @@ export function NavBar() {
             />
           </Link>
 
-          {/* Desktop nav: Radix NavigationMenu with viewport */}
-          <NavigationMenu className="hidden lg:flex">
+          {/* Desktop nav: Radix NavigationMenu with viewport. Controlled so we can force-close
+              when the nav crosses the scroll threshold (avoids the menu morphing alongside the
+              nav's width animation). */}
+          <NavigationMenu
+            value={activeMenu}
+            onValueChange={setActiveMenu}
+            className="hidden lg:flex"
+          >
             <NavigationMenuList>
               <NavigationMenuItem>
                 <NavigationMenuLink
@@ -105,21 +115,21 @@ export function NavBar() {
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
-              <NavigationMenuItem>
+              <NavigationMenuItem value="clientes">
                 <NavigationMenuTrigger>Clientes</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ClientsPanel />
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
-              <NavigationMenuItem>
+              <NavigationMenuItem value="plataforma">
                 <NavigationMenuTrigger>Plataforma</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <PlatformPanel />
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
-              <NavigationMenuItem>
+              <NavigationMenuItem value="departamentos">
                 <NavigationMenuTrigger>Departamentos</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <DepartmentsPanel />

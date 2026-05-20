@@ -144,15 +144,15 @@ export function ClientsPanel() {
           </NavigationMenuLink>
         </div>
 
-        {/* Case cards */}
-        <div className="col-span-9 grid grid-cols-4 gap-3">
+        {/* Case cards — stretch vertically to fill the intro's height */}
+        <div className="col-span-9 grid h-full grid-cols-4 gap-3">
           {CLIENTS.cases.map((c) => (
             <NavigationMenuLink key={c.title} asChild>
               <Link
                 href={c.href}
-                className="group block overflow-hidden rounded-xl border border-white/[0.06] bg-surface/40 transition-all hover:border-accent/40 hover:bg-surface/80"
+                className="group flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-surface/40 transition-all hover:border-accent/40 hover:bg-surface/80"
               >
-                <div className="relative aspect-[16/10] overflow-hidden bg-surface-2">
+                <div className="relative min-h-[140px] flex-1 overflow-hidden bg-surface-2">
                   {c.image ? (
                     <Image
                       src={c.image}
