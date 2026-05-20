@@ -22,7 +22,7 @@ export default function Personas() {
               reveal relative overflow-hidden rounded-2xl border border-border
               bg-surface p-7
               transition-[background,transform,border-color] duration-300
-              hover:-translate-y-0.5 hover:border-[#2a3060] hover:bg-surface-2
+              hover:-translate-y-0.5 hover:border-border-hover hover:bg-surface-2
             "
             style={{ "--delay": `${i * 80}ms` } as React.CSSProperties}
           >

@@ -23,7 +23,7 @@ export default function AnchorSection() {
             <span className="
               inline-flex rounded-full border border-[rgba(26,77,255,0.4)]
               bg-[rgba(26,77,255,0.1)] px-4 py-2
-              font-mono text-[0.65rem] uppercase tracking-[0.25em] text-[#d4dcff]
+              font-mono text-[0.65rem] uppercase tracking-[0.25em] text-accent-ice
             ">
               {A.kicker}
             </span>
