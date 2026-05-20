@@ -29,6 +29,8 @@
   --color-danger: #F43F5E;
   --color-accent-ice: #D4DCFF;   /* light accent tint — kicker pill text */
   --color-border-hover: #2A3060; /* hover border between border and surface-2 */
+  --color-warn: #F0A142;         /* warning status dot */
+  --color-success: #34C77C;      /* success status dot */
 
   --font-sans: var(--font-display);
   --font-mono: var(--font-code);

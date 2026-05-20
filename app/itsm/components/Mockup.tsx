@@ -114,7 +114,7 @@ function Kpi({ label, value, accent }: { label: string; value: string; accent?: 
       <span className="font-mono text-[0.55rem] uppercase tracking-[0.18em] text-text-muted">
         {label}
       </span>
-      <span className={["text-[1.15rem] font-extralight tracking-[-0.03em]", accent ? "text-[#d7e0ff]" : ""].join(" ")}>
+      <span className={["text-[1.15rem] font-extralight tracking-[-0.03em]", accent ? "text-accent-ice" : ""].join(" ")}>
         {value}
       </span>
     </div>
@@ -138,8 +138,8 @@ function Ticket({
     pri === "hi"
       ? "bg-accent shadow-[0_0_8px_var(--color-accent-glow)]"
       : pri === "warn"
-        ? "bg-[#f0a142] shadow-[0_0_8px_rgba(240,161,66,0.4)]"
-        : "bg-[#34c77c] shadow-[0_0_8px_rgba(52,199,124,0.3)]";
+        ? "bg-warn shadow-[0_0_8px_rgba(240,161,66,0.4)]"
+        : "bg-success shadow-[0_0_8px_rgba(52,199,124,0.3)]";
 
   return (
     <div className="
