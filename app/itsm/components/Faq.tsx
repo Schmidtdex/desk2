@@ -6,7 +6,7 @@ import { FAQS } from "@/itsm/lib/data";
 import { buttonClasses } from "@/components/ui/Button";
 
 export default function Faq() {
-  const [open, setOpen] = useState<number>(0);
+  const [open, setOpen] = useState<number>(-1);
 
   return (
     <section id="faq" aria-label="Perguntas frequentes" className="relative px-6 py-20 md:py-32">

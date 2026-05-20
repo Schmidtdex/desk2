@@ -1,8 +1,9 @@
-/**
- * Mockup do dashboard ITSM (server component decorativo).
- * Apenas tokens de cor e estrutura — sem dependências externas.
- */
+"use client";
+
+import { useId } from "react";
+
 export default function Mockup() {
+  const gradientId = useId();
   return (
     <div
       aria-hidden="true"
@@ -70,14 +71,14 @@ export default function Mockup() {
           ">
             <svg className="absolute inset-0 size-full" viewBox="0 0 400 120" preserveAspectRatio="none">
               <defs>
-                <linearGradient id="dm-area" x1="0" x2="0" y1="0" y2="1">
+                <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
                   <stop offset="0" stopColor="#1A4DFF" stopOpacity="0.55" />
                   <stop offset="1" stopColor="#1A4DFF" stopOpacity="0" />
                 </linearGradient>
               </defs>
               <path
                 d="M0,90 C40,70 60,40 100,55 C140,70 160,30 200,40 C240,50 260,80 300,60 C340,40 360,55 400,30 L400,120 L0,120 Z"
-                fill="url(#dm-area)"
+                fill={`url(#${gradientId})`}
               />
               <path
                 d="M0,90 C40,70 60,40 100,55 C140,70 160,30 200,40 C240,50 260,80 300,60 C340,40 360,55 400,30"
