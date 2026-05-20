@@ -556,3 +556,12 @@
   pointer-events: none;
   z-index: 1;
 }
+
+/* FAQ collapse (grid-template-rows avoids layout reflow) */
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .35s cubic-bezier(0.2, 0, 0, 1);
+}
+.faq-answer.open { grid-template-rows: 1fr; }
+.faq-answer > div { overflow: hidden; }

@@ -59,17 +59,11 @@ export default function Faq() {
                       role="region"
                       aria-labelledby={btnId}
                       aria-hidden={!isOpen}
-                      className="
-                        max-w-[620px] overflow-hidden
-                        text-[0.95rem] leading-[1.7] text-text-muted
-                        transition-[max-height,margin] duration-[350ms] ease-[cubic-bezier(0.2,0,0,1)]
-                      "
-                      style={{
-                        maxHeight: isOpen ? "400px" : "0px",
-                        marginTop: isOpen ? "1rem" : "0",
-                      }}
+                      className={`faq-answer${isOpen ? " open" : ""}`}
                     >
-                      {f.a}
+                      <div className="max-w-[620px] pt-4 text-[0.95rem] leading-[1.7] text-text-muted">
+                        {f.a}
+                      </div>
                     </div>
                   </div>
                 );
