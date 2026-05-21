@@ -23,7 +23,7 @@ export default function Hero() {
       <div
         aria-hidden="true"
         className="
-          absolute bottom-0 inset-x-0 -z-10 h-[200px]
+          absolute bottom-0 inset-x-0 -z-10 h-[180px]
           bg-[linear-gradient(to_bottom,transparent,var(--color-bg))]
         "
       />

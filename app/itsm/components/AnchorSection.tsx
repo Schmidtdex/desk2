@@ -13,7 +13,6 @@ export default function AnchorSection() {
       id="anchor"
       aria-label="Práticas ITIL 5 certificadas"
       data-anchor-slot
-      data-anchor-label="Anchor slot · ITSM"
       className="relative px-6 py-20 md:py-32"
     >
       <div className="mx-auto max-w-[1280px]">

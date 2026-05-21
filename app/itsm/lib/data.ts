@@ -15,7 +15,7 @@ export type ValueChainItem = {
   desc: string;
 };
 
-export type Step = { num: string; phase: string; title: string; body: string };
+export type Step = { num: string; title: string; body: string };
 
 export type WhyItem = { title: string; body: string };
 export type Faq = { q: string; a: string };
@@ -68,25 +68,21 @@ export const VALUE_CHAIN: ValueChainItem[] = [
 export const STEPS: Step[] = [
   {
     num: "01",
-    phase: "Etapa 01",
     title: "Estratégia",
     body: "Avaliação da situação atual, definição de metas (reduzir tempo de inatividade, melhorar experiência do usuário, aprimorar governança) e seleção de framework. Stakeholders e plano em fases.",
   },
   {
     num: "02",
-    phase: "Etapa 02",
     title: "Implementação",
     body: "Estabelecimento das práticas core — Incidente, Mudança, Requisição. Fluxos padronizados, treinamento das equipes, central de serviços como ponto único de contato.",
   },
   {
     num: "03",
-    phase: "Etapa 03",
     title: "Maturidade",
     body: "Avaliação contínua com CMMI ou Maturidade ITIL. Evolução do suporte reativo pra proativo, identificação de gaps, refinamento dos processos.",
   },
   {
     num: "04",
-    phase: "Etapa 04",
     title: "Automação",
     body: "Fluxos automatizados, portal de autoatendimento, IA aplicada a previsão de incidentes e resolução rápida. Automação como arquitetura nativa, não módulo extra.",
   },

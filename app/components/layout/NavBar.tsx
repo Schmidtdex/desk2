@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
@@ -28,8 +28,55 @@ export function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string>("");
+  const pinnedMenuRef = useRef<string>(""); // sticky-open state set by trigger click
   const rafRef = useRef(0);
   const scrolledRef = useRef(false); // shadow value — avoids setState when unchanged
+
+  // Block hover-driven open/close attempts when a menu is pinned via click
+  const handleValueChange = useCallback((next: string) => {
+    if (pinnedMenuRef.current && next !== pinnedMenuRef.current) return;
+    setActiveMenu(next);
+  }, []);
+
+  // Click on a trigger toggles pin: pin it if not pinned, unpin if same trigger
+  const handleTriggerClick = useCallback(
+    (key: string) => () => {
+      if (pinnedMenuRef.current === key) {
+        pinnedMenuRef.current = "";
+        setActiveMenu("");
+      } else {
+        pinnedMenuRef.current = key;
+        setActiveMenu(key);
+      }
+    },
+    []
+  );
+
+  // Click anywhere outside triggers (including in-page links, viewport items, body) unpins and closes
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (!pinnedMenuRef.current) return;
+      const target = e.target as HTMLElement | null;
+      // Triggers handle their own toggle — don't double-handle them here
+      if (target?.closest('[data-slot="navigation-menu-trigger"]')) return;
+      pinnedMenuRef.current = "";
+      setActiveMenu("");
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+
+  // Escape closes a pinned menu
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && pinnedMenuRef.current) {
+        pinnedMenuRef.current = "";
+        setActiveMenu("");
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
 
   useEffect(() => {
     let scheduled = false;
@@ -45,6 +92,7 @@ export function NavBar() {
           setIsScrolled(next);
           // Close any open mega-menu when the nav crosses the shrink/expand threshold,
           // so the user never sees the submenu mid-transition.
+          pinnedMenuRef.current = "";
           setActiveMenu("");
         }
       });
@@ -102,7 +150,7 @@ export function NavBar() {
               nav's width animation). */}
           <NavigationMenu
             value={activeMenu}
-            onValueChange={setActiveMenu}
+            onValueChange={handleValueChange}
             className="hidden lg:flex"
           >
             <NavigationMenuList>
@@ -116,21 +164,27 @@ export function NavBar() {
               </NavigationMenuItem>
 
               <NavigationMenuItem value="clientes">
-                <NavigationMenuTrigger>Clientes</NavigationMenuTrigger>
+                <NavigationMenuTrigger onClick={handleTriggerClick("clientes")}>
+                  Clientes
+                </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ClientsPanel />
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
               <NavigationMenuItem value="plataforma">
-                <NavigationMenuTrigger>Plataforma</NavigationMenuTrigger>
+                <NavigationMenuTrigger onClick={handleTriggerClick("plataforma")}>
+                  Plataforma
+                </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <PlatformPanel />
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
               <NavigationMenuItem value="departamentos">
-                <NavigationMenuTrigger>Departamentos</NavigationMenuTrigger>
+                <NavigationMenuTrigger onClick={handleTriggerClick("departamentos")}>
+                  Departamentos
+                </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <DepartmentsPanel />
                 </NavigationMenuContent>
