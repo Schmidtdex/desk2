@@ -27,12 +27,19 @@ export type AnchorGroup = {
   practices: AnchorPractice[];
 };
 
-export const HERO_METRICS = [
-  { value: "12", label: "Práticas ITIL 5 certificadas" },
-  { value: "100%", label: "Rastreabilidade ponta a ponta" },
-  { value: "60+", label: "Países em operação" },
-  { value: "ITIL 5", label: "Primeira plataforma BR aderente" },
-] as const;
+export type HeroMetric = {
+  value: string;
+  label: string;
+  count?: number;
+  suffix?: string;
+};
+
+export const HERO_METRICS: HeroMetric[] = [
+  { value: "12",      label: "Práticas ITIL certificadas",       count: 12,  suffix: ""  },
+  { value: "100%",    label: "Rastreabilidade ponta a ponta",      count: 100, suffix: "%" },
+  { value: "40+",     label: "Países em operação",                  count: 60,  suffix: "+" },
+  { value: "ITIL®",  label: "Primeira plataforma BR aderente" },
+];
 
 export const PERSONAS: Persona[] = [
   {
@@ -89,13 +96,9 @@ export const STEPS: Step[] = [
 ];
 
 export const ANCHOR_ITSM = {
-  kicker: "Práticas certificadas",
-  asideTitle: "12 práticas ITIL 5 com IA nativa aplicada na execução.",
+  asideTitle: "12 práticas ITIL® com IA nativa aplicada na execução.",
   asideBody:
     "Cada prática vem com fluxos prontos, configuração no-code e IA aplicada no dia a dia operacional. Não é teoria de framework — é execução automatizada e rastreável.",
-  bigNumber: "12",
-  bigSubLine1: "de 12",
-  bigSubLine2: "certificadas",
   groups: [
     {
       cat: "Operação",
@@ -139,7 +142,7 @@ export const ANCHOR_ITSM = {
 export const WHY: WhyItem[] = [
   { title: "DNA brasileiro", body: "Compliance e cultura local, suporte em português, sem fuso e sem ruído de tradução. Operação enterprise sem terceirização de relacionamento." },
   { title: "AI nativa, não plugada", body: "Agentes operam dentro da arquitetura, com dados estruturados da própria plataforma. Inteligência não é módulo de terceiro." },
-  { title: "ITIL 5 certificado pela PeopleCert", body: "Aderência reconhecida globalmente. As práticas vêm certificadas, não inferidas." },
+  { title: "ITIL® certificado pela PeopleCert", body: "Aderência reconhecida globalmente. As práticas vêm certificadas, não inferidas." },
   { title: "Hospedado em AWS", body: "ISO 27001, SOC 1/2/3, PCI DSS Nível 1, criptografia AES-256. LGPD-by-default na hospedagem brasileira." },
   { title: "600+ grandes clientes", body: "Milhares de usuários ativos em operações enterprise, multilíngues e multinacionais. Maturidade comprovada em escala." },
 ];

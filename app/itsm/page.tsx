@@ -16,7 +16,7 @@ import { PAGE_CONFIG } from "./lib/data";
 export const metadata: Metadata = {
   title: "ITSM — Desk Manager",
   description:
-    "ITSM estratégico, certificado pela ITIL 5 com IA nativa. A operação de TI deixa de ser reativa e passa a ser orientada por dados, governança estruturada e inteligência contínua.",
+    "ITSM estratégico, certificado pela ITIL® com IA nativa. A operação de TI deixa de ser reativa e passa a ser orientada por dados, governança estruturada e inteligência contínua.",
 };
 
 export default function ITSMPage() {

@@ -10,9 +10,6 @@ export default function Metrics() {
       "
     >
       <div className="mx-auto max-w-[1280px]">
-        <p className="mb-8 font-mono text-[0.65rem] uppercase tracking-[0.28em] text-text-muted">
-          Escala em produção
-        </p>
         <div className="grid grid-cols-2 md:grid-cols-4">
           {HERO_METRICS.map((m, i) => (
             <div
@@ -29,10 +26,7 @@ export default function Metrics() {
               <div className="text-[clamp(2.5rem,5vw,3.75rem)] font-extralight leading-none tracking-[-0.04em]">
                 {m.value}
               </div>
-              <div className="
-                mt-3 max-w-[220px] font-mono text-[0.7rem]
-                uppercase leading-relaxed tracking-[0.18em] text-text-muted
-              ">
+              <div className="mt-3 max-w-[220px] text-[0.92rem] leading-snug text-text-muted">
                 {m.label}
               </div>
             </div>

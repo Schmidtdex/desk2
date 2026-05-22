@@ -1,6 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
 import { buttonClasses } from "@/components/ui/Button";
-import Mockup from "./Mockup";
 
 export default function Hero() {
   return (
@@ -29,7 +29,7 @@ export default function Hero() {
       />
 
       <div className="mx-auto w-full max-w-[1280px]">
-        <div className="grid items-center gap-16 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
+        <div className="grid items-center gap-16 lg:grid-cols-[1fr_1.15fr] lg:gap-12">
           <div>
             <h1
               className="reveal mt-5 text-[clamp(2.25rem,4.5vw,4rem)] leading-[1.1] tracking-[-0.035em]"
@@ -49,23 +49,51 @@ export default function Hero() {
             </p>
 
             <div
-              className="reveal mt-8 flex flex-wrap gap-3"
+              className="reveal mt-8 flex flex-col items-start gap-4"
               style={{ "--delay": "240ms" } as React.CSSProperties}
             >
-              <Link href="#faq-cta" className={buttonClasses({ variant: "primary" })}>
+              <Link href="/contato" className={buttonClasses({ variant: "primary", className: "group" })}>
                 Fale com um especialista
-              </Link>
-              <Link href="#demo" className={buttonClasses({ variant: "ghost" })}>
-                Ver demo
+                <span
+                  aria-hidden="true"
+                  className="ml-2 inline-block transition-transform duration-200 ease-out group-hover:translate-x-1"
+                >
+                  →
+                </span>
               </Link>
             </div>
           </div>
 
           <div
-            className="reveal"
+            className="reveal relative lg:scale-[1.06] lg:-translate-x-2"
             style={{ "--delay": "200ms" } as React.CSSProperties}
           >
-            <Mockup />
+            {/* Glow halo behind the mockup */}
+            <div
+              aria-hidden="true"
+              className="
+                pointer-events-none absolute -inset-8 -z-10
+                bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgba(26,77,255,0.28),transparent_70%)]
+              "
+            />
+
+            <div
+              className="
+                mockup-border relative overflow-hidden rounded-3xl border border-border
+                bg-surface
+                shadow-[0_30px_80px_rgba(0,0,0,0.6),0_0_100px_rgba(26,77,255,0.18),inset_0_1px_0_rgba(255,255,255,0.04)]
+              "
+            >
+              <Image
+                src="/mockup-desk.png"
+                alt="Painel da Desk Manager mostrando SLA, tickets abertos, MTTR e fluxo de atendimento ITSM."
+                width={1600}
+                height={1000}
+                priority
+                sizes="(min-width: 1024px) 720px, 100vw"
+                className="h-auto w-full"
+              />
+            </div>
           </div>
         </div>
       </div>

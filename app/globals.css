@@ -316,9 +316,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Soft-clamp: kill loops/parallax but keep tiny crossfades so the page doesn't feel dead */
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 200ms !important;
   }
 }
 
@@ -364,7 +365,12 @@
 .reveal.in { opacity: 1; transform: translateY(0); }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  /* Keep a short opacity fade, but drop the translateY (no motion of position) */
+  .reveal {
+    transform: none !important;
+    transition: opacity 220ms ease-out !important;
+    transition-delay: var(--delay, 0ms) !important;
+  }
 }
 
 /* Hero grid background (Ring 3 decorative) */
@@ -427,20 +433,6 @@
   background: linear-gradient(90deg, rgba(26, 77, 255, 0.04), transparent 60%);
 }
 
-.anchor-group .cat-label {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  padding: 0.35rem 0.85rem;
-  border: 1px solid var(--color-border);
-  border-radius: 99px;
-  white-space: nowrap;
-  text-align: center;
-  min-width: 150px;
-  transition: color .25s, border-color .25s, background .25s;
-}
 .anchor-group .group-title {
   font-size: clamp(1.25rem, 2vw, 1.6rem);
   font-weight: 200;
@@ -449,11 +441,9 @@
   margin-right: auto;
 }
 .anchor-group .group-count {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  font-size: 0.85rem;
   color: var(--color-text-muted);
+  font-weight: 400;
 }
 .anchor-group .group-chevron {
   width: 32px; height: 32px;
@@ -475,11 +465,6 @@
   box-shadow: 0 0 16px var(--color-accent-glow);
 }
 .anchor-group.open .group-chevron svg { transform: rotate(180deg); }
-.anchor-group.open .cat-label {
-  color: var(--color-accent-2);
-  border-color: rgba(26, 77, 255, 0.4);
-  background: rgba(26, 77, 255, 0.08);
-}
 
 .anchor-group .group-body {
   display: grid;
@@ -527,17 +512,9 @@
   line-height: 1.6;
 }
 
-/* Mobile — pill quebra pra primeira linha, count somem */
+/* Mobile — hide count to keep titles breathing */
 @media (max-width: 700px) {
   .anchor-group .group-head { row-gap: 0.5rem; }
-  .anchor-group .cat-label {
-    flex-basis: 100%;
-    min-width: 0;
-    text-align: left;
-    padding: 0.3rem 0.75rem;
-    align-self: flex-start;
-    max-width: max-content;
-  }
   .anchor-group .group-count { display: none; }
 }
 
@@ -559,6 +536,49 @@
   border-radius: 99px;
   pointer-events: none;
   z-index: 1;
+}
+
+/* Value chain — clean typographic stations with a hairline divider */
+.vc-list { padding-top: 0.25rem; }
+.vc-item + .vc-item { border-top: 1px solid var(--color-border); }
+
+.vc-item {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity .6s cubic-bezier(0.2, 0, 0, 1),
+    transform .6s cubic-bezier(0.2, 0, 0, 1);
+  transition-delay: var(--delay, 0ms);
+}
+.reveal.in .vc-item { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .vc-item {
+    transform: none !important;
+    transition: opacity 220ms ease-out !important;
+    transition-delay: var(--delay, 0ms) !important;
+  }
+}
+
+/* WhyDesk — horizontal reveal variant (translateX instead of Y) */
+.reveal.why-item { transform: translateX(-12px); }
+.reveal.why-item.in { transform: translateX(0); }
+
+/* Implementation steps — progressive dot ignition */
+.step-card .step-dot {
+  background: var(--color-surface);
+  outline: 1px solid var(--color-border);
+  box-shadow: none;
+  transition: background 0.35s ease, box-shadow 0.35s ease, outline-color 0.35s ease;
+}
+.steps-grid.in .step-card:nth-child(1) .step-dot { transition-delay: 200ms; }
+.steps-grid.in .step-card:nth-child(2) .step-dot { transition-delay: 500ms; }
+.steps-grid.in .step-card:nth-child(3) .step-dot { transition-delay: 800ms; }
+.steps-grid.in .step-card:nth-child(4) .step-dot { transition-delay: 1100ms; }
+.steps-grid.in .step-card .step-dot {
+  background: var(--color-accent);
+  outline-color: var(--color-accent);
+  box-shadow: 0 0 8px var(--color-accent-glow);
 }
 
 /* FAQ collapse (grid-template-rows avoids layout reflow) */

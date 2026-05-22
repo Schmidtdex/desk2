@@ -1406,7 +1406,7 @@ export default function Faq() {
           <aside className="reveal">
             <span className="kicker">FAQ</span>
             <h2 className="mt-4 text-[clamp(2rem,4vw,3rem)] font-extralight leading-[1.05] tracking-tight">
-              Perguntas frequentes.
+              Perguntas frequentes
             </h2>
             <p className="mt-6 max-w-[380px] text-[1rem] leading-relaxed text-text-muted">
               O que ouvimos das equipes de TI e operações nas primeiras

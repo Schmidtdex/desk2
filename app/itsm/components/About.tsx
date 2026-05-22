@@ -1,4 +1,4 @@
-import { VALUE_CHAIN, PAGE_CONFIG } from "@/itsm/lib/data";
+import ValueChain from "./ValueChain";
 
 export default function About() {
   return (
@@ -6,10 +6,9 @@ export default function About() {
       <div className="mx-auto max-w-[1280px]">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
           <div className="reveal">
-            <span className="kicker">O que é {PAGE_CONFIG.productLabel}, na prática</span>
-            <h2 className="mt-4 text-[clamp(2rem,4vw,3.25rem)] font-extralight leading-[1.05] tracking-tight">
+            <h2 className="text-[clamp(2rem,4vw,3.25rem)] font-extralight leading-[1.05] tracking-tight">
               TI deixa de ser função<br />
-              e vira <em className="not-italic text-accent-2">serviço estruturado</em>.
+              e vira <em className="not-italic text-accent-2">serviço estruturado</em>
             </h2>
 
             <p className="mt-5 text-[1.05rem] leading-relaxed text-text-muted">
@@ -21,7 +20,7 @@ export default function About() {
               melhoria contínua.
             </p>
             <p className="mt-5 text-[1.05rem] leading-relaxed text-text-muted">
-              A ITIL 5, mantida pela AXELOS e atualizada para 2026 com
+              A ITIL®, mantida pela AXELOS e atualizada para 2026 com
               inteligência artificial aplicada, organiza essa disciplina em
               práticas. A Desk Manager é a{" "}
               <strong className="font-medium text-text">primeira plataforma brasileira</strong>{" "}
@@ -29,41 +28,7 @@ export default function About() {
             </p>
           </div>
 
-          <div
-            className="reveal flex min-h-[380px] flex-col gap-3 rounded-3xl border border-border bg-surface p-8"
-            style={{ "--delay": "120ms" } as React.CSSProperties}
-          >
-            <span className="kicker">Cadeia de valor do serviço</span>
-            {VALUE_CHAIN.map((it) => (
-              <div
-                key={it.i}
-                className="
-                  flex items-center gap-3 rounded-2xl border border-border
-                  bg-bg/60 px-4 py-3.5
-                "
-              >
-                <div className="
-                  flex size-8 items-center justify-center rounded-lg
-                  border border-[rgba(26,77,255,0.25)] bg-[rgba(26,77,255,0.08)]
-                  font-mono text-[0.7rem] font-medium tracking-wide text-accent-2
-                ">
-                  {it.letter}
-                </div>
-                <div>
-                  <div className="text-[0.95rem] font-medium">{it.i}</div>
-                  <div className="mt-[2px] font-mono text-[0.75rem] tracking-wider text-text-muted">
-                    {it.desc}
-                  </div>
-                </div>
-                <div className="
-                  ml-auto font-mono text-[0.7rem] uppercase
-                  tracking-[0.18em] text-text-muted
-                ">
-                  {PAGE_CONFIG.productLabel}
-                </div>
-              </div>
-            ))}
-          </div>
+          <ValueChain />
         </div>
       </div>
     </section>

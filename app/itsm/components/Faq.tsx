@@ -1,33 +1,86 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { FAQS } from "@/itsm/lib/data";
-import { buttonClasses } from "@/components/ui/Button";
 
 export default function Faq() {
   const [open, setOpen] = useState<number>(-1);
+  const panelRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const innerRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  useEffect(() => {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let cancelled = false;
+    (async () => {
+      const { gsap } = await import("gsap");
+      if (cancelled) return;
+
+      FAQS.forEach((_, i) => {
+        const panel = panelRefs.current[i];
+        const inner = innerRefs.current[i];
+        if (!panel || !inner) return;
+        const isOpen = open === i;
+
+        gsap.killTweensOf([panel, inner]);
+
+        // Reduced motion: short fade + height tween, no Y translation
+        const openDur = prefersReduced ? 0.22 : 0.55;
+        const closeDur = prefersReduced ? 0.18 : 0.45;
+        const ease = prefersReduced ? "power1.out" : "power3.inOut";
+
+        if (isOpen) {
+          const target = inner.offsetHeight;
+          gsap.fromTo(
+            panel,
+            { height: panel.offsetHeight },
+            {
+              height: target,
+              duration: openDur,
+              ease,
+              onComplete: () => { panel.style.height = "auto"; },
+            },
+          );
+          gsap.fromTo(
+            inner,
+            { opacity: 0, y: prefersReduced ? 0 : 8 },
+            { opacity: 1, y: 0, duration: openDur * 0.7, ease: "power2.out", delay: prefersReduced ? 0 : 0.1 },
+          );
+        } else {
+          gsap.to(panel, { height: 0, duration: closeDur, ease });
+          gsap.to(inner, {
+            opacity: 0,
+            y: prefersReduced ? 0 : -4,
+            duration: closeDur * 0.5,
+            ease: "power2.in",
+          });
+        }
+      });
+    })();
+
+    return () => { cancelled = true; };
+  }, [open]);
 
   return (
     <section id="faq" aria-label="Perguntas frequentes" className="relative px-6 py-20 md:py-32">
       <div className="mx-auto max-w-[1280px]">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
-          <aside aria-label="Sobre as perguntas" className="reveal">
-            <span className="kicker">FAQ</span>
-            <h2 className="mt-4 text-[clamp(2rem,4vw,3rem)] font-extralight leading-[1.05] tracking-tight">
-              Perguntas frequentes.
-            </h2>
-            <p className="mt-6 max-w-[380px] text-[1rem] leading-relaxed text-text-muted">
-              O que ouvimos das equipes de TI e operações nas primeiras
-              conversas. Se a sua não está aqui, fale com nosso time.
-            </p>
-          </aside>
+        <div className="reveal mx-auto mb-14 max-w-[680px] text-center md:mb-20">
+          <h2 className="text-[clamp(2rem,4vw,3rem)] font-extralight leading-[1.05] tracking-tight">
+            Perguntas{" "}
+            <em className="not-italic text-accent-2">frequentes</em>
+          </h2>
+          <p className="mx-auto mt-6 max-w-[52ch] text-[1rem] leading-relaxed text-text-muted">
+            Cinco anos respondendo CIOs, gerentes de service desk e times de
+            compliance. Se a sua pergunta não está aqui, é porque ainda não
+            ouvimos. Fale com nosso time.
+          </p>
+        </div>
 
-          <div
-            className="reveal flex flex-col"
-            style={{ "--delay": "120ms" } as React.CSSProperties}
-          >
-            <div className="flex flex-col">
+        <div
+          className="reveal mx-auto flex max-w-[860px] flex-col"
+          style={{ "--delay": "120ms" } as React.CSSProperties}
+        >
+          <div className="flex flex-col">
               {FAQS.map((f, i) => {
                 const isOpen = open === i;
                 const btnId = `faq-btn-${i}`;
@@ -36,7 +89,8 @@ export default function Faq() {
                   <div
                     key={f.q}
                     className={[
-                      "border-t border-border py-6",
+                      "faq-row group border-t border-border px-2 py-6 -mx-2 rounded",
+                      "transition-[background] duration-150 ease-out hover:bg-white/[0.015]",
                       i === FAQS.length - 1 ? "border-b" : "",
                     ].join(" ")}
                   >
@@ -52,16 +106,22 @@ export default function Faq() {
                       "
                     >
                       <span>{f.q}</span>
-                      <PlusMinus open={isOpen} />
+                      <PlusCross open={isOpen} />
                     </button>
                     <div
                       id={panelId}
                       role="region"
                       aria-labelledby={btnId}
                       aria-hidden={!isOpen}
-                      className={`faq-answer${isOpen ? " open" : ""}`}
+                      ref={(el) => { panelRefs.current[i] = el; }}
+                      className="faq-answer-gsap overflow-hidden"
+                      style={{ height: 0 }}
                     >
-                      <div className="max-w-[620px] pt-4 text-[0.95rem] leading-[1.7] text-text-muted">
+                      <div
+                        ref={(el) => { innerRefs.current[i] = el; }}
+                        className="max-w-[620px] pt-4 text-[0.95rem] leading-[1.7] text-text-muted"
+                        style={{ opacity: 0 }}
+                      >
                         {f.a}
                       </div>
                     </div>
@@ -69,55 +129,27 @@ export default function Faq() {
                 );
               })}
             </div>
-
-            {/* Slim closing CTA */}
-            <div
-              id="faq-cta"
-              className="
-                mt-10 flex flex-wrap items-center justify-between gap-5
-                rounded-2xl border border-border bg-surface px-7 py-6
-                bg-[linear-gradient(135deg,rgba(26,77,255,0.06),transparent_60%),var(--color-surface)]
-              "
-            >
-              <div className="text-[0.98rem] text-text">
-                Sua dúvida não está aqui?
-                <small className="
-                  mt-1 block font-mono text-[0.65rem] font-normal uppercase
-                  tracking-[0.2em] text-text-muted
-                ">
-                  Diagnóstico em 30 minutos · proposta em fases
-                </small>
-              </div>
-              <Link href="/contato" className={buttonClasses({ variant: "primary", size: "sm" })}>
-                Falar com especialista
-                <span aria-hidden="true">→</span>
-              </Link>
-            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
   );
 }
 
-function PlusMinus({ open }: { open: boolean }) {
+function PlusCross({ open }: { open: boolean }) {
   return (
     <span
       aria-hidden="true"
       className={[
-        "relative size-6 shrink-0 rounded-full border border-border",
-        "transition-[background,border-color,box-shadow] duration-200",
-        open ? "border-accent bg-accent shadow-[0_0_16px_var(--color-accent-glow)]" : "",
+        "relative grid size-6 shrink-0 place-items-center rounded-full border border-border",
+        "transition-[background,border-color,box-shadow,transform] duration-250 ease-out",
+        open
+          ? "rotate-45 border-accent bg-accent shadow-[0_0_16px_var(--color-accent-glow)]"
+          : "",
       ].join(" ")}
+      style={{ transitionDuration: "250ms" }}
     >
-      <span className="absolute left-1/2 top-1/2 h-px w-2.5 -translate-x-1/2 -translate-y-1/2 bg-text" />
-      <span
-        className={[
-          "absolute left-1/2 top-1/2 h-2.5 w-px -translate-x-1/2 -translate-y-1/2 bg-text",
-          "transition-opacity duration-200",
-          open ? "opacity-0" : "",
-        ].join(" ")}
-      />
+      <span className="absolute h-px w-2.5 bg-text" />
+      <span className="absolute h-2.5 w-px bg-text" />
     </span>
   );
 }

@@ -11,35 +11,32 @@ export default function AnchorSection() {
   return (
     <section
       id="anchor"
-      aria-label="Práticas ITIL 5 certificadas"
+      aria-label="Práticas ITIL® certificadas"
       data-anchor-slot
       className="relative px-6 py-20 md:py-32"
     >
       <div className="mx-auto max-w-[1280px]">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[280px_1fr] lg:items-start lg:gap-16">
           {/* Aside sticky */}
-          <aside aria-label="12 práticas ITIL 5" className="reveal relative lg:sticky lg:top-[100px]">
-            <span className="
-              inline-flex rounded-full border border-[rgba(26,77,255,0.4)]
-              bg-[rgba(26,77,255,0.1)] px-4 py-2
-              font-mono text-[0.65rem] uppercase tracking-[0.25em] text-accent-ice
-            ">
-              {A.kicker}
-            </span>
-            <h2 className="mt-6 text-[clamp(2rem,3.5vw,2.75rem)] font-extralight leading-[1.05] tracking-tight">
-              {A.asideTitle}
-            </h2>
-            <p className="mt-6 text-[0.95rem] leading-relaxed text-text-muted">
-              {A.asideBody}
-            </p>
-            <div className="mt-8 flex items-baseline gap-3">
-              <span className="text-[5rem] font-extralight leading-[0.95] tracking-[-0.05em]">
-                {A.bigNumber}
+          <aside aria-label="12 práticas ITIL®" className="reveal relative lg:sticky lg:top-[100px]">
+            <div className="flex items-baseline gap-3">
+              <span className="text-[clamp(4.5rem,7vw,6.5rem)] font-extralight leading-none tracking-[-0.06em]">
+                12
               </span>
-              <span className="font-mono text-[0.75rem] uppercase tracking-[0.2em] text-text-muted">
-                {A.bigSubLine1}<br />{A.bigSubLine2}
+              <span className="text-[0.95rem] leading-snug text-text-muted">
+                práticas<br />
+                ITIL® certificadas
               </span>
             </div>
+
+            <h2 className="mt-8 text-[clamp(1.6rem,2.6vw,2.1rem)] font-extralight leading-[1.15] tracking-[-0.018em]">
+              IA nativa aplicada<br />
+              <em className="not-italic text-accent-2">na execução</em>, não em teoria
+            </h2>
+
+            <p className="mt-6 max-w-[28ch] text-[0.95rem] leading-relaxed text-text-muted">
+              {A.asideBody}
+            </p>
           </aside>
 
           {/* Accordion de grupos */}
@@ -64,10 +61,9 @@ export default function AnchorSection() {
                     onClick={() => setOpenGroup(isOpen ? -1 : i)}
                     className="group-head"
                   >
-                    <span className="cat-label">{g.cat}</span>
                     <span className="group-title">{g.title}</span>
                     <span className="group-count">
-                      {String(g.practices.length).padStart(2, "0")} práticas
+                      {g.practices.length} {g.practices.length === 1 ? "prática" : "práticas"}
                     </span>
                     <span className="group-chevron" aria-hidden="true">
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5">
