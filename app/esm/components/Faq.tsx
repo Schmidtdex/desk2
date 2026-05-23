@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { FAQS } from "@/itsm/lib/data";
+import { FAQS } from "@/esm/lib/data";
 
 export default function Faq() {
   const [open, setOpen] = useState<number>(-1);
@@ -24,7 +24,6 @@ export default function Faq() {
 
         gsap.killTweensOf([panel, inner]);
 
-        // Reduced motion: short fade + height tween, no Y translation
         const openDur = prefersReduced ? 0.22 : 0.55;
         const closeDur = prefersReduced ? 0.18 : 0.45;
         const ease = prefersReduced ? "power1.out" : "power3.inOut";
@@ -62,17 +61,20 @@ export default function Faq() {
   }, [open]);
 
   return (
-    <section id="faq" aria-label="Perguntas frequentes" className="relative px-6 pt-10 pb-20 md:pt-16 md:pb-32">
+    <section
+      id="faq"
+      aria-label="Perguntas frequentes sobre ESM"
+      className="relative px-6 pt-10 pb-20 md:pt-16 md:pb-32"
+    >
       <div className="mx-auto max-w-[1280px]">
         <div className="reveal mx-auto mb-14 max-w-[820px] text-center md:mb-20">
           <h2 className="text-[clamp(2.5rem,5.5vw,4.25rem)] font-extralight leading-[1.02] tracking-[-0.025em]">
-            Perguntas{" "}
-            <em className="not-italic text-accent-2">frequentes</em>
+            Perguntas <em className="not-italic text-accent-2">frequentes</em>
           </h2>
           <p className="mx-auto mt-8 max-w-[58ch] text-[1.2rem] leading-relaxed text-text-muted">
-            Cinco anos respondendo CIOs, gerentes de service desk e times de
-            compliance. Se a sua pergunta não está aqui, é porque ainda não
-            ouvimos. Fale com nosso time.
+            ESM levanta as mesmas dúvidas em qualquer C-level: escopo,
+            integração, time. As respostas vêm de centenas de implantações
+            corporativas: Eurofarma, Petz Cobasi, Convergint, BYD.
           </p>
         </div>
 
@@ -81,57 +83,57 @@ export default function Faq() {
           style={{ "--delay": "120ms" } as React.CSSProperties}
         >
           <div className="flex flex-col">
-              {FAQS.map((f, i) => {
-                const isOpen = open === i;
-                const btnId = `faq-btn-${i}`;
-                const panelId = `faq-panel-${i}`;
-                return (
-                  <div
-                    key={f.q}
-                    className={[
-                      "faq-row group border-t border-border px-2 py-6 -mx-2 rounded",
-                      "transition-[background] duration-150 ease-out hover:bg-white/[0.015]",
-                      i === FAQS.length - 1 ? "border-b" : "",
-                    ].join(" ")}
+            {FAQS.map((f, i) => {
+              const isOpen = open === i;
+              const btnId = `faq-btn-${i}`;
+              const panelId = `faq-panel-${i}`;
+              return (
+                <div
+                  key={f.q}
+                  className={[
+                    "faq-row group border-t border-border px-2 py-6 -mx-2 rounded",
+                    "transition-[background] duration-150 ease-out hover:bg-white/[0.015]",
+                    i === FAQS.length - 1 ? "border-b" : "",
+                  ].join(" ")}
+                >
+                  <button
+                    id={btnId}
+                    type="button"
+                    aria-expanded={isOpen}
+                    aria-controls={panelId}
+                    onClick={() => setOpen(isOpen ? -1 : i)}
+                    className="
+                      flex w-full items-center justify-between gap-6 py-1
+                      text-left text-[1.18rem] font-normal tracking-[-0.01em] text-text
+                    "
                   >
-                    <button
-                      id={btnId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      onClick={() => setOpen(isOpen ? -1 : i)}
-                      className="
-                        flex w-full items-center justify-between gap-6 py-1
-                        text-left text-[1.18rem] font-normal tracking-[-0.01em] text-text
-                      "
-                    >
-                      <span>{f.q}</span>
-                      <PlusCross open={isOpen} />
-                    </button>
+                    <span>{f.q}</span>
+                    <PlusCross open={isOpen} />
+                  </button>
+                  <div
+                    id={panelId}
+                    role="region"
+                    aria-labelledby={btnId}
+                    aria-hidden={!isOpen}
+                    ref={(el) => { panelRefs.current[i] = el; }}
+                    className="faq-answer-gsap overflow-hidden"
+                    style={{ height: 0 }}
+                  >
                     <div
-                      id={panelId}
-                      role="region"
-                      aria-labelledby={btnId}
-                      aria-hidden={!isOpen}
-                      ref={(el) => { panelRefs.current[i] = el; }}
-                      className="faq-answer-gsap overflow-hidden"
-                      style={{ height: 0 }}
+                      ref={(el) => { innerRefs.current[i] = el; }}
+                      className="max-w-[680px] pt-4 text-[1.02rem] leading-[1.7] text-text-muted"
+                      style={{ opacity: 0 }}
                     >
-                      <div
-                        ref={(el) => { innerRefs.current[i] = el; }}
-                        className="max-w-[680px] pt-4 text-[1.02rem] leading-[1.7] text-text-muted"
-                        style={{ opacity: 0 }}
-                      >
-                        {f.a}
-                      </div>
+                      {f.a}
                     </div>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
         </div>
-      </section>
+      </div>
+    </section>
   );
 }
 

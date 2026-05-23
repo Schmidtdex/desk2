@@ -5,6 +5,7 @@ export default function Implementation() {
   return (
     <Section
       id="implementacao"
+      className="band-soft"
       title={
         <>
           Maturidade de ITSM<br />

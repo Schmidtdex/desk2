@@ -1,8 +1,37 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { buttonClasses } from "@/components/ui/Button";
 
 export default function Hero() {
+  const mockupRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = mockupRef.current;
+    if (!el) return;
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let cleanup = () => {};
+    (async () => {
+      const { gsap } = await import("gsap");
+      if (prefersReduced) {
+        gsap.to(el, { opacity: 1, duration: 0.25 });
+        return;
+      }
+      const ctx = gsap.context(() => {
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 32, scale: 0.96 },
+          { opacity: 1, y: 0, scale: 1, duration: 1.1, ease: "power3.out", delay: 0.25 },
+        );
+      });
+      cleanup = () => ctx.revert();
+    })();
+
+    return () => cleanup();
+  }, []);
   return (
     <section
       id="top"
@@ -65,8 +94,8 @@ export default function Hero() {
           </div>
 
           <div
-            className="reveal relative lg:scale-[1.06] lg:-translate-x-2"
-            style={{ "--delay": "200ms" } as React.CSSProperties}
+            ref={mockupRef}
+            className="relative opacity-0 lg:scale-[1.06] lg:-translate-x-2"
           >
             {/* Glow halo behind the mockup */}
             <div

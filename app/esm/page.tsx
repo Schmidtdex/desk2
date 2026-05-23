@@ -4,9 +4,9 @@ import { FooterFull } from "@/components/layout/FooterFull";
 
 import Hero from "./components/Hero";
 import Metrics from "./components/Metrics";
-import Personas from "./components/Personas";
+import Stakeholders from "./components/Stakeholders";
 import About from "./components/About";
-import PracticesGrid from "./components/PracticesGrid";
+import DomainsGrid from "./components/DomainsGrid";
 import Implementation from "./components/Implementation";
 import WhyDesk from "./components/WhyDesk";
 import Faq from "./components/Faq";
@@ -14,21 +14,21 @@ import Faq from "./components/Faq";
 import { PAGE_CONFIG } from "./lib/data";
 
 export const metadata: Metadata = {
-  title: "ITSM — Desk Manager",
+  title: "ESM · Desk Manager",
   description:
-    "ITSM estratégico, certificado pela ITIL® com IA nativa. A operação de TI deixa de ser reativa e passa a ser orientada por dados, governança estruturada e inteligência contínua.",
+    "Enterprise Service Management para a empresa inteira. RH, Jurídico, Financeiro, Facilities e TI no mesmo motor: catálogo único, audit trail unificado e IA nativa. Plataforma de orquestração corporativa da Desk Manager.",
 };
 
-export default function ITSMPage() {
+export default function ESMPage() {
   return (
     <>
       <Reveal />
       <main>
         <Hero />
         <Metrics />
-        <Personas />
+        <Stakeholders />
         <About />
-        <PracticesGrid />
+        <DomainsGrid />
         <Implementation />
         {PAGE_CONFIG.showWhy && <WhyDesk />}
         <Faq />

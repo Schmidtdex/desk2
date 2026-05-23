@@ -17,7 +17,7 @@ export type ValueChainItem = {
 
 export type Step = { num: string; title: string; body: string };
 
-export type WhyItem = { title: string; body: string };
+export type WhyItem = { title: string; body: string; featured?: boolean };
 export type Faq = { q: string; a: string };
 
 export type AnchorPractice = { title: string; body: string };
@@ -143,12 +143,13 @@ export const WHY: WhyItem[] = [
   { title: "DNA brasileiro", body: "Compliance e cultura local, suporte em português, sem fuso e sem ruído de tradução. Operação enterprise sem terceirização de relacionamento." },
   { title: "AI nativa, não plugada", body: "Agentes operam dentro da arquitetura, com dados estruturados da própria plataforma. Inteligência não é módulo de terceiro." },
   { title: "ITIL® certificado pela PeopleCert", body: "Aderência reconhecida globalmente. As práticas vêm certificadas, não inferidas." },
-  { title: "Hospedado em AWS", body: "ISO 27001, SOC 1/2/3, PCI DSS Nível 1, criptografia AES-256. LGPD-by-default na hospedagem brasileira." },
-  { title: "600+ grandes clientes", body: "Milhares de usuários ativos em operações enterprise, multilíngues e multinacionais. Maturidade comprovada em escala." },
+  { title: "Certificação ISO 27001", body: "Infraestrutura auditada globalmente, com relatórios SOC 1, SOC 2, SOC 3 e conformidade PCI DSS Nível 1. Padrão internacional de gestão de segurança da informação.", featured: true },
+  { title: "Hospedado em AWS", body: "Redundância em múltiplas zonas, criptografia AES-256 em repouso e TLS 1.3 em trânsito. LGPD por padrão na operação." },
+  { title: "600+ grandes clientes", body: "Milhares de usuários ativos em operações enterprise, em mais de 40 países e múltiplos idiomas. Maturidade comprovada em escala." },
 ];
 
 export const FAQS: Faq[] = [
-  { q: "Em quanto tempo a Desk Manager fica em produção?", a: "Implantações típicas vão de 4 a 12 semanas, dependendo do escopo. Operações enterprise com múltiplos departamentos costumam fazer rollout faseado em 3 a 6 meses." },
+  { q: "Em quanto tempo a Desk Manager fica em produção?", a: "Depende do escopo da operação e da quantidade de departamentos envolvidos. Operações enterprise com múltiplas áreas costumam fazer rollout faseado. Fale com nosso time para um diagnóstico do seu cenário." },
   { q: "Funciona com nosso help desk atual durante a transição?", a: "Sim. O iPaaS Maestro permite operação híbrida — você migra fluxos por área enquanto mantém integração com sistemas legados, sem ruptura no atendimento." },
   { q: "Preciso de equipe técnica dedicada pra configurar?", a: "Não. A plataforma é no-code pra configuração de fluxos, telas e regras. O time de operações configura sem depender de TI." },
   { q: "A IA nativa exige treinamento dos modelos?", a: "A IA já vem pré-treinada pra serviços e operações. Você refina com base de conhecimento e dados da sua operação ao longo do uso, sem projeto de ML." },

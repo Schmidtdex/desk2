@@ -4,8 +4,8 @@ export default function About() {
   return (
     <section id="produto" aria-label="O que é ITSM na prática" className="relative px-6 py-20 md:py-32">
       <div className="mx-auto max-w-[1280px]">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
-          <div className="reveal">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+          <div className="reveal lg:self-center">
             <h2 className="text-[clamp(2rem,4vw,3.25rem)] font-extralight leading-[1.05] tracking-tight">
               TI deixa de ser função<br />
               e vira <em className="not-italic text-accent-2">serviço estruturado</em>

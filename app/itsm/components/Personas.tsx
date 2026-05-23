@@ -6,6 +6,7 @@ export default function Personas() {
     <Section
       id="personas"
       centered
+      className="band-soft"
       title={
         <>
           A operação moderna de TI<br />

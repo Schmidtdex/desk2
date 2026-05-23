@@ -1,40 +1,44 @@
-import { WHY } from "@/itsm/lib/data";
+import { DIFFERENTIATORS } from "@/esm/lib/data";
 
 export default function WhyDesk() {
   return (
-    <section id="por-que" aria-label="Por que Desk Manager" className="relative px-6 py-20 md:py-32">
+    <section
+      id="por-que"
+      aria-label="Por que Desk Manager para ESM"
+      className="relative px-6 py-20 md:py-32"
+    >
       <div className="mx-auto max-w-[1280px]">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
           <div className="reveal lg:self-center">
             <h2 className="text-[clamp(2rem,4vw,3.25rem)] font-extralight leading-[1.05] tracking-tight">
-              ITSM como{" "}
-              <em className="not-italic text-accent-2">camada</em>,<br />
-              não como módulo
+              ESM como{" "}
+              <em className="not-italic text-accent-2">plataforma</em>,<br />
+              não como suíte
             </h2>
+
             <p className="mt-7 max-w-[520px] text-[1.05rem] leading-relaxed text-text-muted">
-              Plataformas tradicionais oferecem ITSM como módulo. A Desk
-              Manager entrega ITSM como{" "}
-              <strong className="font-medium text-text">camada</strong> de uma
-              plataforma de orquestração mais ampla — onde o mesmo motor que
-              cuida do chamado de TI cuida do onboarding do RH, da gestão
-              contratual do jurídico e da manutenção do facilities.
+              A indústria vende ESM como pacote de módulos. Cada área recebe um
+              produto separado, com integrações por fora e licença por
+              departamento. A Desk Manager entrega ESM como{" "}
+              <strong className="font-medium text-text">um motor único</strong>
+              : mesmo catálogo, mesmo workflow, mesmo audit trail.
             </p>
+
             <p className="mt-6 max-w-[520px] text-[1.05rem] leading-relaxed text-text-muted">
-              Você não compra uma ferramenta de service desk e amarra
-              integrações por fora.{" "}
+              A operação inteira da empresa cabe numa plataforma de IA nativa.{" "}
               <strong className="font-medium text-text">
-                Compra a operação inteira já conectada.
+                Não é integração. É desenho.
               </strong>
             </p>
           </div>
 
           <ul className="flex flex-col">
-            {WHY.map((it, i) => (
+            {DIFFERENTIATORS.map((it, i) => (
               <li
                 key={it.title}
                 className={[
                   "reveal why-item relative border-t border-border py-7",
-                  i === WHY.length - 1 ? "border-b" : "",
+                  i === DIFFERENTIATORS.length - 1 ? "border-b" : "",
                   it.featured ? "why-featured" : "",
                 ].join(" ")}
                 style={{ "--delay": `${120 + i * 60}ms` } as React.CSSProperties}
