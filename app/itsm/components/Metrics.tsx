@@ -35,9 +35,6 @@ export default function Metrics() {
         return;
       }
 
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      gsap.registerPlugin(ScrollTrigger);
-
       const ctx = gsap.context(() => {
         const cells = gsap.utils.toArray<HTMLElement>("[data-metric-cell]", root);
 

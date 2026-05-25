@@ -2,9 +2,15 @@
 
 import { useEffect, type ReactNode } from "react";
 import Lenis from "lenis";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export function LenisProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
+    // Synchronous so any child useEffect (which fires bottom-up, before this one
+    // completes its async work) can safely use `scrollTrigger:` in gsap configs.
+    gsap.registerPlugin(ScrollTrigger);
+
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReduced) return;
 
@@ -14,6 +20,11 @@ export function LenisProvider({ children }: { children: ReactNode }) {
       smoothWheel: true,
     });
 
+    lenis.on("scroll", ScrollTrigger.update);
+
+    // Single rAF loop. Previously we ran both this AND `gsap.ticker.add` calling
+    // lenis.raf — two clocks driving the same instance caused inconsistent deltas
+    // and a visible "flick" at scroll boundaries when releasing the wheel/trackpad.
     let rafId = 0;
     function raf(time: number) {
       lenis.raf(time);
@@ -21,21 +32,9 @@ export function LenisProvider({ children }: { children: ReactNode }) {
     }
     rafId = requestAnimationFrame(raf);
 
-    let ScrollTrigger: typeof import("gsap/ScrollTrigger").ScrollTrigger | null = null;
-    (async () => {
-      const gsapMod = await import("gsap");
-      const stMod = await import("gsap/ScrollTrigger");
-      ScrollTrigger = stMod.ScrollTrigger;
-      gsapMod.gsap.registerPlugin(ScrollTrigger);
-      lenis.on("scroll", ScrollTrigger.update);
-      gsapMod.gsap.ticker.add((t) => lenis.raf(t * 1000));
-      gsapMod.gsap.ticker.lagSmoothing(0);
-    })();
-
     return () => {
       cancelAnimationFrame(rafId);
       lenis.destroy();
-      ScrollTrigger?.killAll();
     };
   }, []);
 

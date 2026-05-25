@@ -39,9 +39,6 @@ export default function Stakeholders() {
         return;
       }
 
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      gsap.registerPlugin(ScrollTrigger);
-
       const ctx = gsap.context(() => {
         // Title lines reveal
         gsap.fromTo(

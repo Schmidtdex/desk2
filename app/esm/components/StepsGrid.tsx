@@ -33,9 +33,6 @@ export default function StepsGrid() {
         return;
       }
 
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      gsap.registerPlugin(ScrollTrigger);
-
       const ctx = gsap.context(() => {
         const cards = gsap.utils.toArray<HTMLElement>(".step-card", root);
 

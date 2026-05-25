@@ -29,9 +29,6 @@ export default function DomainsGrid() {
         return;
       }
 
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      gsap.registerPlugin(ScrollTrigger);
-
       const ctx = gsap.context(() => {
         gsap.fromTo(
           cells,
