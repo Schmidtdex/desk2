@@ -453,139 +453,6 @@
   pointer-events: none;
 }
 
-/* Anchor accordion (Ring 2 template) */
-.anchor-groups {
-  display: flex;
-  flex-direction: column;
-  border-top: 1px solid var(--color-border);
-}
-.anchor-group { border-bottom: 1px solid var(--color-border); }
-
-.anchor-group .group-head {
-  width: 100%;
-  background: transparent;
-  border: 0;
-  text-align: left;
-  cursor: pointer;
-  padding: 1.5rem 0.5rem 1.5rem 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  row-gap: 0.65rem;
-  column-gap: 1.25rem;
-  font-family: inherit;
-  color: var(--color-text);
-  transition: background .25s;
-}
-.anchor-group .group-head:hover {
-  background: linear-gradient(90deg, rgba(26, 77, 255, 0.04), transparent 60%);
-}
-
-.anchor-group .group-title {
-  font-size: clamp(1.25rem, 2vw, 1.6rem);
-  font-weight: 200;
-  letter-spacing: -0.015em;
-  line-height: 1.2;
-  margin-right: auto;
-}
-.anchor-group .group-count {
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
-  font-weight: 400;
-}
-.anchor-group .group-chevron {
-  width: 32px; height: 32px;
-  border: 1px solid var(--color-border);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--color-text-muted);
-  transition:
-    background .3s, border-color .3s, color .3s,
-    transform .35s cubic-bezier(0.2, 0, 0, 1);
-}
-.anchor-group .group-chevron svg {
-  transition: transform .35s cubic-bezier(0.2, 0, 0, 1);
-}
-.anchor-group.open .group-chevron {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-  color: var(--color-text);
-  box-shadow: 0 0 16px var(--color-accent-glow);
-}
-.anchor-group.open .group-chevron svg { transform: rotate(180deg); }
-
-.anchor-group .group-body {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows .45s cubic-bezier(0.2, 0, 0, 1);
-}
-.anchor-group.open .group-body { grid-template-rows: 1fr; }
-.anchor-group .group-body > div { overflow: hidden; }
-
-.anchor-group .practices {
-  display: grid;
-  grid-template-columns: 1fr;
-  row-gap: 1.5rem;
-  column-gap: 3rem;
-  padding: 0.25rem 0 1.75rem;
-}
-@media (min-width: 768px) {
-  .anchor-group .practices { grid-template-columns: repeat(2, 1fr); }
-}
-.anchor-group .practice {
-  display: grid;
-  grid-template-columns: 18px 1fr;
-  gap: 0.85rem;
-  align-items: start;
-}
-.anchor-group .practice .dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--color-accent);
-  box-shadow: 0 0 8px var(--color-accent-glow);
-  margin-top: 0.55rem;
-}
-.anchor-group .practice h4 {
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  color: var(--color-text);
-  margin: 0;
-  line-height: 1.3;
-}
-.anchor-group .practice p {
-  margin-top: 0.5rem;
-  font-size: 0.88rem;
-  color: var(--color-text-muted);
-  line-height: 1.6;
-}
-
-/* Mobile — hide count to keep titles breathing */
-@media (max-width: 700px) {
-  .anchor-group .group-head { row-gap: 0.5rem; }
-  .anchor-group .group-count { display: none; }
-}
-
-/* Anchor slot dev marker */
-[data-anchor-slot] { position: relative; }
-[data-anchor-slot]::before {
-  content: attr(data-anchor-label);
-  position: absolute;
-  top: 1rem;
-  right: 1.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-accent-2);
-  opacity: 0.5;
-  padding: 0.25rem 0.6rem;
-  border: 1px dashed rgba(59, 130, 246, 0.3);
-  border-radius: 99px;
-  pointer-events: none;
-  z-index: 1;
-}
-
 /* Alternating section bands — adds rhythm via subtle bg tint shift */
 .band-soft {
   background: var(--color-surface);
@@ -605,7 +472,11 @@
   background:
     linear-gradient(180deg, rgba(19, 23, 50, 0.45), rgba(11, 13, 28, 0.85));
   transition: border-color .3s ease, box-shadow .3s ease;
-  overflow: hidden;
+  /* Stretch contents to fill cell height — shorter lists distribute their items
+     evenly so cells with 3 practices read as deliberate, not under-filled */
+  display: flex;
+  flex-direction: column;
+  /* No overflow:hidden — lets hovered items breathe a bit beyond the edge */
 }
 .bento-cell::before {
   content: "";
@@ -649,16 +520,28 @@
   padding: 0;
   display: flex;
   flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
 }
 
 .bento-item {
   position: relative;
-  padding: 0.85rem 0 0.85rem 0.85rem;
+  padding: 1.1rem 0 1.1rem 0.85rem;
   border-bottom: 1px solid rgba(30, 34, 64, 0.5);
   cursor: pointer;
   margin-left: -0.85rem;
+  transition: transform .35s cubic-bezier(0.2, 0, 0, 1);
+  transform-origin: left center;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .bento-item:last-child { border-bottom: 0; }
+.bento-item:hover {
+  z-index: 5;
+}
 
 /* Hairline marker on the left — transparent by default, lights up on hover */
 .bento-item::before {
@@ -682,11 +565,15 @@
   font-weight: 400;
   letter-spacing: -0.01em;
   color: var(--color-text);
-  line-height: 1.4;
+  line-height: 1.35;
   margin: 0;
-  transition: color .25s ease;
+  transition: color .25s ease, font-size .35s cubic-bezier(0.2, 0, 0, 1), letter-spacing .35s ease;
 }
-.bento-item:hover .bento-item-title { color: var(--color-accent-2); }
+.bento-item:hover .bento-item-title {
+  color: var(--color-accent-2);
+  font-size: 1.35rem;
+  letter-spacing: -0.018em;
+}
 
 /* Grid-template-rows trick: smooth animation through natural content height */
 .bento-item-desc-wrap {
@@ -700,7 +587,7 @@
 
 .bento-item-desc {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 1rem;
   line-height: 1.55;
   color: var(--color-text-muted);
   min-height: 0;
@@ -708,11 +595,41 @@
   opacity: 0;
   transition: opacity .3s ease, padding-top .3s ease;
   padding-top: 0;
+  max-width: 42ch;
 }
 .bento-item:hover .bento-item-desc {
   opacity: 1;
-  padding-top: 0.5rem;
+  padding-top: 0.65rem;
 }
+
+.bento-item-bullets {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.05rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--color-text);
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.bento-item-bullets li {
+  position: relative;
+  padding-left: 0.75rem;
+}
+.bento-item-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.3rem;
+  height: 1px;
+  background: var(--color-accent-2);
+  opacity: 0.7;
+}
+.bento-item:hover .bento-item-bullets { opacity: 1; }
 
 /* Touch / no-hover devices: always show descriptions */
 @media (hover: none) {
@@ -721,24 +638,8 @@
     opacity: 1;
     padding-top: 0.5rem;
   }
+  .bento-item-bullets { opacity: 1; }
 }
-
-/* Client wordmark band */
-.client-band {
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-}
-.client-mark {
-  font-family: var(--font-mono);
-  font-size: 0.95rem;
-  letter-spacing: 0.06em;
-  color: var(--color-text-muted);
-  font-weight: 400;
-  white-space: nowrap;
-  transition: color .25s ease, opacity .25s ease;
-  opacity: 0.6;
-}
-.client-mark:hover { color: var(--color-text); opacity: 1; }
 
 /* Value chain — clean typographic stations with a hairline divider */
 .vc-list { padding-top: 0.25rem; }
@@ -793,11 +694,3 @@
   box-shadow: 0 0 8px var(--color-accent-glow);
 }
 
-/* FAQ collapse (grid-template-rows avoids layout reflow) */
-.faq-answer {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows .35s cubic-bezier(0.2, 0, 0, 1);
-}
-.faq-answer.open { grid-template-rows: 1fr; }
-.faq-answer > div { overflow: hidden; }

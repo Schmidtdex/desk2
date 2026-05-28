@@ -37,7 +37,7 @@ export default function Hero() {
       id="top"
       className="
         relative isolate flex min-h-screen items-center overflow-hidden
-        px-6 pt-32 pb-20
+        px-6 pt-32 pb-8
       "
     >
       {/* Drenched background */}
@@ -61,7 +61,7 @@ export default function Hero() {
         <div className="grid items-center gap-16 lg:grid-cols-[1fr_1.15fr] lg:gap-12">
           <div>
             <h1
-              className="reveal mt-5 text-[clamp(2.25rem,4.5vw,4rem)] leading-[1.1] tracking-[-0.035em]"
+              className="reveal text-[clamp(2.25rem,4.5vw,4rem)] leading-[1.05] tracking-[-0.035em]"
               style={{ "--delay": "80ms" } as React.CSSProperties}
             >
               ITSM estratégico certificado pela{" "}
@@ -74,11 +74,11 @@ export default function Hero() {
               style={{ "--delay": "160ms" } as React.CSSProperties}
             >
               A operação de TI deixa de ser reativa e passa a ser orientada
-              por dados, governança estruturada e inteligência contínua
+              por dados, governança estruturada e inteligência contínua.
             </p>
 
             <div
-              className="reveal mt-8 flex flex-col items-start gap-4"
+              className="reveal mt-10 flex flex-col items-start gap-4"
               style={{ "--delay": "240ms" } as React.CSSProperties}
             >
               <Link href="/contato" className={buttonClasses({ variant: "primary", className: "group" })}>
@@ -114,7 +114,7 @@ export default function Hero() {
               "
             >
               <Image
-                src="/mockup-desk.png"
+                src="/hero-itsm2.png"
                 alt="Painel da Desk Manager mostrando SLA, tickets abertos, MTTR e fluxo de atendimento ITSM."
                 width={1600}
                 height={1000}

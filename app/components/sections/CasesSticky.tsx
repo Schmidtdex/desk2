@@ -149,25 +149,20 @@ export function CasesSticky() {
     <div id="scene-cases" className="relative -mt-24 bg-bg text-text">
       {/* Intro */}
       <section className="relative flex min-h-screen items-center justify-center px-12 text-center">
-        <div>
-          <p className="mb-6 font-mono text-[11px] uppercase tracking-[.26em] text-text-muted">
-            Cases de sucesso
-          </p>
-          <h2
-            style={{
-              fontFamily: DISPLAY,
-              fontSize: "clamp(52px,7vw,96px)",
-              fontWeight: 200,
-              lineHeight: 1.02,
-              letterSpacing: "-.04em",
-              maxWidth: 760,
-            }}
-          >
-            Resultados que
-            <br />
-            falam por si.
-          </h2>
-        </div>
+        <h2
+          style={{
+            fontFamily: DISPLAY,
+            fontSize: "clamp(52px,7vw,96px)",
+            fontWeight: 200,
+            lineHeight: 1.02,
+            letterSpacing: "-.04em",
+            maxWidth: 760,
+          }}
+        >
+          Resultados que
+          <br />
+          falam por si.
+        </h2>
       </section>
 
       {/* Sticky block */}

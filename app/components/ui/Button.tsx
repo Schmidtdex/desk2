@@ -32,7 +32,8 @@ export function buttonClasses({
 }) {
   const variants: Record<Variant, string> = {
     primary: `bg-accent text-white ${PRIMARY_SHADOW[size]} hover:brightness-110`,
-    ghost: "border border-border text-text hover:bg-surface",
+    ghost:
+      "border border-border text-text bg-transparent hover:bg-surface-2 hover:border-accent-2/40",
   };
   return cn(BUTTON_BASE, BUTTON_SIZES[size], variants[variant], className);
 }

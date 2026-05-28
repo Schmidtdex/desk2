@@ -51,11 +51,11 @@ export const PLATFORM: { columns: MegaMenuColumn[] } = {
       title: "Produtos",
       description: "Cinco superfícies, uma plataforma.",
       items: [
-        { label: "AI Agent", description: "Agentes autônomos que executam tarefas pela operação.", href: "#scene-products", icon: Bot },
-        { label: "ESM",      description: "Enterprise Service Management — empresa toda.",        href: "#scene-products", icon: Layers },
-        { label: "ITSM",     description: "IT Service Management ITIL-native.",                    href: "#scene-products", icon: Server },
-        { label: "BPM",      description: "Business Process Management com visão executiva.",      href: "#scene-products", icon: GitBranch },
-        { label: "Maestro",  description: "iPaaS low-code para integrar todo o ecossistema.",      href: "#scene-products", icon: Wand2 },
+        { label: "AI Agent", description: "Agentes autônomos que executam tarefas pela operação.", href: "ai-agent", icon: Bot },
+        { label: "ESM",      description: "Enterprise Service Management — empresa toda.",        href: "esm", icon: Layers },
+        { label: "ITSM",     description: "IT Service Management ITIL-native.",                    href: "itsm", icon: Server },
+        { label: "BPM",      description: "Business Process Management com visão executiva.",      href: "bpm", icon: GitBranch },
+        { label: "Maestro",  description: "iPaaS low-code para integrar todo o ecossistema.",      href: "#maestro", icon: Wand2 },
       ],
     },
   ],
@@ -107,25 +107,25 @@ export const CLIENTS: { cases: ClientCase[] } = {
     {
       title: "Eurofarma",
       description: "Como a Eurofarma centralizou 12 mil chamados/mês em uma plataforma única.",
-      image: "",                  // ← troque por "/cases/eurofarma.jpg" quando tiver a imagem
+      image: "/cases/eurofarma.jpg",                  // ← troque por "/cases/eurofarma.jpg" quando tiver a imagem
       href: "#scene-cases",       // ← troque pelo link real do case
     },
     {
       title: "Convergint",
       description: "+40% de produtividade no service desk global.",
-      image: "",
+      image: "/cases/convergint.webp",
       href: "#scene-cases",
     },
     {
       title: "BYD",
       description: "Onboarding de fábrica em uma plataforma única.",
-      image: "",
+      image: "/cases/BYD.webp",
       href: "#scene-cases",
     },
     {
       title: "Petz Cobasi",
       description: "Atendimento omnichannel para mais de 600 lojas.",
-      image: "",
+      image: "/cases/cobasi.png",
       href: "#scene-cases",
     },
   ],

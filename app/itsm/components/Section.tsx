@@ -14,8 +14,6 @@ export default function Section({
   children,
 }: {
   id?: string;
-  /** Deprecated — accepted for backward-compat but no longer rendered. */
-  kicker?: string;
   title: ReactNode;
   lead?: ReactNode;
   centered?: boolean;

@@ -18,7 +18,7 @@ import { PlatformPanel, DepartmentsPanel, ClientsPanel } from "./MegaMenu";
 
 // Mobile-only flat list (mega menus collapse to simple links on small screens)
 const MOBILE_NAV_LINKS = [
-  { name: "Home",          href: "#" },
+  { name: "Home",          href: "/" },
   { name: "Clientes",      href: "#scene-cases" },
   { name: "Plataforma",    href: "#scene-anatomy" },
   { name: "Departamentos", href: "#scene-products" },
@@ -159,7 +159,7 @@ export function NavBar() {
                   asChild
                   className="inline-flex shrink-0 items-center font-sans text-sm text-white/50 transition-colors duration-150 hover:text-white"
                 >
-                  <Link href="#">Home</Link>
+                  <Link href="/">Home</Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
 

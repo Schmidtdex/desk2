@@ -1,8 +1,8 @@
 "use client";
 
 import type { ComponentProps, ReactNode } from "react";
-import { useState, useEffect } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import Image from "next/image";
 
 const FacebookIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="size-4">
@@ -54,12 +54,20 @@ const segmentos = [
   "Varejo",
 ];
 
-const conteudo = ["Blog", "Recursos", "AI Agent", "BPM", "ESM", "MAESTRO", "ITSM"];
+const conteudo = [
+  { title: "Blog",     href: "#" },
+  { title: "Recursos", href: "#" },
+  { title: "AI Agent", href: "ai-agent" },
+  { title: "BPM",      href: "bpm" },
+  { title: "ESM",      href: "esm" },
+  { title: "MAESTRO",  href: "maestro" },
+  { title: "ITSM",     href: "itsm" },
+];
 
 const socials = [
-  { icon: FacebookIcon,  href: "#", label: "Facebook"  },
-  { icon: InstagramIcon, href: "#", label: "Instagram"  },
-  { icon: LinkedinIcon,  href: "#", label: "LinkedIn"   },
+  { icon: FacebookIcon,  href: "https://www.facebook.com/DeskManager", label: "Facebook"  },
+  { icon: InstagramIcon, href: "https://www.instagram.com/deskmanager", label: "Instagram"  },
+  { icon: LinkedinIcon,  href: "https://www.linkedin.com/company/desk-manager/posts/?feedView=all", label: "LinkedIn"   },
 ];
 
 export function FooterFull() {
@@ -79,9 +87,11 @@ export function FooterFull() {
         {/* Logo + socials */}
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8 mb-14">
           <AnimatedContainer delay={0}>
-            <img
+            <Image
               src="/Logotipo principal - branco.png"
               alt="Desk Manager"
+              width={200}
+              height={80}
               className="h-20 w-auto mb-4"
             />
             <p className="text-sm max-w-xs leading-relaxed" style={{ color: "rgba(169,219,255,0.6)" }}>
@@ -150,8 +160,8 @@ export function FooterFull() {
             <h3 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: "#A9DBFF" }}>Conteúdo</h3>
             <ul className="space-y-2.5">
               {conteudo.map(c => (
-                <li key={c}>
-                  <a href="#" className="text-sm transition-colors duration-200 hover:text-white" style={{ color: "rgba(255,255,255,0.5)" }}>{c}</a>
+                <li key={c.title}>
+                  <a href={c.href} className="text-sm transition-colors duration-200 hover:text-white" style={{ color: "rgba(255,255,255,0.5)" }}>{c.title}</a>
                 </li>
               ))}
             </ul>
@@ -204,11 +214,9 @@ type AnimatedContainerProps = {
 };
 
 function AnimatedContainer({ className, delay = 0, children }: AnimatedContainerProps) {
-  const reduce   = useReducedMotion();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
+  const reduce = useReducedMotion();
 
-  if (!mounted || reduce) return <div className={className}>{children}</div>;
+  if (reduce) return <div className={className}>{children}</div>;
 
   return (
     <motion.div

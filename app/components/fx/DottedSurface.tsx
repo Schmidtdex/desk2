@@ -6,13 +6,11 @@ type DottedSurfaceProps = Omit<React.ComponentProps<'div'>, 'ref'>;
 
 export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const sceneRef = useRef<{
-		renderer: THREE.WebGLRenderer;
-		animationId: number;
-	} | null>(null);
 
 	useEffect(() => {
-		if (!containerRef.current) return;
+		// Capture container locally — refs can be nulled before cleanup, leaking the canvas
+		const container = containerRef.current;
+		if (!container) return;
 
 		const SEPARATION = 150;
 		const AMOUNTX = 40;
@@ -37,7 +35,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		renderer.setClearColor(0x05060f, 0);
 
-		containerRef.current.appendChild(renderer.domElement);
+		container.appendChild(renderer.domElement);
 
 		const positions: number[] = [];
 		const colors: number[] = [];
@@ -51,7 +49,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
 					0,
 					iy * SEPARATION - (AMOUNTY * SEPARATION) / 2,
 				);
-				colors.push(0.65, 0.70, 1.0);
+				colors.push(0.10, 0.30, 1.0);
 			}
 		}
 
@@ -73,9 +71,12 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
 		scene.add(points);
 
 		let count = 0;
-		let animationId: number;
+		let disposed = false;
+		let animationId = 0;
 
 		const animate = () => {
+			// Late frame fired after unmount would render into a disposed context
+			if (disposed) return;
 			animationId = requestAnimationFrame(animate);
 
 			const positionAttribute = geometry.attributes.position;
@@ -105,28 +106,21 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
 		window.addEventListener('resize', handleResize, { passive: true });
 		animate();
 
-		sceneRef.current = { renderer, animationId };
-
 		return () => {
-			window.removeEventListener('resize', handleResize);
+			disposed = true;
 			cancelAnimationFrame(animationId);
+			window.removeEventListener('resize', handleResize);
 
-			scene.traverse((object) => {
-				if (object instanceof THREE.Points) {
-					object.geometry.dispose();
-					if (Array.isArray(object.material)) {
-						object.material.forEach((m) => m.dispose());
-					} else {
-						object.material.dispose();
-					}
-				}
-			});
-
+			geometry.dispose();
+			material.dispose();
 			renderer.dispose();
+			// Browsers cap active WebGL contexts (~16). Without forceContextLoss,
+			// remounting through SPA navigation can exhaust the pool and the new
+			// renderer comes back inert.
+			renderer.forceContextLoss();
 
-			if (containerRef.current && renderer.domElement.parentNode === containerRef.current) {
-				containerRef.current.removeChild(renderer.domElement);
-			}
+			const canvas = renderer.domElement;
+			canvas.parentNode?.removeChild(canvas);
 		};
 	}, []);
 

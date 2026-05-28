@@ -259,39 +259,26 @@ export const CaseCard = memo(function CaseCard({ data }: { data: CaseData }) {
               gap: 12,
             }}
           >
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "baseline",
+                gap: "0 10px",
+                fontFamily: DISPLAY,
+                fontSize: 12,
+                lineHeight: 1.3,
+                color: INK_2,
+              }}
+            >
               {data.tags.map((t, i) => (
-                <span
-                  key={i}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 7,
-                    padding: "7px 13px 7px 11px",
-                    border: `1px solid ${HAIR}`,
-                    borderRadius: 999,
-                    fontSize: 12,
-                    fontFamily: DISPLAY,
-                    color: INK_2,
-                    background: "#fff",
-                    lineHeight: 1,
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 6,
-                      height: 6,
-                      borderRadius: "50%",
-                      flexShrink: 0,
-                      background:
-                        t.tone === "primary"
-                          ? BLUE
-                          : t.tone === "ink"
-                            ? INK
-                            : "#cfd3e8",
-                    }}
-                  />
-                  {t.label}
+                <span key={i} style={{ display: "inline-flex", alignItems: "baseline", gap: 10 }}>
+                  {i > 0 && (
+                    <span aria-hidden style={{ color: HAIR, fontWeight: 300 }}>·</span>
+                  )}
+                  <span style={{ color: t.tone === "primary" ? INK : INK_2 }}>
+                    {t.label}
+                  </span>
                 </span>
               ))}
             </div>
@@ -300,40 +287,22 @@ export const CaseCard = memo(function CaseCard({ data }: { data: CaseData }) {
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: 10,
-                fontFamily: MONO,
-                fontSize: 10,
-                letterSpacing: ".2em",
-                color: INK,
-                textTransform: "uppercase",
+                gap: 8,
+                padding: "9px 18px",
+                fontFamily: DISPLAY,
+                fontSize: 13,
+                fontWeight: 500,
+                color: "#fff",
+                background: BLUE,
+                borderRadius: 999,
+                lineHeight: 1,
                 flexShrink: 0,
-                cursor: "default",
+                cursor: "pointer",
+                boxShadow: "0 1px 0 rgba(0,0,0,0.04), 0 6px 16px -6px rgba(31,61,255,0.45)",
               }}
             >
               Leia o case
-              <span
-                style={{
-                  position: "relative",
-                  display: "inline-block",
-                  width: 26,
-                  height: 1,
-                  background: INK,
-                }}
-              >
-                <span
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: -3,
-                    width: 7,
-                    height: 7,
-                    borderTop: `1px solid ${INK}`,
-                    borderRight: `1px solid ${INK}`,
-                    transform: "rotate(45deg)",
-                    display: "block",
-                  }}
-                />
-              </span>
+              <span aria-hidden style={{ fontSize: 14 }}>→</span>
             </span>
           </div>
         </div>

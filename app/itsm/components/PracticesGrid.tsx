@@ -54,9 +54,9 @@ export default function PracticesGrid() {
 
   return (
     <section
-      id="anchor"
+      id="praticas"
       aria-label="Práticas ITIL certificadas"
-      className="relative px-6 py-20 md:py-32"
+      className="relative scroll-mt-32 px-6 py-20 md:scroll-mt-40 md:py-32"
     >
       <div className="mx-auto max-w-[1280px]">
         {/* Header */}
@@ -93,6 +93,11 @@ export default function PracticesGrid() {
                     <h4 className="bento-item-title">{p.title}</h4>
                     <div className="bento-item-desc-wrap">
                       <p className="bento-item-desc">{p.body}</p>
+                      <ul className="bento-item-bullets">
+                        {p.bullets.map((b) => (
+                          <li key={b}>{b}</li>
+                        ))}
+                      </ul>
                     </div>
                   </li>
                 ))}
