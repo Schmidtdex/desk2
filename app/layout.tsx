@@ -34,8 +34,8 @@ export const metadata: Metadata = {
  */
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" className={`${plusJakarta.variable} ${jetBrainsMono.variable}`} style={{ fontFamily: "var(--font-display), system-ui, sans-serif" }}>
-      <body className="bg-bg text-text min-h-screen">
+    <html lang="pt-BR" className={`${plusJakarta.variable} ${jetBrainsMono.variable}`}>
+      <body>
         {children}
       </body>
     </html>

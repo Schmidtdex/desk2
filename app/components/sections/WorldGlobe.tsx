@@ -80,8 +80,13 @@ export function WorldGlobe({ data }: WorldGlobeProps) {
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-text-muted">
             {eyebrow}
           </p>
-          <h2 className="mt-4 text-[clamp(2rem,6vw,5rem)] font-extralight leading-[1.05] tracking-tight md:mt-6">
-            <span className="text-accent">{countriesCount}</span> países
+          <h2 className="mt-4 font-extralight leading-[1.05] tracking-tight md:mt-6">
+            <span className="block text-[clamp(3.5rem,10vw,8rem)] text-accent">
+              {countriesCount}
+            </span>
+            <span className="block text-[clamp(2rem,6vw,5rem)]">
+              países
+            </span>
           </h2>
           <p className="mt-5 max-w-md text-text-muted">
             {description}

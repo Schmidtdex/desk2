@@ -27,19 +27,19 @@ export default async function SiteLayout({ children }: Readonly<{ children: Reac
   }
 
   return (
-    <LenisProvider>
-      <NavBar data={cmsData?.navbar} />
-      {children}
-      <FooterFull data={cmsData?.footer} />
+    <div className="site-root">
+      <LenisProvider>
+        <NavBar data={cmsData?.navbar} />
+        {children}
+        <FooterFull data={cmsData?.footer} />
 
-      {isDraftMode && (
-        <>
-          {/* Click-to-edit overlays — only active inside Presentation Tool iframe */}
-          <VisualEditing />
-          {/* Exit button — shown when browsing the site directly in Draft Mode */}
-          <DisableDraftMode />
-        </>
-      )}
-    </LenisProvider>
+        {isDraftMode && (
+          <>
+            <VisualEditing />
+            <DisableDraftMode />
+          </>
+        )}
+      </LenisProvider>
+    </div>
   );
 }

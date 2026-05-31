@@ -38,19 +38,17 @@
 }
 
 @layer base {
-  html {
+  /* Scoped to .site-root so Sanity Studio at /studio is never affected */
+  .site-root {
     background: var(--color-bg);
     color: var(--color-text);
     color-scheme: dark;
-  }
-  body {
     font-family: var(--font-sans), system-ui, sans-serif;
-    background: var(--color-bg);
-    color: var(--color-text);
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    min-height: 100svh;
   }
-  ::selection {
+  .site-root ::selection {
     background: var(--color-accent);
     color: white;
   }
