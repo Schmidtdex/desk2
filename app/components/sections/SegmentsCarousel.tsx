@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import {
   ArrowLeft,
@@ -35,63 +35,43 @@ interface Segment {
 }
 
 const SEGMENTS: Segment[] = [
-  {
-    id: "agro",
-    title: "Agro e Alimentos",
-    description:
-      "Gestão de chamados, manutenção preventiva e suporte a campo para cooperativas e agroindústrias.",
-    icon: Wheat,
-    image: "/agro.png",
-  },
-  {
-    id: "varejo",
-    title: "Varejo",
-    description:
-      "Atendimento omnichannel, triagem automatizada e SLA por loja para redes com centenas de unidades.",
-    icon: ShoppingBag,
-    image: "/varejo.png",
-  },
-  {
-    id: "educacao",
-    title: "Educação",
-    description:
-      "Portal de serviços unificado para alunos, docentes e administrativo com workflows por campus.",
-    icon: GraduationCap,
-    image: "/educacao.png",
-  },
-  {
-    id: "industria",
-    title: "Indústria",
-    description:
-      "CMDB industrial, ordens de manutenção, gestão de ativos e integração nativa com o chão de fábrica.",
-    icon: Factory,
-    image: "/industria.png",
-  },
-  {
-    id: "logistica",
-    title: "Logística",
-    description:
-      "Rastreamento de ocorrências, SLA por entregador e visibilidade em tempo real de toda a operação.",
-    icon: Truck,
-    image: "/logistica.png",
-  },
-  {
-    id: "saude",
-    title: "Saúde e Diagnóstico",
-    description:
-      "Chamados clínicos, gestão de equipamentos e SLA adaptado a criticidade hospitalar e laboratorial.",
-    icon: Activity,
-    image: "/saude.png",
-  },
-  {
-    id: "servicos",
-    title: "Serviços e Outsourcing",
-    description:
-      "Gestão de contratos, prazos e equipes em campo com visibilidade por cliente e SLA terceirizado.",
-    icon: Briefcase,
-    image: "/servicos.png",
-  },
+  { id: "agro",     title: "Agro e Alimentos",      description: "Gestão de chamados, manutenção preventiva e suporte a campo para cooperativas e agroindústrias.", icon: Wheat,       image: "/agro.png" },
+  { id: "varejo",   title: "Varejo",                 description: "Atendimento omnichannel, triagem automatizada e SLA por loja para redes com centenas de unidades.", icon: ShoppingBag, image: "/varejo.png" },
+  { id: "educacao", title: "Educação",               description: "Portal de serviços unificado para alunos, docentes e administrativo com workflows por campus.", icon: GraduationCap, image: "/educacao.png" },
+  { id: "industria", title: "Indústria",             description: "CMDB industrial, ordens de manutenção, gestão de ativos e integração nativa com o chão de fábrica.", icon: Factory, image: "/industria.png" },
+  { id: "logistica", title: "Logística",             description: "Rastreamento de ocorrências, SLA por entregador e visibilidade em tempo real de toda a operação.", icon: Truck, image: "/logistica.png" },
+  { id: "saude",    title: "Saúde e Diagnóstico",    description: "Chamados clínicos, gestão de equipamentos e SLA adaptado a criticidade hospitalar e laboratorial.", icon: Activity, image: "/saude.png" },
+  { id: "servicos", title: "Serviços e Outsourcing", description: "Gestão de contratos, prazos e equipes em campo com visibilidade por cliente e SLA terceirizado.", icon: Briefcase, image: "/servicos.png" },
 ];
+
+// Icon map for CMS segments (matched by id)
+const SEGMENT_ICONS: Record<string, LucideIcon> = {
+  agro: Wheat, varejo: ShoppingBag, educacao: GraduationCap,
+  industria: Factory, logistica: Truck, saude: Activity, servicos: Briefcase,
+};
+
+interface CmsSegment {
+  _key?: string;
+  id?: string | null;
+  title?: string | null;
+  description?: string | null;
+  imageUrl?: string | null;
+  ctaLabel?: string | null;
+  ctaHref?: string | null;
+}
+
+interface SegmentsCarouselData {
+  eyebrow?: string | null;
+  headline?: string | null;
+  description?: string | null;
+  segments?: CmsSegment[] | null;
+}
+
+interface SegmentsCarouselProps {
+  data?: SegmentsCarouselData | null;
+}
+
+
 
 function SegmentCard({ seg, delay }: { seg: Segment; delay: number }) {
   const Icon = seg.icon;
@@ -238,7 +218,27 @@ function SegmentCard({ seg, delay }: { seg: Segment; delay: number }) {
   );
 }
 
-export function SegmentsCarousel() {
+export function SegmentsCarousel({ data }: SegmentsCarouselProps) {
+  const eyebrow     = data?.eyebrow     ?? "Segmentos";
+  const headlinePt1 = data?.headline?.split("\n")[0] ?? "A plataforma que";
+  const headlinePt2 = data?.headline?.split("\n")[1] ?? "cada setor merece.";
+  const description = data?.description ?? "Sete verticais. Um ecossistema. A Desk Manager opera com entregas específicas para cada realidade operacional.";
+
+  // Merge CMS segments with code-side icons and images
+  const activeSegments: Segment[] = data?.segments && data.segments.length > 0
+    ? data.segments.map((cs, i) => {
+        const id   = cs.id ?? `seg-${i}`;
+        const base = SEGMENTS.find(s => s.id === id) ?? SEGMENTS[i % SEGMENTS.length];
+        return {
+          id,
+          title:       cs.title       ?? base.title,
+          description: cs.description ?? base.description,
+          icon:        SEGMENT_ICONS[id] ?? base.icon,
+          image:       cs.imageUrl    ?? base.image,
+        };
+      })
+    : SEGMENTS;
+
   const trackRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(headerRef, { once: true, margin: "-80px" });
@@ -314,29 +314,16 @@ export function SegmentsCarousel() {
               preset="blur"
               per="word"
               trigger={isInView}
-              className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-accent-2"
+              className="mb-3 font-mono text-xs uppercase tracking-[0.25em] text-text-muted"
             >
-              Segmentos
+              {eyebrow}
             </TextEffect>
-            <h2 className="text-[clamp(36px,4vw,56px)] font-light leading-[1.08] tracking-[-0.03em]">
-              <TextEffect
-                as="span"
-                preset="blur"
-                per="word"
-                trigger={isInView}
-                className="block"
-              >
-                A plataforma que
+            <h2 className="text-[clamp(3.5rem,7vw,7.5rem)] font-extralight leading-[1.05] tracking-[-0.04em]">
+              <TextEffect as="span" preset="blur" per="word" trigger={isInView} className="block">
+                {headlinePt1}
               </TextEffect>
-              <TextEffect
-                as="span"
-                preset="blur"
-                per="word"
-                trigger={isInView}
-                delay={0.22}
-                className="block font-normal text-accent-2"
-              >
-                cada setor merece.
+              <TextEffect as="span" preset="blur" per="word" trigger={isInView} delay={0.25} className="block font-light text-accent-2">
+                {headlinePt2}
               </TextEffect>
             </h2>
             <TextEffect
@@ -344,11 +331,10 @@ export function SegmentsCarousel() {
               preset="blur"
               per="word"
               trigger={isInView}
-              delay={0.38}
-              className="mt-5 text-[15px] leading-relaxed text-text-muted"
+              delay={0.5}
+              className="mt-4 max-w-sm text-sm text-text-muted"
             >
-              Sete verticais. Um ecossistema. A Desk Manager opera com entregas
-              específicas para cada realidade operacional.
+              {description}
             </TextEffect>
           </div>
 
@@ -389,14 +375,14 @@ export function SegmentsCarousel() {
           paddingRight: "max(2rem, calc((100vw - 1280px) / 2 + 2rem))",
         }}
       >
-        {SEGMENTS.map((seg, i) => (
+        {activeSegments.map((seg, i) => (
           <SegmentCard key={seg.id} seg={seg} delay={i * 0.055} />
         ))}
       </div>
 
       {/* Dot navigation */}
       <div className="mt-8 flex items-center justify-center gap-2">
-        {SEGMENTS.map((seg, i) => (
+        {activeSegments.map((seg, i) => (
           <button
             key={seg.id}
             onClick={() => scrollTo(i)}

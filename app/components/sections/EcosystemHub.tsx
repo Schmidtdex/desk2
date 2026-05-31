@@ -27,53 +27,46 @@ interface Pillar {
   angle: number;
 }
 
+const DEFAULT_EYEBROW = "O Ecossistema";
+const DEFAULT_LINE1   = "Uma plataforma.";
+const DEFAULT_LINE2   = "Cinco pilares.";
+
+interface CmsPillar {
+  _key?: string;
+  id?: string | null;
+  label?: string | null;
+  name?: string | null;
+  description?: string | null;
+}
+
+interface EcosystemHubData {
+  eyebrow?: string | null;
+  headlineLine1?: string | null;
+  headlineLine2?: string | null;
+  pillars?: CmsPillar[] | null;
+}
+
+interface EcosystemHubProps {
+  data?: EcosystemHubData | null;
+}
+
+// Icon mapping — kept in code since Lucide icons can't be stored in Sanity
+const PILLAR_ICONS: Record<string, LucideIcon> = {
+  esm:     Layers,
+  itsm:    Server,
+  bpm:     GitBranch,
+  maestro: Wand2,
+  agent:   Bot,
+};
+
 const pillars: Pillar[] = [
-  {
-    id: "esm",
-    label: "ESM",
-    name: "Enterprise Service Management",
-    icon: Layers,
-    description:
-      "Centralize portais de autoatendimento, SLAs e catálogos de serviço em um hub único, com visibilidade total para gestores e usuários finais.",
-    angle: -90,
-  },
-  {
-    id: "itsm",
-    label: "ITSM",
-    name: "IT Service Management",
-    icon: Server,
-    description:
-      "Gerencie incidentes, problemas, mudanças e ativos de TI com CMDB integrado e alinhamento nativo ao ITIL.",
-    angle: -18,
-  },
-  {
-    id: "bpm",
-    label: "BPM",
-    name: "Business Process Management",
-    icon: GitBranch,
-    description:
-      "Gestão e automação de processos de negócio com visão executiva.",
-    angle: 54,
-  },
-  {
-    id: "maestro",
-    label: "Maestro",
-    name: "Orquestração Inteligente",
-    icon: Wand2,
-    description:
-      "Plataforma iPaaS para integração low-code de todo o ecossistema.",
-    angle: 126,
-  },
-  {
-    id: "agent",
-    label: "AI Agent",
-    name: "Agentes de IA Autônomos",
-    icon: Bot,
-    description:
-      "Agentes autônomos que decidem e executam tarefas pela operação.",
-    angle: 198,
-  },
+  { id: "esm",     label: "ESM",      name: "Enterprise Service Management", icon: Layers,    description: "Centralize portais de autoatendimento, SLAs e catálogos de serviço em um hub único, com visibilidade total para gestores e usuários finais.", angle: -90 },
+  { id: "itsm",    label: "ITSM",     name: "IT Service Management",          icon: Server,    description: "Gerencie incidentes, problemas, mudanças e ativos de TI com CMDB integrado e alinhamento nativo ao ITIL.", angle: -18 },
+  { id: "bpm",     label: "BPM",      name: "Business Process Management",    icon: GitBranch, description: "Gestão e automação de processos de negócio com visão executiva.", angle: 54 },
+  { id: "maestro", label: "Maestro",  name: "Orquestração Inteligente",       icon: Wand2,     description: "Plataforma iPaaS para integração low-code de todo o ecossistema.", angle: 126 },
+  { id: "agent",   label: "AI Agent", name: "Agentes de IA Autônomos",        icon: Bot,       description: "Agentes autônomos que decidem e executam tarefas pela operação.", angle: 198 },
 ];
+
 
 function coords(angleDeg: number, radius = R) {
   const rad = (angleDeg * Math.PI) / 180;
@@ -83,7 +76,27 @@ function coords(angleDeg: number, radius = R) {
   };
 }
 
-export function EcosystemHub() {
+export function EcosystemHub({ data }: EcosystemHubProps) {
+  const eyebrow  = data?.eyebrow       ?? DEFAULT_EYEBROW;
+  const line1    = data?.headlineLine1  ?? DEFAULT_LINE1;
+  const line2    = data?.headlineLine2  ?? DEFAULT_LINE2;
+
+  // Merge CMS pillar text with code-side icons and angles
+  const activePillars: Pillar[] = data?.pillars && data.pillars.length > 0
+    ? data.pillars.map((cp, i) => {
+        const id     = cp.id ?? `pillar-${i}`;
+        const base   = pillars.find(p => p.id === id) ?? pillars[i % pillars.length];
+        return {
+          id,
+          label:       cp.label       ?? base.label,
+          name:        cp.name        ?? base.name,
+          description: cp.description ?? base.description,
+          icon:        PILLAR_ICONS[id] ?? base.icon,
+          angle:       base.angle,
+        };
+      })
+    : pillars;
+
   const [activeId, setActiveId] = useState<string | null>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(headerRef, { once: true, margin: "-80px" });
@@ -169,7 +182,7 @@ export function EcosystemHub() {
         return null;
       }
 
-      const pillar = pillars.find((p) => p.id === id)!;
+      const pillar = activePillars.find((p) => p.id === id)!;
       // Find the rotation delta that places pillar at top (-90°) via shortest arc
       const rawTarget = -90 - pillar.angle;
       const currentMod = ((angleRef.current % 360) + 360) % 360;
@@ -201,7 +214,7 @@ export function EcosystemHub() {
             trigger={isInView}
             className="mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-accent-2"
           >
-            O Ecossistema
+            {eyebrow}
           </TextEffect>
           <h2 className="text-[clamp(45px,4vw,100px)] font-light leading-[1.08] tracking-[-0.03em]">
             <TextEffect
@@ -211,7 +224,7 @@ export function EcosystemHub() {
               trigger={isInView}
               className="block"
             >
-              Uma plataforma.
+              {line1}
             </TextEffect>
             <TextEffect
               as="span"
@@ -221,7 +234,7 @@ export function EcosystemHub() {
               delay={0.28}
               className="block font-normal text-accent-2"
             >
-              Cinco pilares.
+              {line2}
             </TextEffect>
           </h2>
         </div>
@@ -288,7 +301,7 @@ export function EcosystemHub() {
             </div>
 
             {/* Nodes — translated by RAF, always upright */}
-            {pillars.map((p, i) => {
+            {activePillars.map((p, i) => {
               const Icon = p.icon;
               const isActive = activeId === p.id;
               return (
@@ -388,7 +401,7 @@ export function EcosystemHub() {
 
         {/* ── Mobile: vertical accordion ── */}
         <div className="grid grid-cols-1 gap-3 md:hidden">
-          {pillars.map((p, i) => {
+          {activePillars.map((p, i) => {
             const Icon = p.icon;
             const isActive = activeId === p.id;
             return (

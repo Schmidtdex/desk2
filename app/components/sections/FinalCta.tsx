@@ -3,8 +3,22 @@
 import { useEffect, useState } from "react";
 import { MagneticButton } from "@/components/fx/MagneticButton";
 
-const Q1 = "Quantas das nossas tarefas poderiam ser operadas por agentes de IA hoje?";
-const Q2 = "Qual é o custo de oportunidade de cada mês sem agentes em produção?";
+const DEFAULT_EYEBROW = "Provocação final";
+const DEFAULT_Q1 = "Quantas das nossas tarefas poderiam ser operadas por agentes de IA hoje?";
+const DEFAULT_Q2 = "Qual é o custo de oportunidade de cada mês sem agentes em produção?";
+const DEFAULT_CTA = "Vamos colocar sua operação em movimento.";
+
+interface FinalCtaData {
+  eyebrow?: string | null;
+  question1?: string | null;
+  question2?: string | null;
+  ctaLabel?: string | null;
+  ctaHref?: string | null;
+}
+
+interface FinalCtaProps {
+  data?: FinalCtaData | null;
+}
 
 function Typewriter({ text, delay = 0 }: { text: string; delay?: number }) {
   const [chars, setChars] = useState(0);
@@ -32,7 +46,13 @@ function Typewriter({ text, delay = 0 }: { text: string; delay?: number }) {
   );
 }
 
-export function FinalCta() {
+export function FinalCta({ data }: FinalCtaProps) {
+  const eyebrow = data?.eyebrow ?? DEFAULT_EYEBROW;
+  const q1      = data?.question1 ?? DEFAULT_Q1;
+  const q2      = data?.question2 ?? DEFAULT_Q2;
+  const ctaLabel = data?.ctaLabel ?? DEFAULT_CTA;
+  const ctaHref  = data?.ctaHref ?? undefined;
+
   return (
     <section
       id="scene-cta"
@@ -55,16 +75,23 @@ export function FinalCta() {
       </div>
 
       <div className="relative mx-auto max-w-5xl text-center">
-        <p className="font-mono text-xs uppercase tracking-[0.3em] text-text-muted">Provocação final</p>
+        <p className="font-mono text-xs uppercase tracking-[0.3em] text-text-muted">{eyebrow}</p>
         <h2 className="mt-8 text-[clamp(2rem,5vw,4rem)] font-extralight leading-[1.15] tracking-tight">
-          <Typewriter text={Q1} />
+          <Typewriter text={q1} />
         </h2>
         <h2 className="mt-12 text-[clamp(2rem,5vw,4rem)] font-extralight leading-[1.15] tracking-tight text-accent-2">
-          <Typewriter text={Q2} delay={2500} />
+          <Typewriter text={q2} delay={2500} />
         </h2>
 
         <div className="mt-10 md:mt-20">
-          <MagneticButton>Vamos colocar sua operação em movimento.</MagneticButton>
+          <MagneticButton
+            onClick={ctaHref ? () => {
+              const el = document.querySelector(ctaHref);
+              el?.scrollIntoView({ behavior: "smooth" });
+            } : undefined}
+          >
+            {ctaLabel}
+          </MagneticButton>
         </div>
       </div>
     </section>

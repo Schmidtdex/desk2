@@ -6,7 +6,22 @@ import { CaseCard } from "./CaseCard";
 import { CasesSidebar } from "./CasesSidebar";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
-export function CasesSticky() {
+interface CasesSectionData {
+  eyebrow?: string | null;
+  headline?: string | null;
+}
+
+interface CasesStickyProps {
+  data?: CasesSectionData | null;
+}
+
+const DEFAULT_EYEBROW  = "Cases de sucesso";
+const DEFAULT_HEADLINE = "Resultados que\nfalam por si.";
+
+export function CasesSticky({ data }: CasesStickyProps) {
+  const eyebrow  = data?.eyebrow  ?? DEFAULT_EYEBROW;
+  const headline = data?.headline ?? DEFAULT_HEADLINE;
+
   const isMobile = useIsMobile();
   const [activeIdx, setActiveIdx] = useState(0);
   const [visualIdx, setVisualIdx] = useState(0);
@@ -151,7 +166,7 @@ export function CasesSticky() {
       <section className="relative flex min-h-screen items-center justify-center px-12 text-center">
         <div>
           <p className="mb-6 font-mono text-[11px] uppercase tracking-[.26em] text-text-muted">
-            Cases de sucesso
+            {eyebrow}
           </p>
           <h2
             style={{
@@ -163,9 +178,9 @@ export function CasesSticky() {
               maxWidth: 760,
             }}
           >
-            Resultados que
-            <br />
-            falam por si.
+            {headline.split("\n").map((line, i, arr) => (
+              <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+            ))}
           </h2>
         </div>
       </section>

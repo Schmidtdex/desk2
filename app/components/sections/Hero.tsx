@@ -4,13 +4,30 @@ import { DottedSurface } from "@/components/fx/DottedSurface";
 import { TextEffect } from "@/components/fx/TextEffect";
 import { motion } from "motion/react";
 
-const PILLS = [
+const DEFAULT_PILLS = [
   "#1 EM ITSM",
   "#1 EM AUTOMAÇÃO",
   "+600 CLIENTES",
 ] as const;
 
-export function Hero() {
+const DEFAULT_HEADLINE_1 = "Não somos um software";
+const DEFAULT_HEADLINE_2 = "Somos a sinfonia da sua operação";
+
+interface HeroData {
+  headlineLine1?: string | null;
+  headlineLine2?: string | null;
+  pills?: string[] | null;
+}
+
+interface HeroProps {
+  data?: HeroData | null;
+}
+
+export function Hero({ data }: HeroProps) {
+  const line1 = data?.headlineLine1 ?? DEFAULT_HEADLINE_1;
+  const line2 = data?.headlineLine2 ?? DEFAULT_HEADLINE_2;
+  const pills = data?.pills ?? DEFAULT_PILLS;
+
   return (
     <section
       id="scene-hero"
@@ -30,7 +47,7 @@ export function Hero() {
             delay={0.2}
             className="enable-ligatures block font-serif font-light text-[2.75rem] leading-[1.05] tracking-[-0.04em] text-pretty text-center text-white md:text-[4.5rem] xl:text-[6.5rem]"
           >
-            Não somos um software
+            {line1}
           </TextEffect>
           <TextEffect
             as="span"
@@ -39,7 +56,7 @@ export function Hero() {
             delay={0.5}
             className="enable-ligatures block font-serif font-light text-[2.75rem] leading-[1.05] tracking-[-0.04em] text-pretty text-center text-[oklch(68%_0.18_260)] md:text-[4.5rem] xl:text-[6.5rem]"
           >
-            Somos a sinfonia da sua operação
+            {line2}
           </TextEffect>
         </div>
 
@@ -50,7 +67,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.9, ease: [0.2, 0, 0, 1] }}
           className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2"
         >
-          {PILLS.map((label) => (
+          {pills.map((label) => (
             <span
               key={label}
               className="gap-5 font-mono text-xs font-light tracking-[0.2em] text-text-muted uppercase"

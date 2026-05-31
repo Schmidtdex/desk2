@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { LenisProvider } from "./components/layout/LenisProvider";
-import { NavBar } from "./components/layout/NavBar";
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-display",
@@ -28,14 +26,17 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 };
 
+/**
+ * Root layout — applies to ALL routes including /studio.
+ * Only contains the bare HTML shell.
+ * NavBar and LenisProvider are in app/(site)/layout.tsx (site routes only).
+ * The Studio at /studio gets its own clean layout via app/studio/layout.tsx.
+ */
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR" className={`${plusJakarta.variable} ${jetBrainsMono.variable}`} style={{ fontFamily: "var(--font-display), system-ui, sans-serif" }}>
       <body className="bg-bg text-text min-h-screen">
-        <LenisProvider>
-          <NavBar />
-          {children}
-        </LenisProvider>
+        {children}
       </body>
     </html>
   );

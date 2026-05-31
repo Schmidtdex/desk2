@@ -6,24 +6,49 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
-const NAV_LINKS = [
-  { name: "Home", href: "#" },
-  { name: "Clientes", href: "#scene-cases" },
-  { name: "Plataforma", href: "#scene-anatomy" },
-  { name: "Departamentos", href: "#scene-products" },
+// -- Defaults ----------------------------------------------------------------
+const DEFAULT_LOGIN_LABEL = "Entrar";
+const DEFAULT_CTA_LABEL   = "Falar com especialista";
+const DEFAULT_CTA_HREF    = "#scene-cta";
+
+const DEFAULT_NAV_LINKS: NavLink[] = [
+  { title: "Home",          href: "#" },
+  { title: "Clientes",      href: "#scene-cases" },
+  { title: "Plataforma",    href: "#scene-anatomy" },
+  { title: "Departamentos", href: "#scene-products" },
 ];
 
-export function NavBar() {
+// -- Types -------------------------------------------------------------------
+interface NavLink { _key?: string; title?: string | null; href?: string | null; }
+
+interface NavBarData {
+  loginLabel?: string | null;
+  ctaLabel?: string | null;
+  ctaHref?: string | null;
+  links?: NavLink[] | null;
+}
+
+interface NavBarProps {
+  data?: NavBarData | null;
+}
+
+// -- Component ---------------------------------------------------------------
+export function NavBar({ data }: NavBarProps) {
+  const loginLabel = data?.loginLabel ?? DEFAULT_LOGIN_LABEL;
+  const ctaLabel   = data?.ctaLabel   ?? DEFAULT_CTA_LABEL;
+  const ctaHref    = data?.ctaHref    ?? DEFAULT_CTA_HREF;
+  const navLinks   = data?.links && data.links.length > 0 ? data.links : DEFAULT_NAV_LINKS;
+
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const rafRef     = useRef(0);
-  const scrolledRef = useRef(false); // shadow value — avoids setState when unchanged
+  const rafRef      = useRef(0);
+  const scrolledRef = useRef(false);
 
   useEffect(() => {
     let scheduled = false;
 
     const onScroll = () => {
-      if (scheduled) return; // already waiting for next frame
+      if (scheduled) return;
       scheduled = true;
       rafRef.current = requestAnimationFrame(() => {
         scheduled = false;
@@ -83,13 +108,13 @@ export function NavBar() {
           </Link>
 
           <ul className="hidden items-center gap-8 lg:flex" aria-label="Navegação principal">
-            {NAV_LINKS.map((link) => (
-              <li key={link.name}>
+            {navLinks.map((link, i) => (
+              <li key={link._key ?? i}>
                 <Link
-                  href={link.href}
+                  href={link.href ?? "#"}
                   className="font-sans text-sm text-white/50 transition-colors duration-150 hover:text-white"
                 >
-                  {link.name}
+                  {link.title}
                 </Link>
               </li>
             ))}
@@ -100,13 +125,13 @@ export function NavBar() {
               href="#"
               className="px-4 py-2 font-sans text-sm text-white/50 transition-colors duration-150 hover:text-white"
             >
-              Entrar
+              {loginLabel}
             </Link>
             <Link
-              href="#scene-cta"
+              href={ctaHref}
               className="rounded-full bg-accent px-5 py-2 font-sans text-sm font-medium text-white shadow-[0_0_24px_rgba(26,77,255,0.3)] transition-shadow duration-200 hover:shadow-[0_0_36px_rgba(26,77,255,0.5)]"
             >
-              Falar com especialista
+              {ctaLabel}
             </Link>
           </div>
 
@@ -153,14 +178,14 @@ export function NavBar() {
             className="absolute inset-x-4 top-full mt-2 rounded-2xl border border-white/[0.06] bg-[#05060F]/95 p-6 backdrop-blur-xl lg:hidden"
           >
             <ul className="space-y-1">
-              {NAV_LINKS.map((link) => (
-                <li key={link.name}>
+              {navLinks.map((link, i) => (
+                <li key={link._key ?? i}>
                   <Link
-                    href={link.href}
+                    href={link.href ?? "#"}
                     onClick={() => setIsOpen(false)}
                     className="block rounded-xl px-4 py-3 font-sans text-base text-white/70 transition-colors hover:bg-white/[0.04] hover:text-white"
                   >
-                    {link.name}
+                    {link.title}
                   </Link>
                 </li>
               ))}
@@ -170,14 +195,14 @@ export function NavBar() {
                 href="#"
                 className="block rounded-xl px-4 py-3 text-center font-sans text-sm text-white/60 hover:text-white"
               >
-                Entrar
+                {loginLabel}
               </Link>
               <Link
-                href="#scene-cta"
+                href={ctaHref}
                 onClick={() => setIsOpen(false)}
                 className="block rounded-full bg-accent px-5 py-3 text-center font-sans text-sm font-medium text-white"
               >
-                Falar com especialista
+                {ctaLabel}
               </Link>
             </div>
           </motion.div>

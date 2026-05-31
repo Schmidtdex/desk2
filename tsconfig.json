@@ -19,7 +19,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./app/*"]
+      "@/*": ["./app/*"],
+      "@/sanity/*": ["./sanity/*"],
+      "@/sanity.config": ["./sanity.config"]
     }
   },
   "include": [

@@ -11,21 +11,62 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 const DISPLAY = "var(--font-display,system-ui,sans-serif)";
 const MONO    = 'var(--font-code,"JetBrains Mono",monospace)';
 
-// -- Content -----------------------------------------------------------------
-const LINE_1 = "Mais que um escritório";
-const LINE_2 = "Desk experience";
+// -- Defaults ----------------------------------------------------------------
+const DEFAULT_LINE_1 = "Mais que um escritório";
+const DEFAULT_LINE_2 = "Desk experience";
+const DEFAULT_EYEBROW = "Desk Manager Experience";
+const DEFAULT_HEADLINE = "Hub estratégico de inovação e cocriação.";
+const DEFAULT_BODY1 = "O Desk Manager Experience nasce como nosso hub estratégico de inovação e cocriação. Um ambiente estruturado para promover conexões relevantes, estimular a geração de insights e transformar oportunidades em resultados concretos.";
+const DEFAULT_BODY2 = "Mais do que um endereço, é um ponto de encontro para clientes, parceiros e lideranças de mercado que buscam colaboração, agilidade e performance.";
+const DEFAULT_BADGE = "Vila Olímpia · São Paulo";
 
-interface Feature { icon: LucideIcon; title: string; desc: string; }
+interface FeatureItem { icon: LucideIcon; title: string; desc: string; }
 
-const FEATURES: Feature[] = [
-  { icon: Users,       title: "Conexões Relevantes",   desc: "Networking estratégico com clientes, parceiros e lideranças de mercado." },
-  { icon: Lightbulb,   title: "Geração de Insights",   desc: "Ambiente pensado para estimular criatividade e inovação." },
-  { icon: TrendingUp,  title: "Resultados Concretos",  desc: "Transforme oportunidades em negócios com agilidade." },
+const DEFAULT_FEATURES: FeatureItem[] = [
+  { icon: Users,       title: "Conexões Relevantes",    desc: "Networking estratégico com clientes, parceiros e lideranças de mercado." },
+  { icon: Lightbulb,   title: "Geração de Insights",    desc: "Ambiente pensado para estimular criatividade e inovação." },
+  { icon: TrendingUp,  title: "Resultados Concretos",   desc: "Transforme oportunidades em negócios com agilidade." },
   { icon: CircleCheck, title: "Infraestrutura Completa", desc: "Cada detalhe planejado para potencializar experiências." },
 ];
 
+interface CmsFeature { _key?: string; title?: string | null; desc?: string | null; }
+
+interface DeskExperienceData {
+  heroLine1?: string | null;
+  heroLine2?: string | null;
+  eyebrow?: string | null;
+  headline?: string | null;
+  body1?: string | null;
+  body2?: string | null;
+  locationBadge?: string | null;
+  features?: CmsFeature[] | null;
+}
+
+interface DeskExperienceProps {
+  data?: DeskExperienceData | null;
+}
+
 // -- Component ---------------------------------------------------------------
-export function DeskExperience() {
+export function DeskExperience({ data }: DeskExperienceProps) {
+  const line1   = data?.heroLine1      ?? DEFAULT_LINE_1;
+  const line2   = data?.heroLine2      ?? DEFAULT_LINE_2;
+  const eyebrow = data?.eyebrow        ?? DEFAULT_EYEBROW;
+  const headline = data?.headline      ?? DEFAULT_HEADLINE;
+  const body1   = data?.body1          ?? DEFAULT_BODY1;
+  const body2   = data?.body2          ?? DEFAULT_BODY2;
+  const badge   = data?.locationBadge  ?? DEFAULT_BADGE;
+
+  // Features: use CMS items (text only) paired with default icons
+  const ICON_ORDER: FeatureItem["icon"][] = [Users, Lightbulb, TrendingUp, CircleCheck];
+  const features: FeatureItem[] =
+    data?.features && data.features.length > 0
+      ? data.features.map((f, i) => ({
+          icon:  ICON_ORDER[i % ICON_ORDER.length],
+          title: f.title ?? DEFAULT_FEATURES[i % DEFAULT_FEATURES.length].title,
+          desc:  f.desc  ?? DEFAULT_FEATURES[i % DEFAULT_FEATURES.length].desc,
+        }))
+      : DEFAULT_FEATURES;
+
   const isMobile = useIsMobile();
   const wrapperRef  = useRef<HTMLDivElement>(null);
   const bgRef       = useRef<HTMLDivElement>(null);
@@ -147,14 +188,14 @@ export function DeskExperience() {
                   className="text-5xl md:text-6xl lg:text-[5.5rem] font-bold text-blue-200 tracking-tight"
                   style={{ willChange: "transform" }}
                 >
-                  {LINE_1}
+                  {line1}
                 </h2>
                 <h2
                   ref={line2Ref}
                   className="text-5xl md:text-6xl lg:text-[5.5rem] font-bold text-blue-200 text-center tracking-tight"
                   style={{ willChange: "transform" }}
                 >
-                  {LINE_2}
+                  {line2}
                 </h2>
               </div>
             </div>
@@ -182,35 +223,28 @@ export function DeskExperience() {
               style={isMobile ? undefined : { position: "sticky", top: 96 }}
             >
               <p style={{ fontFamily: MONO, fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "#3B82F6", marginBottom: 28 }}>
-                Desk Manager Experience
+                {eyebrow}
               </p>
               <h3 style={{ fontFamily: DISPLAY, fontSize: "clamp(32px,3.5vw,48px)", fontWeight: 300, lineHeight: 1.08, letterSpacing: "-0.03em", color: "#ffffff", marginBottom: 28 }}>
-                Hub estratégico<br />
-                <em style={{ fontStyle: "normal", color: "rgba(255,255,255,0.4)", fontWeight: 200 }}>
-                  de inovação e<br />cocriação.
-                </em>
+                {headline}
               </h3>
               <p style={{ fontFamily: DISPLAY, fontSize: 15, lineHeight: 1.75, color: "rgba(255,255,255,0.55)", marginBottom: 20 }}>
-                O Desk Manager Experience nasce como nosso hub estratégico de inovação e
-                cocriação. Um ambiente estruturado para promover conexões relevantes,
-                estimular a geração de insights e transformar oportunidades em resultados
-                concretos.
+                {body1}
               </p>
               <p style={{ fontFamily: DISPLAY, fontSize: 15, lineHeight: 1.75, color: "rgba(255,255,255,0.55)", marginBottom: 36 }}>
-                Mais do que um endereço, é um ponto de encontro para clientes, parceiros
-                e lideranças de mercado que buscam colaboração, agilidade e performance.
+                {body2}
               </p>
               <div style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "8px 16px", border: "1px solid rgba(59,130,246,0.2)", borderRadius: 999, background: "rgba(26,77,255,0.08)" }}>
                 <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#3B82F6", boxShadow: "0 0 6px rgba(59,130,246,0.8)", flexShrink: 0 }} />
                 <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)" }}>
-                  Vila Olímpia · São Paulo
-                </span>
+                    {badge}
+                  </span>
               </div>
             </motion.div>
 
             {/* RIGHT — 2×2 feature cards */}
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 16 }}>
-              {FEATURES.map((f, i) => {
+              {features.map((f, i) => {
                 const Icon = f.icon;
                 return (
                   <motion.div

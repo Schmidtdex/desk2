@@ -1,11 +1,25 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef } from "react";
 import createGlobe from "cobe";
 import { COUNTRIES } from "@/lib/countries";
 
-export function WorldGlobe() {
+interface WorldGlobeData {
+  eyebrow?: string | null;
+  countriesCount?: string | null;
+  description?: string | null;
+}
+
+interface WorldGlobeProps {
+  data?: WorldGlobeData | null;
+}
+
+export function WorldGlobe({ data }: WorldGlobeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const eyebrow = data?.eyebrow ?? "Do Brasil para o mundo";
+  const countriesCount = data?.countriesCount ?? "+40";
+  const description = data?.description ?? "Suporte multilíngue e governança adaptada a padrões internacionais.";
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -64,13 +78,13 @@ export function WorldGlobe() {
       <div className="mx-auto grid w-full max-w-7xl gap-16 lg:grid-cols-2">
         <div className="flex flex-col justify-center">
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-text-muted">
-            Do Brasil para o mundo
+            {eyebrow}
           </p>
           <h2 className="mt-4 text-[clamp(2rem,6vw,5rem)] font-extralight leading-[1.05] tracking-tight md:mt-6">
-            <span className="text-accent">+40</span> países
+            <span className="text-accent">{countriesCount}</span> países
           </h2>
           <p className="mt-5 max-w-md text-text-muted">
-            Suporte multilíngue e governança adaptada a padrões internacionais.
+            {description}
           </p>
           <ul className="mt-10 grid max-w-md grid-cols-2 gap-x-6 gap-y-2 font-mono text-xs text-text-muted">
             {COUNTRIES.slice(0, 18).map((c) => (
